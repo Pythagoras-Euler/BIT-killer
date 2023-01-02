@@ -9,31 +9,97 @@ namespace StartScene.UI.Canvas.SignupPanel
 
         public GameObject mask;
 
-        public GameObject password;
-
         public GameObject account;
 
+        public GameObject password;
+
         public GameObject confirmPassword;
+
+        public Text errorInfo;
+
+        public Text loginAccount;
+
+        public Text loginPassword;
+
 
         private void Start()
         {
             _okButton = transform.GetComponent<Button>();
-            _okButton.onClick.AddListener(Ok);
+            _okButton.onClick.AddListener(OkButtonClicked);
+            errorInfo.text = "";
         }
 
-        private void Ok()
+        //private void OnDestroy()
+        //{
+            
+        //}
+
+        string sha256(string plaintext)
+        {
+            string cipertext;
+            cipertext = plaintext;//TODO 密码加密
+
+            return cipertext;
+        }
+
+
+        private void OkButtonClicked()
         {
             var acc = account.GetComponent<Text>().text;
             var psw = password.GetComponent<Text>().text;
             var cfmPsw = confirmPassword.GetComponent<Text>().text;
-            if (!psw.Equals(cfmPsw))
+            if (psw.Length <= 6)//密码强度检查（只做了大于6位，这玩意没必要搞太复杂）（有时间可以搞一个低强度密码本匹配，在后端搞也行）
             {
+                errorInfo.text = "请输入大于6位的密码";
+            }
+            else if (!psw.Equals(cfmPsw))
+            {
+                errorInfo.text = "两次密码输入不一致";
                 //TODO:两次密码输入不一致
             }
-            //TODO:发送请求
-            Debug.Log($"注册账号{acc}, 密码{psw}");
-            mask.SetActive(false);
-            transform.parent.gameObject.SetActive(false);
+            else 
+            {
+
+                string cipcher = sha256(psw);
+
+                //TODO:发送请求
+                Debug.Log($"标识\"register\",注册账号{acc}, 密码{cipcher}");
+                //
+                
+
+                string retType = "register";//TODO 接收服务器返回值
+                bool retSuccess = true;
+                string retMes = "Registration successful";
+
+
+                if (retType != "register")//不知道什么时候会出现这种错误（大概是用户乱点？
+                {
+                    errorInfo.text = "请勿频繁操作（未知错误）";
+                }
+                else if (retSuccess == false)//返回出现错误
+                {
+                    if (retMes == "Duplicate username")//用户名重复错误
+                    {
+                        errorInfo.text = "该用户名已被注册";
+                    }
+                    else//其他错误
+                    {
+                        errorInfo.text = retMes;
+                    }
+                }
+                else if (retMes == "Registration successful")//成功
+                {
+
+                    errorInfo.text = "注册成功！";
+                    mask.SetActive(false);
+                    transform.parent.parent.gameObject.SetActive(false);
+                    //TODO close Panel
+                    //TODO set loginPanel true
+                    loginAccount.text = acc;
+                    loginPassword.text = psw;
+
+                }
+            }
         }
     }
 }

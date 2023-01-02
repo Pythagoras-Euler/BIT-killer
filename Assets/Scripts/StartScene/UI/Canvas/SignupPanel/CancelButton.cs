@@ -18,7 +18,7 @@ namespace StartScene.UI.Canvas.SignupPanel
         private void Cancel()
         {
             mask.SetActive(false);
-            transform.parent.gameObject.SetActive(false);
+            transform.parent.parent.gameObject.SetActive(false);
         }
     }
 }
