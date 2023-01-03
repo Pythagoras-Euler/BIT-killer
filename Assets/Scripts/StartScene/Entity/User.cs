@@ -2,17 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class User : MonoBehaviour
+public class User 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public string type;
+    public string username;
+    public string password;
 
-    // Update is called once per frame
-    void Update()
+    public User(string Type,string Username,string Password)
     {
-        
+        type = Type;
+        username = Username;
+        password = Password;
+
     }
+    
 }
+public class RetUser
+{
+    public string type;
+    public bool success;
+    public string message;
+}
+

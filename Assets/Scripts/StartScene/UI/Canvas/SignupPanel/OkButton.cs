@@ -21,12 +21,15 @@ namespace StartScene.UI.Canvas.SignupPanel
 
         public Text loginPassword;
 
+        [SerializeField] WebLink wl;
+
 
         private void Start()
         {
             _okButton = transform.GetComponent<Button>();
             _okButton.onClick.AddListener(OkButtonClicked);
             errorInfo.text = "";
+            wl = GameObject.Find("WebLink").GetComponent<WebLink>();
         }
 
         //private void OnDestroy()
@@ -61,43 +64,54 @@ namespace StartScene.UI.Canvas.SignupPanel
             {
 
                 string cipcher = sha256(psw);
-
-                //TODO:发送请求
                 Debug.Log($"标识\"register\",注册账号{acc}, 密码{cipcher}");
-                //
-                
 
-                string retType = "register";//TODO 接收服务器返回值
-                bool retSuccess = true;
-                string retMes = "Registration successful";
+                // 发送请求
+                User user = new User("register",acc,cipcher);
+                string userJson = JsonUtility.ToJson(user);
+                wl.Send(userJson);
 
+                // TODO:server处理请求并返回
 
-                if (retType != "register")//不知道什么时候会出现这种错误（大概是用户乱点？
+                // 接收服务器返回值
+                RetUser retuser = JsonUtility.FromJson<RetUser>(wl.receiveJson);
+                if (retuser.type == "register") // 如果是注册
                 {
-                    errorInfo.text = "请勿频繁操作（未知错误）";
-                }
-                else if (retSuccess == false)//返回出现错误
-                {
-                    if (retMes == "Duplicate username")//用户名重复错误
+
+                    string retType = "register";
+                    bool retSuccess = retuser.success;
+                    string retMes = retuser.message;
+
+
+                    if (retType != "register")//不知道什么时候会出现这种错误（大概是用户乱点？
                     {
-                        errorInfo.text = "该用户名已被注册";
+                        errorInfo.text = "请勿频繁操作（未知错误）";
                     }
-                    else//其他错误
+                    else if (retSuccess == false)//返回出现错误
                     {
-                        errorInfo.text = retMes;
+                        if (retMes == "Duplicate username")//用户名重复错误
+                        {
+                            errorInfo.text = "该用户名已被注册";
+                        }
+                        else//其他错误
+                        {
+                            errorInfo.text = retMes;
+                        }
                     }
-                }
-                else if (retMes == "Registration successful")//成功
-                {
+                    else if (retMes == "Registration successful")//成功
+                    {
 
-                    errorInfo.text = "注册成功！";
-                    mask.SetActive(false);
-                    transform.parent.parent.gameObject.SetActive(false);
-                    //TODO close Panel
-                    //TODO set loginPanel true
-                    loginAccount.text = acc;
-                    loginPassword.text = psw;
+                        errorInfo.text = "注册成功！";
+                        mask.SetActive(false);
+                        transform.parent.parent.gameObject.SetActive(false);
+                        //TODO close Panel
 
+                        //TODO set loginPanel true
+
+                        loginAccount.text = acc;
+                        loginPassword.text = psw;
+
+                    }
                 }
             }
         }
