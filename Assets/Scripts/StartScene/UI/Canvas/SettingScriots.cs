@@ -38,7 +38,7 @@ public class SettingScriots : MonoBehaviour
         lastClickSE = ClickSETog.isOn;
     }
 
-    public void settingCancelButtonClicked()
+    public void SettingCancelButtonClicked()
     {
          MasterVolSlider.value = lastMasterVol;
         BGMVolSlider.value = lastBGMVol;
@@ -48,7 +48,7 @@ public class SettingScriots : MonoBehaviour
         transform.gameObject.SetActive(false);
         mask.SetActive(false);
     }
-    public void settingConfirmButtonClicked()
+    public void SettingConfirmButtonClicked()
     {
         transform.gameObject.SetActive(false);
         mask.SetActive(false);

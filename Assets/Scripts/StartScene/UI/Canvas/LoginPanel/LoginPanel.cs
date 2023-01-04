@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -56,8 +58,13 @@ public class LoginPanel : MonoBehaviour
 
     string Sha256(string plaintext)
     {
-        string cipertext;
-        cipertext = plaintext;//TODO √‹¬Îº”√‹
+        //string cipertext;
+        //cipertext = plaintext;//TODO √‹¬Îº”√‹
+
+        //From https://github.com/jv-amorim/Unity-Helpers/blob/master/Scripts/HashingHelpers/HashGenerator.cs with MIT Lisence
+        byte[] data = Encoding.ASCII.GetBytes(plaintext);
+        data = new SHA256Managed().ComputeHash(data);
+        string cipertext = Encoding.ASCII.GetString(data);   
 
         return cipertext;
     }

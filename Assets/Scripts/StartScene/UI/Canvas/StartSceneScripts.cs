@@ -52,18 +52,18 @@ public class StartSceneScripts : MonoBehaviour
         mask.SetActive(true);
     }
 
-    public void setMasterVolume(float volValue)
+    public void SetMasterVolume(float volValue)
     {
         mainAudioMixer.SetFloat("VolMaster", volValue);
     }
 
-    public void setBGMVolume(float volValue)
+    public void SetBGMVolume(float volValue)
     {
         mainAudioMixer.SetFloat("VolBGM",volValue);
     }
 
 
-    public void setSEVolume(float volValue)
+    public void SetSEVolume(float volValue)
     {
         mainAudioMixer.SetFloat("VolSE", volValue);
     }

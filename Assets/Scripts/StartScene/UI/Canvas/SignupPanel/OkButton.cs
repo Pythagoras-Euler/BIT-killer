@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Text;
+using System.Security.Cryptography;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace StartScene.UI.Canvas.SignupPanel
@@ -37,11 +39,18 @@ namespace StartScene.UI.Canvas.SignupPanel
             
         //}
 
-        string sha256(string plaintext)
+        string Sha256(string plaintext)
         {
-            string cipertext;
-            cipertext = plaintext;//TODO 密码加密
+            //string cipertext;
+            //cipertext = plaintext;//TODO 密码加密
 
+            //return cipertext;
+
+            //From https://github.com/jv-amorim/Unity-Helpers/blob/master/Scripts/HashingHelpers/HashGenerator.cs 
+            //MIT Lisence Authorized;
+            byte[] data = Encoding.ASCII.GetBytes(plaintext);
+            data = new SHA256Managed().ComputeHash(data);
+            string cipertext = Encoding.ASCII.GetString(data);
             return cipertext;
         }
 
@@ -63,7 +72,7 @@ namespace StartScene.UI.Canvas.SignupPanel
             else 
             {
 
-                string cipcher = sha256(psw);
+                string cipcher = Sha256(psw);
                 Debug.Log($"标识\"register\",注册账号{acc}, 密码{cipcher}");
 
                 // 发送请求
