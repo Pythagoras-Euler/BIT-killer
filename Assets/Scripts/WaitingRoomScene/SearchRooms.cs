@@ -9,6 +9,10 @@ public class SearchRooms : MonoBehaviour
     public WebLink wl;
     public GameObject searchRoomPannel;
     [SerializeField] Text searchIdText;
+
+    private Text retMsgDisplay;
+
+
     public class GetRooms // 获取所有房间的请求参数
     {
         public string type { get; set; }
@@ -80,6 +84,8 @@ public class SearchRooms : MonoBehaviour
     void Start()
     {
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
+
+        retMsgDisplay = transform.Find("RetMsg").GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -113,9 +119,47 @@ public class SearchRooms : MonoBehaviour
         wl.Send(gettheRoomJson);
 
         // TODO:接收返回json，根据返回json处理
+        RetTheRoom retRoom = new RetTheRoom();
+
+        //测试用init
+        {
+            retRoom.type = "join room";
+            retRoom.success = true;
+            retRoom.message = "Join the room successfully";
+            retRoom.content[0].roomID = 1;
+            retRoom.content[0].creator = "lbwnb";
+            retRoom.content[0].roomName = "test room";
+            retRoom.content[0].password = "";
+            retRoom.content[0].playerCount = 1;
+            retRoom.content[0].players = new string[] { "lbwnb", "lcy", "lgy", "lx" };
+            retRoom.content[0].gaming = false;
+            retRoom.content[0].full = false;
+        }
+        
+        // TODO：等待时间超时
+        // if (waittime >= 1000)
+        // { timeout }else
+        
         // TODO:查找不到直接输出提示消息，查找到则弹窗
-        // TODO:有密码则直接提问是否加入
-        // TODO:有密码则输入密码检查正误，正确直接加入，错误提示错误
+        if (retRoom.success)
+        {
+            // TODO:无密码则直接提问是否加入
+            if(retRoom.content[0].password == "")
+            {
+                //加入确认（无密码）
+            }
+            // TODO:有密码则输入密码检查正误，正确直接加入，错误提示错误
+            else
+            {
+                //加入确认（有密码）
+            }
+        }
+        else //找不到该房间
+        {
+            //NotFound()
+            retMsgDisplay.text = "找不到该房间 请检查ID输入";
+        }
+
         // 东西好多啊哼哼哼啊啊啊啊
     }
     public void CreateRoom()

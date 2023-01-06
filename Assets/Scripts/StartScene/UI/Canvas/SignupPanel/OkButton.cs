@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using LitJson;
-using System.Text;
 
 namespace StartScene.UI.Canvas.SignupPanel
 {
