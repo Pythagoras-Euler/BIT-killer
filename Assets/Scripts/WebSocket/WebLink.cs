@@ -34,12 +34,16 @@ public class WebLink : MonoBehaviour
         await ws.ConnectAsync(new Uri(uri), CancellationToken.None);
         while (true)
         {
-            var reault = new byte[20480];
+            var reault = new byte[4096];
             //等待接收服务端发送的消息
             await ws.ReceiveAsync(new ArraySegment<byte>(reault), CancellationToken.None);
-            receiveStr = Encoding.UTF8.GetString(reault, 0, reault.Length);
-            Debug.Log(receiveStr);
-            receiveJson = receiveStr; // TODO：str转类
+            UTF8Encoding m_utf8 = new UTF8Encoding(false);
+            receiveStr = m_utf8.GetString(reault, 0, reault.Length);
+            // string[] strArray = receiveStr.Split(new string[] {"  ","  "}, StringSplitOptions.RemoveEmptyEntries);
+            // receiveJson = strArray[0]; // TODO：str转类
+            // Debug.Log(receiveJson.Length.ToString());
+            // Debug.Log(receiveJson);
+            receiveJson = receiveStr;
         }
     }
 
@@ -51,7 +55,8 @@ public class WebLink : MonoBehaviour
 
     public void Send(string text)
     {
-        byte[] textbyte = Encoding.UTF8.GetBytes(text);
+        UTF8Encoding m_utf8 = new UTF8Encoding(false);
+        byte[] textbyte = m_utf8.GetBytes(text);
         ws.SendAsync(new ArraySegment<byte>(textbyte), WebSocketMessageType.Text, true, CancellationToken.None);
     }
 }

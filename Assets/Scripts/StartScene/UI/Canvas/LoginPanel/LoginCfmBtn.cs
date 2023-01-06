@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using LitJson;
 
 
 
@@ -18,13 +18,15 @@ public class LoginCfmBtn : MonoBehaviour
     //// Start is called before the first frame update
     //private void Start()
     //{
-    //    wl = GameObject.Find("WebLink").GetComponent<WebLink>();
+    //    wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
     //}
 
+
+    
     //string Sha256(string plaintext)
     //{
     //    string cipertext;
-    //    cipertext = plaintext;//TODO ÃÜÂë¼ÓÃÜ
+    //    cipertext = plaintext;//TODO ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     //    return cipertext;
     //}
@@ -36,66 +38,66 @@ public class LoginCfmBtn : MonoBehaviour
     //    var psw = password.GetComponent<Text>().text;
     //    if (psw.Length <= 6)
     //    {
-    //        promptInfo.text = "ÇëÊäÈë´óÓÚ6Î»µÄÃÜÂë";
+    //        promptInfo.text = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½6Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
     //    }
     //    else
     //    {
 
     //        string cipcher = Sha256(psw);
 
-    //        Debug.Log($"±êÊ¶\"login\",ÕËºÅ{acc}, ÃÜÂë{cipcher}");
+    //        // Debug.Log($"ï¿½ï¿½Ê¶\"login\",ï¿½Ëºï¿½{acc}, ï¿½ï¿½ï¿½ï¿½{cipcher}");
 
-    //        //TODO:·¢ËÍÇëÇó
+    //        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     //        User user = new User("login", acc, cipcher);
-    //        string userJson = JsonUtility.ToJson(user);
+    //        string userJson = JsonMapper.ToJson(user);
     //        wl.Send(userJson);
 
-    //        // ´¦Àí·µ»ØÖµ
-    //        RetUser retuser = JsonUtility.FromJson<RetUser>(wl.receiveJson);
-    //        if(retuser.type == "login") // Èç¹ûÊÇµÇÂ¼ 
+    //        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
+    //        RetUser retuser = JsonMapper.ToObject<RetUser>(wl.receiveJson);
+    //        if(retuser.type == "login") // ï¿½ï¿½ï¿½ï¿½Çµï¿½Â¼ 
     //        {
 
-    //            string retType = retuser.type;//½ÓÊÕ·þÎñÆ÷·µ»ØÖµ
+    //            string retType = retuser.type;//ï¿½ï¿½ï¿½Õ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
     //            bool retSuccess = retuser.success;
     //            string retMes = retuser.message;
 
 
-    //            if (retType != "login")//²»ÖªµÀÊ²Ã´Ê±ºò»á³öÏÖÕâÖÖ´íÎó£¨´ó¸ÅÊÇÓÃ»§ÂÒµã£¿
+    //            if (retType != "login")//ï¿½ï¿½Öªï¿½ï¿½Ê²Ã´Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ó£¨´ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Òµã£¿
     //            {
-    //                promptInfo.text = "Î´Öª´íÎó(ÇëÎðÆµ·±²Ù×÷£©";
+    //                promptInfo.text = "Î´Öªï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
     //            }
-    //            else if (retSuccess == false)//·µ»Ø³öÏÖ´íÎó
+    //            else if (retSuccess == false)//ï¿½ï¿½ï¿½Ø³ï¿½ï¿½Ö´ï¿½ï¿½ï¿½
     //            {
-    //                if (retMes == "Unvalid Username")//µÇÂ½Ê§°Ü
+    //                if (retMes == "Unvalid Username")//ï¿½ï¿½Â½Ê§ï¿½ï¿½
     //                {
-    //                    promptInfo.text = "¸ÃÓÃ»§ÃûÎ´±»×¢²á";//ÓÃ»§Ãû´íÎó
+    //                    promptInfo.text = "ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Î´ï¿½ï¿½×¢ï¿½ï¿½";//ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     //                }
     //                else if (retMes == "Wrong Password")
     //                {
-    //                    promptInfo.text = "ÃÜÂë´íÎó";//ÃÜÂë´íÎó
+    //                    promptInfo.text = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     //                }
-    //                else if (retMes == "Login Failed")//µÇÂ½Ê§°Ü
+    //                else if (retMes == "Login Failed")//ï¿½ï¿½Â½Ê§ï¿½ï¿½
     //                {
-    //                    promptInfo.text = "µÇÂ½Ê§°Ü£¬ÇëÖØÊÔ";//ÊÇ²»ÊÇÓ¦¸ÃÓÐÓÃ»§Ãû²»´æÔÚºÍÃÜÂë´íÎóÁ½ÖÖ¼ì²é·½Ê½
+    //                    promptInfo.text = "ï¿½ï¿½Â½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";//ï¿½Ç²ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½é·½Ê½
     //                }
-    //                else//ÆäËû´íÎó
+    //                else//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     //                {
     //                    promptInfo.text = retMes;
     //                }
     //            }
-    //            else if (retMes == "Login successful")//³É¹¦
+    //            else if (retMes == "Login successful")//ï¿½É¹ï¿½
     //            {
 
-    //                promptInfo.text = "µÇÂ¼³É¹¦£¡";
+    //                promptInfo.text = "ï¿½ï¿½Â¼ï¿½É¹ï¿½ï¿½ï¿½";
     //                mask.SetActive(false);
     //                transform.parent.parent.gameObject.SetActive(false);
     //                //TODO close Panel
     //                //TODO set loginPanel true
-    //                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);//ÇÐ»»µ½ÏÂÒ»¸ö³¡¾°£º²Ëµ¥½çÃæ£¨Ö÷½çÃæ£©
-    //                                                                                     //£¨ÐèÒªÔÚ ÎÄ¼þFile->
-    //                                                                                     //Éú³ÉÉèÖÃBuildSettings ÀïÉèÖÃË³Ðò£©
-    //                                                                                     //Èç¹ûÐèÒªµÄ»°¿ÉÒÔÉèÖÃÒ»¸ö¹ý¶É¶¯»­
+    //                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);//ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½æ£¨ï¿½ï¿½ï¿½ï¿½ï¿½æ£©
+    //                                                                                     //ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ ï¿½Ä¼ï¿½File->
+    //                                                                                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½BuildSettings ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½
+    //                                                                                     //ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½
 
 
     //            }

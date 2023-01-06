@@ -1,7 +1,10 @@
-﻿using System.Text;
+using System.Text;
 using System.Security.Cryptography;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LitJson;
+using System.Text;
 
 namespace StartScene.UI.Canvas.SignupPanel
 {
@@ -31,12 +34,12 @@ namespace StartScene.UI.Canvas.SignupPanel
             _okButton = transform.GetComponent<Button>();
             _okButton.onClick.AddListener(OkButtonClicked);
             errorInfo.text = "";
-            wl = GameObject.Find("WebLink").GetComponent<WebLink>();
+            wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
         }
 
         //private void OnDestroy()
         //{
-            
+
         //}
 
         string Sha256(string plaintext)
@@ -77,13 +80,15 @@ namespace StartScene.UI.Canvas.SignupPanel
 
                 // 发送请求
                 User user = new User("register",acc,cipcher);
-                string userJson = JsonUtility.ToJson(user);
+                string userJson = JsonMapper.ToJson(user);
+                //Debug.Log(userJson);
                 wl.Send(userJson);
-
                 // TODO:server处理请求并返回
 
                 // 接收服务器返回值
-                RetUser retuser = JsonUtility.FromJson<RetUser>(wl.receiveJson);
+                // RetUser retuser = JsonUtility.FromJson<RetUser>(wl.receiveJson);
+                Debug.Log(wl.receiveJson);
+                RetUser retuser = JsonMapper.ToObject<RetUser>(wl.receiveJson);
                 if (retuser.type == "register") // 如果是注册
                 {
 
