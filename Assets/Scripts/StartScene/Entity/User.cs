@@ -2,25 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class User 
+public class User
 {
-    public string type;
-    public string username;
-    public string password;
-
-    public User(string Type,string Username,string Password)
+    public string type { get; set; }
+    public Dictionary<string, string> content;
+    public User(string t, string u, string p)
     {
-        type = Type;
-        username = Username;
-        password = Password;
-
+        type = t;
+        content = new Dictionary<string, string>()
+                {
+                    { "username",u},
+                    { "password",p }
+                };
     }
-    
+
 }
 public class RetUser
 {
-    public string type;
-    public bool success;
-    public string message;
+    public string type { get; set; }
+    public bool success { get; set; }
+    public string message { get; set; }
+    public Dictionary<string, string> content;
+
+    public RetUser() { }
+   /* public RetUser(string t, bool s, string m)
+    {
+        type = t;
+        success = s;
+        message = m;
+        content = new Dictionary<string, string>()
+        {
+        };
+    }*/
 }
 

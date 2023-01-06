@@ -29,7 +29,8 @@ server.on('connection', function connection(ws, req) {
         // 广播消息给所有客户端
         server.clients.forEach(function each(client) {
             if (client.readyState === WebSocket.OPEN) {
-                client.send(clientName + " -> " + message);
+                //client.send(clientName + " -> " + message);
+                client.send(message);
             }
         });
 

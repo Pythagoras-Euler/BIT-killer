@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using LitJson;
 
 
 
@@ -18,9 +18,11 @@ public class LoginCfmBtn : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        wl = GameObject.Find("WebLink").GetComponent<WebLink>();
+        wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
     }
 
+
+    
     string sha256(string plaintext)
     {
         string cipertext;
@@ -43,15 +45,15 @@ public class LoginCfmBtn : MonoBehaviour
 
             string cipcher = sha256(psw);
 
-            Debug.Log($"标识\"login\",账号{acc}, 密码{cipcher}");
+            // Debug.Log($"标识\"login\",账号{acc}, 密码{cipcher}");
 
-            //TODO:发送请求
+            //发送请求
             User user = new User("login", acc, cipcher);
-            string userJson = JsonUtility.ToJson(user);
+            string userJson = JsonMapper.ToJson(user);
             wl.Send(userJson);
 
             // 处理返回值
-            RetUser retuser = JsonUtility.FromJson<RetUser>(wl.receiveJson);
+            RetUser retuser = JsonMapper.ToObject<RetUser>(wl.receiveJson);
             if(retuser.type == "login") // 如果是登录 
             {
 
