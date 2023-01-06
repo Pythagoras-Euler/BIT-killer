@@ -56,7 +56,7 @@ public class LoginPanel : MonoBehaviour
     //    wl = GameObject.Find("WebLink").GetComponent<WebLink>();
     //}
 
-    string Sha256(string plaintext)
+    byte[] Sha256(string plaintext)
     {
         //string cipertext;
         //cipertext = plaintext;//TODO 密码加密
@@ -64,9 +64,26 @@ public class LoginPanel : MonoBehaviour
         //From https://github.com/jv-amorim/Unity-Helpers/blob/master/Scripts/HashingHelpers/HashGenerator.cs with MIT Lisence
         byte[] data = Encoding.ASCII.GetBytes(plaintext);
         data = new SHA256Managed().ComputeHash(data);
-        string cipertext = Encoding.ASCII.GetString(data);   
+        //string cipertext = Encoding.ASCII.GetString(data);   
 
-        return cipertext;
+        //return cipertext;
+        return data;
+    }
+
+
+    public static string ToHexStrFromByte(byte[] byteDatas)//调试用，log密码输出16进制字符串
+    {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < byteDatas.Length; i++)
+        {
+            builder.Append(string.Format("{0:X2} ", byteDatas[i]));
+        }
+        return builder.ToString().Trim();
+    }
+    public static string ToHexString(string plainString, Encoding encode)
+    {
+        byte[] byteDatas = encode.GetBytes(plainString);
+        return ToHexStrFromByte(byteDatas);
     }
 
     public void LoginCfmBtnClicked()
@@ -81,9 +98,17 @@ public class LoginPanel : MonoBehaviour
         else
         {
 
-            string cipcher = Sha256(psw);
+            //string cipcher = Sha256(psw);
+            byte[] cipchers = Sha256(psw);
+            string cipcher = Encoding.UTF8.GetString(cipchers);
+            string cipchert = ToHexStrFromByte(cipchers);
 
-            Debug.Log($"标识\"login\",账号{acc}, 密码{cipcher}");
+            byte[] ax = new byte[2] { 0xFF, 0xF0 };
+
+            //string opPsw = ToHexString(cipcher, Encoding.ASCII);
+            Debug.Log($"标识\"login\",账号{acc}, 密码{cipchers}");
+            Debug.Log($"ff00:{ToHexStrFromByte(ax)}");
+            Debug.Log($"标识\"login\",账号{acc}, 密码{cipchert}");
 
             //TODO:发送请求
             User user = new User("login", acc, cipcher);
