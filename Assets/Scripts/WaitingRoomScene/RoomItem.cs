@@ -19,6 +19,7 @@ public class RoomItem : MonoBehaviour
     [SerializeField] GameObject creatorField;
     [SerializeField] GameObject playerCountField;
     [SerializeField] GameObject hasPasswordHint;
+    [SerializeField] GameObject lockIcon;
     [SerializeField] GameObject gamingHint;
     [SerializeField] GameObject fullHint;
 
@@ -42,6 +43,8 @@ public class RoomItem : MonoBehaviour
         if(hasPassword)
         {
             hasPasswordHint.GetComponent<Text>().text = "需要密码";
+            lockIcon.SetActive(true);//加锁形图标
+
         }
         // TODO:是否正在游戏显示不同图标
         if (gaming)

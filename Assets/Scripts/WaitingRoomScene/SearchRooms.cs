@@ -29,6 +29,7 @@ public class SearchRooms : MonoBehaviour
         
     }
 
+    //获取全部房间列表
     public void GetAllRooms()
     {
         // 发送请求
@@ -38,14 +39,20 @@ public class SearchRooms : MonoBehaviour
         wl.Send(getRoomsJson);
         // TODO:根据返回消息更新房间列表
     }
+
+    //打开搜索房间面板
     public void OpenSearchRoomPannel()
     {
         searchRoomPannel.SetActive(true);
     }
+
+    //关闭搜索房间面板
     public void CloseSearchRoomPannel()
     {
         searchRoomPannel.SetActive(false);
     }
+
+    //搜索房间事件
     public void SearchRoom()
     {
         int id =int.Parse(searchIdText.text);
@@ -98,11 +105,34 @@ public class SearchRooms : MonoBehaviour
 
         // 东西好多啊哼哼哼啊啊啊啊
     }
+
+    //随机加入房间
+    public void RandomJoin()
+    {
+        //发动随机加入请求
+
+        //接收返回值
+        bool retSuc = true;
+
+        if(retSuc == true)
+        {
+            JoinRoom();//TODO:获取房间信息的部分我没找到在哪（）
+        }
+        else
+        {
+            CreateRoom();//找不到房间就创建房间
+        }
+        
+    }
+
+    //创建房间事件
     public void CreateRoom()
     {
         // 弹出房间设置框
         createRoomPannel.SetActive(true);
     }
+
+    //加入房间事件
     public void JoinRoom()
     {
         // TODO:弹出房间信息窗询问是否加入
