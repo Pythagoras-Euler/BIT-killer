@@ -47,4 +47,9 @@ public class RoomItem : MonoBehaviour
             fullHint.GetComponent<Text>().text = "已满";
         }
     }
+    public void JoinRoom()
+    {
+        Debug.Log("Join");
+        // TODO:发送加入消息
+    }
 }
