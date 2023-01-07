@@ -787,9 +787,13 @@ MonoBehaviour:
   hasPassword: 1
   gaming: 0
   full: 0
+  roomID: 0
+  roomPassword: 
   roomNameField: {fileID: 6153168167464358930}
   creatorField: {fileID: 6153168167330660783}
   playerCountField: {fileID: 6153168166347185128}
   hasPasswordHint: {fileID: 6153168165858875429}
   gamingHint: {fileID: 6153168166371793776}
   fullHint: {fileID: 6153168166659812517}
+  joinRoomPannel: {fileID: 0}
+  joinBtn: {fileID: 1846155174402879369}

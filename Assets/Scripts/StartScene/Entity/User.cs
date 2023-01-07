@@ -25,7 +25,7 @@ public class RetUser
     public Dictionary<string, string> content;
 
     public RetUser() { }
-   /* public RetUser(string t, bool s, string m)
+    public RetUser(string t, bool s, string m)
     {
         type = t;
         success = s;
@@ -33,6 +33,6 @@ public class RetUser
         content = new Dictionary<string, string>()
         {
         };
-    }*/
+    }
 }
 

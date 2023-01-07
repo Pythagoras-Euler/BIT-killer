@@ -1,0 +1,15 @@
+{
+  "type" : "join room",
+  "success" : true,
+  "message" : "Join the room successfully",
+  "content" : {
+        "roomID":1,
+        "creator" : "lbwnb",
+        "roomName" : "test room",
+        "password" : "",
+        "playerCount" : 4,
+        "players" : ["lbwnb","lcy","lgy","lx"],
+        "gaming" : false,
+        "full" : false
+  }
+}

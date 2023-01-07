@@ -12,6 +12,9 @@ public class RoomItem : MonoBehaviour
     public bool gaming;
     public bool full;
 
+    public int roomID;
+    public string roomPassword;
+
     [SerializeField] GameObject roomNameField;
     [SerializeField] GameObject creatorField;
     [SerializeField] GameObject playerCountField;
@@ -19,10 +22,14 @@ public class RoomItem : MonoBehaviour
     [SerializeField] GameObject gamingHint;
     [SerializeField] GameObject fullHint;
 
+    [SerializeField] GameObject joinRoomPannel;
+    [SerializeField] GameObject joinBtn;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        joinRoomPannel = GameObject.Find("Canvas").transform.Find("JoinRoomPannel").gameObject;
+        Debug.Log("find");
     }
 
     // Update is called once per frame
@@ -40,16 +47,19 @@ public class RoomItem : MonoBehaviour
         if (gaming)
         {
             gamingHint.GetComponent<Text>().text = "游戏中";
+            joinBtn.SetActive(false);
         }
         // TODO:是否满员也采用不同图标
         if (full)
         {
             fullHint.GetComponent<Text>().text = "已满";
+            joinBtn.SetActive(false);
         }
     }
     public void JoinRoom()
     {
-        Debug.Log("Join");
-        // TODO:发送加入消息
+        joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = roomID;
+        joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = hasPassword;
+        joinRoomPannel.SetActive(true);
     }
 }

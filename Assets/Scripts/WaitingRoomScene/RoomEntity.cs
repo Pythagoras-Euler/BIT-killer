@@ -36,6 +36,7 @@ public class Room
     public bool gaming;
     public bool full;
 
+    public Room() { }
     public Room(int id, string c, string rn, string psw, int plc, string[] pl, bool g, bool f)
     {
         roomID = id;
@@ -83,5 +84,46 @@ public class CreateARoom
                 { "password", p },
                 { "roomName", rn }
             };
+    }
+}
+public class RetCreateARoom
+{
+    public string type;
+    public bool success;
+    public string message;
+    /*public Dictionary<string,string> content;
+    public RetCreateARoom()
+    {
+        content = new Dictionary<string, string>()
+        {
+            { "roomID",1} ,
+            { "creator","lbwnb"},
+            { "roomName","test room" },
+            { "password","" },
+            { "playerCount",1 },
+            { "players",["lbwnb"] },
+            { "gaming",false },
+            { "full"false }
+        };
+    }*/
+    public Room content;
+
+}
+public class JoinARoom
+{
+    public string type;
+    public class JoinContent {
+        public string user;
+        public int roomID;
+        public string password;
+    }
+    public JoinARoom() { }
+    public JoinARoom(string t,string u,int id,string p)
+    {
+        type = t;
+        JoinContent content = new JoinContent();
+        content.user = u;
+        content.roomID = id;
+        content.password = p;
     }
 }

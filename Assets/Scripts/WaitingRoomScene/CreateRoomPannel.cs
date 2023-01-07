@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using LitJson;
+using System.IO;
 
 public class CreateRoomPannel : MonoBehaviour
 {
@@ -34,13 +35,19 @@ public class CreateRoomPannel : MonoBehaviour
             password = "";
         }
         Debug.Log("创建房间");
-        // TODO:发送json
+        // 发送json
         CreateARoom crar = new CreateARoom("create room", creator, password, roomName);
         string crarJson = JsonMapper.ToJson(crar);
         Debug.Log(crarJson);
         wl.Send(crarJson);
-        
-        // 处理返回消息
+
+        // TODO:处理返回消息
+        // 依然有BOM的问题，这里先放一个jsontest.txt做测试
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd();
+        Debug.Log(json);
+        JsonData retcreatearoom = JsonMapper.ToObject(json);
+        Debug.Log(retcreatearoom["content"]["creator"].ToString());
     }
     public void ClosePannel()
     {
