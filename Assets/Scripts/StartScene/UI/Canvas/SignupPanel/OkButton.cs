@@ -80,9 +80,8 @@ namespace StartScene.UI.Canvas.SignupPanel
                 // 发送请求
                 User user = new User("register",acc,cipcher);
                 string userJson = JsonMapper.ToJson(user);
-                //Debug.Log(userJson);
+                Debug.Log(userJson);
                 wl.Send(userJson);
-                // TODO:server处理请求并返回
 
                 // 接收服务器返回值
                 // RetUser retuser = JsonUtility.FromJson<RetUser>(wl.receiveJson);

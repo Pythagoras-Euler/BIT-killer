@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using LitJson;
 
 public class LoginPanel : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class LoginPanel : MonoBehaviour
     public WebLink wl;
     public InputField pswInputField;
     public Toggle pswDisplayTog;
+    public GameObject userInfo;
 
 
     // Start is called before the first frame update
@@ -112,11 +114,11 @@ public class LoginPanel : MonoBehaviour
 
             //TODO:发送请求
             User user = new User("login", acc, cipcher);
-            string userJson = JsonUtility.ToJson(user);
+            string userJson = JsonMapper.ToJson(user);
             wl.Send(userJson);
 
             // 处理返回值
-            RetUser retuser = JsonUtility.FromJson<RetUser>(wl.receiveJson);
+            RetUser retuser = JsonMapper.ToObject<RetUser>(wl.receiveJson);
             if (retuser.type == "login") // 如果是登录 
             {
 
@@ -155,8 +157,7 @@ public class LoginPanel : MonoBehaviour
                     promptInfo.text = "登录成功！";
                     mask.SetActive(false);
                     transform.parent.parent.gameObject.SetActive(false);
-                    //TODO close Panel
-                    //TODO set loginPanel true
+                    userInfo.GetComponent<UserInfo>().username = retuser.content["username"];
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);//切换到下一个场景：菜单界面（主界面）
                                                                                          //（需要在 文件File->
                                                                                          //生成设置BuildSettings 里设置顺序）

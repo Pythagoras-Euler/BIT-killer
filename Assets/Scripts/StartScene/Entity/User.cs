@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class User
+public class User:MonoBehaviour
 {
     public string type { get; set; }
     public Dictionary<string, string> content;
