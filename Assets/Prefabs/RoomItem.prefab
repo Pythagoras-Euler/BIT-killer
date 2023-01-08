@@ -794,6 +794,7 @@ MonoBehaviour:
   creatorField: {fileID: 6153168167330660783}
   playerCountField: {fileID: 6153168166347185128}
   hasPasswordHint: {fileID: 6153168165858875429}
+  lockIcon: {fileID: 8309266476132864273}
   gamingHint: {fileID: 6153168166371793776}
   fullHint: {fileID: 6153168166659812517}
   joinRoomPannel: {fileID: 0}

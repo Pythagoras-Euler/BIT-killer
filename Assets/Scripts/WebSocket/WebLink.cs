@@ -25,6 +25,7 @@ public class WebLink : MonoBehaviour
     // 在Start中获取消息
     public void Start()
     {
+        //TODO 这里加一个转圈小动画，用于await加载
         OnConnectedToServer();
     }
 

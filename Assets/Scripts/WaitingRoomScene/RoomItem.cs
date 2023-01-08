@@ -46,7 +46,7 @@ public class RoomItem : MonoBehaviour
             lockIcon.SetActive(true);//加锁形图标
 
         }
-        // TODO:是否正在游戏显示不同图标
+        // TODO:是否正在游戏显示不同图标or加粗
         if (gaming)
         {
             gamingHint.GetComponent<Text>().text = "游戏中";

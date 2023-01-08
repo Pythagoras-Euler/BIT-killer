@@ -43,7 +43,7 @@ public class SearchRoomPannel : MonoBehaviour
         Debug.Log(json);
         JsonData retgetaroom = JsonMapper.ToObject(json);
         Debug.Log(retgetaroom["success"]);
-        if (retgetaroom["success"].ToString() == "True")
+        if (retgetaroom["success"].ToString() == "True")//TODO 梳理一下这个和Searhroom.cs.Srarch()是什么关系
         {
             //TODO:找到房间询问是否加入
         }

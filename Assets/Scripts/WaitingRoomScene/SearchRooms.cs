@@ -6,6 +6,17 @@ using UnityEngine.UI;
 
 public class SearchRooms : MonoBehaviour
 {
+    public string roomName;
+    public string creator;
+    public int playerCount;
+    public bool hasPassword;
+    public bool gaming;
+    public bool full;
+    public int playerLimit = 7;
+
+    public int roomID;
+    public string roomPassword;
+
     public WebLink wl;
     public GameObject searchRoomPannel;
     [SerializeField] Text searchIdText;
@@ -66,14 +77,14 @@ public class SearchRooms : MonoBehaviour
 
         //测试用init
         {
-            retRoom.type = "join room";
+            retRoom.type = "get a room";
             retRoom.success = true;
-            retRoom.message = "Join the room successfully";
+            retRoom.message = "Get a room successfully";
             retRoom.content[0].roomID = 1;
             retRoom.content[0].creator = "lbwnb";
             retRoom.content[0].roomName = "test room";
             retRoom.content[0].password = "";
-            retRoom.content[0].playerCount = 1;
+            retRoom.content[0].playerCount = 4;
             retRoom.content[0].players = new string[] { "lbwnb", "lcy", "lgy", "lx" };
             retRoom.content[0].gaming = false;
             retRoom.content[0].full = false;
@@ -86,15 +97,34 @@ public class SearchRooms : MonoBehaviour
         // TODO:查找不到直接输出提示消息，查找到则弹窗
         if (retRoom.success)
         {
+            if(retRoom.content[0].playerCount >= playerLimit)//房间已满
+            {
+                retMsgDisplay.text = "房间已满！";
+                joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = roomID;
+                joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = hasPassword;
+                joinRoomPannel.GetComponent<JoinRoomPannel>().canJoin = false;
+                joinRoomPannel.SetActive(true);
+            }
+            else 
             // TODO:无密码则直接提问是否加入
             if(retRoom.content[0].password == "")
             {
+                hasPassword = false;
                 //加入确认（无密码）
+                joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = roomID;
+                joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = hasPassword;
+                joinRoomPannel.GetComponent<JoinRoomPannel>().canJoin = true;
+                joinRoomPannel.SetActive(true);
             }
             // TODO:有密码则输入密码检查正误，正确直接加入，错误提示错误
             else
             {
                 //加入确认（有密码）
+                hasPassword = true;
+                joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = roomID;
+                joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = hasPassword;
+                joinRoomPannel.GetComponent<JoinRoomPannel>().canJoin = true;
+                joinRoomPannel.SetActive(true);
             }
         }
         else //找不到该房间
@@ -116,7 +146,7 @@ public class SearchRooms : MonoBehaviour
 
         if(retSuc == true)
         {
-            JoinRoom();//TODO:获取房间信息的部分我没找到在哪（）
+            JoinRoom();//TODO:获取房间信息的部分我没找到在哪（是上面那个searchroom么）
         }
         else
         {

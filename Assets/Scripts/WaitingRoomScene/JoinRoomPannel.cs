@@ -10,9 +10,18 @@ public class JoinRoomPannel : MonoBehaviour
     public string username;
     public GameObject roomPasswordField;
     public GameObject roomPasswordText;
+    public GameObject joinBtn;
+    public Text roomInfoDisplay;
+    public Text retMsg;
     public WebLink wl;
     public int roomID;
     public bool hasPassword;
+    public bool canJoin;
+    public string roomOwner;
+    public string[] roomMembers;
+    public int memberCount;
+
+
     private void Start()
     {
         username = GameObject.FindGameObjectWithTag("UserInfo").GetComponent<UserInfo>().username;
@@ -21,14 +30,32 @@ public class JoinRoomPannel : MonoBehaviour
     }
     private void Update()
     {
-        if (!hasPassword)
+
+        RoomInfoDisplay();
+        if (!canJoin)
         {
+            joinBtn.SetActive(false);
             roomPasswordField.SetActive(false);
         }
-        else
+        else 
         {
-            roomPasswordField.SetActive(true);
+            if (!hasPassword)
+            {
+                roomPasswordField.SetActive(false);
+            }
+            else
+            {
+                roomPasswordField.SetActive(true);
+            }
+            joinBtn.SetActive(true);
         }
+    }
+
+    private void RoomInfoDisplay()
+    {
+        roomMembers = new string[] { "lbw", "lx", "lcy", "lgy" };
+        roomInfoDisplay.text = "房间号："+ roomID + " \n 房主："+roomOwner + " \n 成员:" + roomMembers + " \n 人数："+ memberCount + "/7 \n ";
+        //TODO 格式有点问题,string[]需要更换显示方式
     }
     public void JoinBtn()
     {
@@ -62,6 +89,7 @@ public class JoinRoomPannel : MonoBehaviour
         else
         {
             //TODO:显示加入失败信息
+            retMsg.text = "加入房间失败，请重试";
         }
         
     }
