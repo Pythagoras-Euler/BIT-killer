@@ -17,3 +17,6 @@ gitee：https://gitee.com/Pythagoras-Euler/bit-killer
   
 ##### 后端仓库地址：  
 github：https://github.com/BoldWinds/BITKill
+
+##### 接口测试文档：
+https://shimo.im/docs/KrkEVaBzgrcJr7AJ/
