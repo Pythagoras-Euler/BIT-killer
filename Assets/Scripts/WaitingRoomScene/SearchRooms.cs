@@ -63,78 +63,7 @@ public class SearchRooms : MonoBehaviour
         searchRoomPannel.SetActive(false);
     }
 
-    //搜索房间事件
-    public void SearchRoom()
-    {
-        int id =int.Parse(searchIdText.text);
-        GetTheRoom gettheRoom = new GetTheRoom(id);
-        string gettheRoomJson = JsonMapper.ToJson(gettheRoom);
-        Debug.Log(gettheRoomJson);
-        wl.Send(gettheRoomJson);
 
-        // TODO:接收返回json，根据返回json处理
-        RetTheRoom retRoom = new RetTheRoom();
-
-        //测试用init
-        {
-            retRoom.type = "get a room";
-            retRoom.success = true;
-            retRoom.message = "Get a room successfully";
-            retRoom.content[0].roomID = 1;
-            retRoom.content[0].creator = "lbwnb";
-            retRoom.content[0].roomName = "test room";
-            retRoom.content[0].password = "";
-            retRoom.content[0].playerCount = 4;
-            retRoom.content[0].players = new string[] { "lbwnb", "lcy", "lgy", "lx" };
-            retRoom.content[0].gaming = false;
-            retRoom.content[0].full = false;
-        }
-        
-        // TODO：等待时间超时
-        // if (waittime >= 1000)
-        // { timeout }else
-        
-        // TODO:查找不到直接输出提示消息，查找到则弹窗
-        if (retRoom.success)
-        {
-            if(retRoom.content[0].playerCount >= playerLimit)//房间已满
-            {
-                retMsgDisplay.text = "房间已满！";
-                joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = roomID;
-                joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = hasPassword;
-                joinRoomPannel.GetComponent<JoinRoomPannel>().canJoin = false;
-                joinRoomPannel.SetActive(true);
-            }
-            else 
-            // TODO:无密码则直接提问是否加入
-            if(retRoom.content[0].password == "")
-            {
-                hasPassword = false;
-                //加入确认（无密码）
-                joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = roomID;
-                joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = hasPassword;
-                joinRoomPannel.GetComponent<JoinRoomPannel>().canJoin = true;
-                joinRoomPannel.SetActive(true);
-            }
-            // TODO:有密码则输入密码检查正误，正确直接加入，错误提示错误
-            else
-            {
-                //加入确认（有密码）
-                hasPassword = true;
-                joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = roomID;
-                joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = hasPassword;
-                joinRoomPannel.GetComponent<JoinRoomPannel>().canJoin = true;
-                joinRoomPannel.SetActive(true);
-            }
-        }
-        else //找不到该房间
-        {
-            //NotFound()
-            retMsgDisplay.text = "找不到该房间 请检查ID输入";
-        }
-
-        // 东西好多啊哼哼哼啊啊啊啊
-    }
 
     //随机加入房间
     public void RandomJoin()

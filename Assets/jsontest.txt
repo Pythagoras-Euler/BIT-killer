@@ -4,10 +4,10 @@
   "message" : "Join the room successfully",
   "content" : {
         "roomID":1,
-        "creator" : "lbwnb",
+        "creator" : "lbwlbw",
         "roomName" : "test room",
-        "password" : "",
-        "playerCount" : 4,
+        "password" : "123456",
+        "playerCount" : 5,
         "players" : ["lbwnb","lcy","lgy","lx"],
         "gaming" : false,
         "full" : false

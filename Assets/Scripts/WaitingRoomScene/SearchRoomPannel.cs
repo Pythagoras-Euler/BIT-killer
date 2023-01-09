@@ -9,6 +9,7 @@ public class SearchRoomPannel : MonoBehaviour
 {
     [SerializeField] GameObject searchFieldText;
     [SerializeField] GameObject RetMsg;
+    [SerializeField] GameObject joinRoomPannel;
     public WebLink wl;
 
     public int searchID;
@@ -25,7 +26,8 @@ public class SearchRoomPannel : MonoBehaviour
         
     }
     
-    public void searchBtn()
+    // 搜索房间
+    public void searchBtn() 
     {
         searchID =int.Parse (searchFieldText.GetComponent<Text>().text);
         JsonData data1 = new JsonData();
@@ -34,7 +36,7 @@ public class SearchRoomPannel : MonoBehaviour
         data1["content"]["roomID"] = searchID;
         string srJson = data1.ToJson();
         Debug.Log(srJson);
-        wl.Send(srJson);
+       // wl.Send(srJson);
 
         // TODO:处理返回消息
         // 放一个jsontest.txt测试
@@ -43,14 +45,74 @@ public class SearchRoomPannel : MonoBehaviour
         Debug.Log(json);
         JsonData retgetaroom = JsonMapper.ToObject(json);
         Debug.Log(retgetaroom["success"]);
-        if (retgetaroom["success"].ToString() == "True")//TODO 梳理一下这个和Searhroom.cs.Srarch()是什么关系
+        if (retgetaroom["success"].ToString() == "True") // 查找成功
         {
             //TODO:找到房间询问是否加入
+            if (int.Parse(retgetaroom["content"]["playerCount"].ToString()) >= 7) //房间已满
+            {
+                joinRoomPannel.GetComponent<JoinRoomPannel>().retMsg.GetComponent<Text>().text = "房间已满"; 
+                joinRoomPannel.GetComponent<JoinRoomPannel>().roomID =int.Parse(retgetaroom["content"]["roomID"].ToString());
+                if (retgetaroom["content"]["password"].ToString() == "")
+                {
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword =false;
+                }
+                else
+                {
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = true;
+                }
+                joinRoomPannel.GetComponent<JoinRoomPannel>().canJoin = false;
+                joinRoomPannel.GetComponent<JoinRoomPannel>().roomOwner = retgetaroom["content"]["creator"].ToString();
+                joinRoomPannel.GetComponent<JoinRoomPannel>().memberCount = retgetaroom["content"]["players"].Count;
+                joinRoomPannel.GetComponent<JoinRoomPannel>().roomMembers = new string[retgetaroom["content"]["players"].Count];
+                for (int i =0;i<retgetaroom["content"]["players"].Count;i++)
+                {
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().roomMembers[i] = retgetaroom["content"]["players"][i].ToString();
+
+                }
+                joinRoomPannel.SetActive(true);
+            }
+            else // 房间未满
+            {
+                joinRoomPannel.GetComponent<JoinRoomPannel>().retMsg.GetComponent<Text>().text = "可加入";
+                if (retgetaroom["content"]["password"].ToString() == "")
+                {
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = false;
+                    //加入确认（无密码）
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = int.Parse(retgetaroom["content"]["roomID"].ToString());
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = false; // 无密码
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().canJoin = true;
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().roomOwner = retgetaroom["content"]["creator"].ToString();
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().memberCount = retgetaroom["content"]["players"].Count;
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().roomMembers = new string[retgetaroom["content"]["players"].Count];
+                    for (int i = 0; i < retgetaroom["content"]["players"].Count; i++)
+                    {
+                        joinRoomPannel.GetComponent<JoinRoomPannel>().roomMembers[i] = retgetaroom["content"]["players"][i].ToString();
+
+                    }
+                    joinRoomPannel.SetActive(true);
+                }
+                else
+                {
+                    //加入确认（有密码）
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = true;
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = int.Parse(retgetaroom["content"]["roomID"].ToString());
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = true;
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().canJoin = true;
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().roomOwner = retgetaroom["content"]["creator"].ToString();
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().memberCount = retgetaroom["content"]["players"].Count;
+                    joinRoomPannel.GetComponent<JoinRoomPannel>().roomMembers = new string[retgetaroom["content"]["players"].Count];
+                    for (int i = 0; i < retgetaroom["content"]["players"].Count; i++)
+                    {
+                        joinRoomPannel.GetComponent<JoinRoomPannel>().roomMembers[i] = retgetaroom["content"]["players"][i].ToString();
+
+                    }
+                    joinRoomPannel.SetActive(true);
+                }
+            }
         }
         else
         {
-            //TODO:显示查找失败信息
+            RetMsg.GetComponent<Text>().text = "查找失败";
         }
     }
-
 }

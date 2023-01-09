@@ -53,8 +53,12 @@ public class JoinRoomPannel : MonoBehaviour
 
     private void RoomInfoDisplay()
     {
-        roomMembers = new string[] { "lbw", "lx", "lcy", "lgy" };
-        roomInfoDisplay.text = "房间号："+ roomID + " \n 房主："+roomOwner + " \n 成员:" + roomMembers + " \n 人数："+ memberCount + "/7 \n ";
+        string rM = roomMembers[0];
+        for(int i =1;i<roomMembers.Length;i++)
+        {
+            rM = rM + "," + roomMembers[i];
+        }
+        roomInfoDisplay.text = "房间号："+ roomID + " \n 房主："+roomOwner + " \n 成员:" + rM + " \n 人数："+ memberCount + "/7 \n ";
         //TODO 格式有点问题,string[]需要更换显示方式
     }
     public void JoinBtn()
