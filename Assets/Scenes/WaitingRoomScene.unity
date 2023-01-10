@@ -2286,7 +2286,10 @@ MonoBehaviour:
   HasPasswordBtn: {fileID: 880857227}
   SetPasswordField: {fileID: 64638659}
   CreateRoomPassword: {fileID: 2114209476}
+  retMsg: {fileID: 1320505016}
   wl: {fileID: 0}
+  roomInfo: {fileID: 2023197217}
+  username: 
   hasPassword: 0
 --- !u!1 &499809128
 GameObject:
@@ -7105,7 +7108,7 @@ GameObject:
   - component: {fileID: 2023197219}
   m_Layer: 0
   m_Name: RoomInfo
-  m_TagString: Untagged
+  m_TagString: RoomInfo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
