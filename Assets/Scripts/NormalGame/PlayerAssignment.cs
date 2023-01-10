@@ -10,18 +10,20 @@ public class PlayerAssignment : MonoBehaviour
     [SerializeField] Room curroom;
 
     // 在夜晚显示Panel根据当前玩家身份决定，如果玩家是seer，所有其他玩家只显示BasicInfoPanel和seerPanel，seerPanel中是预言家可操控的功能组件
-    public enum Character
+    public enum Character // 玩家身份
     {
         VILLAGE, WOLF, PROPHET, WITCH, UNDEF
     }
     public int seatNum;
     public string playerName;
+    public bool playerState;
     // Start is called before the first frame update
     void Start()
     {
         curroom = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
         seatNum = curroom.playerCount;
         playerName = GameObject.FindGameObjectWithTag("UserInfo").GetComponent<UserInfo>().username;
+        playerState = true;
     }
 
     // Update is called once per frame

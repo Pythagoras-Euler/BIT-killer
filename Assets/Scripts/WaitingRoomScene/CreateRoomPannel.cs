@@ -49,8 +49,7 @@ public class CreateRoomPannel : MonoBehaviour
         Debug.Log(crarJson);
         wl.Send(crarJson);
 
-        // TODO:处理返回消息
-        // 依然有BOM的问题，这里先放一个jsontest.txt做测试
+        // 处理返回消息
         Debug.Log(wl.receiveJson);
         Debug.Log(BitConverter.ToString (wl.reault));
         StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
