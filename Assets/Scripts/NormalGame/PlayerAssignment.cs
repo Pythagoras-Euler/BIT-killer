@@ -14,6 +14,7 @@ public class PlayerAssignment : MonoBehaviour
     {
         VILLAGE, WOLF, PROPHET, WITCH, UNDEF
     }
+    public Character playerCharacter;
     public int seatNum;
     public string playerName;
     public bool playerState;

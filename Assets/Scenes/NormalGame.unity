@@ -958,6 +958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curroom: {fileID: 0}
+  playerCharacter: 0
   seatNum: 0
   playerName: 
   playerState: 0
@@ -973,7 +974,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &985933751
 GameObject:
@@ -1391,6 +1392,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1405895069}
   m_CullTransparentMesh: 1
+--- !u!1 &1457207219
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1457207221}
+  - component: {fileID: 1457207220}
+  m_Layer: 0
+  m_Name: GameControl
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1457207220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457207219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84235cacf7ebd6c45b5aa17a1f138940, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameState: 0
+  DayCount: 0
+  dayEvent:
+    killed: 
+    saved: 
+    poisoned: 
+    inspected: 
+    checkIden: 
+    voted: 
+    isnew: 0
+--- !u!4 &1457207221
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457207219}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 447.02536, y: 886.6191, z: -108.77583}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1498557384
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,7 +1918,7 @@ RectTransform:
   - {fileID: 1020680052}
   - {fileID: 1305263760}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2691,7 +2745,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4864130010042730637
 PrefabInstance:
@@ -2971,7 +3025,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 0.0007345204}
+  m_AnchoredPosition: {x: 0.00008254429, y: -0.00000091061526}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5070452170922682219
@@ -3137,7 +3191,6 @@ GameObject:
   - component: {fileID: 5070452171447861547}
   - component: {fileID: 5070452171447861541}
   - component: {fileID: 5070452171447861546}
-  - component: {fileID: 7743859081711960964}
   m_Layer: 5
   m_Name: ChatPanel
   m_TagString: Untagged
@@ -3930,22 +3983,3 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7743859081711960964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5070452171447861544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ee785c5e6fcecb40b7abbe84df0513b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unameInput: {fileID: 0}
-  msgInput: {fileID: 5070452172102187066}
-  loginBtn: {fileID: 0}
-  sendBtn: {fileID: 5070452172145373571}
-  stateTxt: {fileID: 0}
-  connectBtnText: {fileID: 0}
-  chatMsgTxt: {fileID: 5070452170922682212}
