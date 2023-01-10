@@ -12,8 +12,10 @@ public class RoomItem : MonoBehaviour
     public bool gaming;
     public bool full;
 
-    public int roomID;
+    public long roomID;
     public string roomPassword;
+
+    public string[] players;
 
     [SerializeField] GameObject roomNameField;
     [SerializeField] GameObject creatorField;

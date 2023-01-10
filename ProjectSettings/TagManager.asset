@@ -7,6 +7,7 @@ TagManager:
   - WebLink
   - UserInfo
   - JoinRoomPannel
+  - RoomsView
   layers:
   - Default
   - TransparentFX

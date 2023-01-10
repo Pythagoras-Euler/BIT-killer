@@ -14,7 +14,7 @@ public class JoinRoomPannel : MonoBehaviour
     public Text roomInfoDisplay;
     public Text retMsg;
     public WebLink wl;
-    public int roomID;
+    public long roomID;
     public bool hasPassword;
     public bool canJoin;
     public string roomOwner;

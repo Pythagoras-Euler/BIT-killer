@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using LitJson;
 using UnityEngine.UI;
+using System.IO;
 
 public class SearchRooms : MonoBehaviour
 {
@@ -13,8 +14,6 @@ public class SearchRooms : MonoBehaviour
     public bool gaming;
     public bool full;
     public int playerLimit = 7;
-
-    public int roomID;
     public string roomPassword;
 
     public WebLink wl;
@@ -22,6 +21,7 @@ public class SearchRooms : MonoBehaviour
     [SerializeField] Text searchIdText;
     [SerializeField] GameObject createRoomPannel;
     [SerializeField] GameObject joinRoomPannel;
+    [SerializeField] GameObject roomItem;
 
     private Text retMsgDisplay;
 
@@ -29,7 +29,7 @@ public class SearchRooms : MonoBehaviour
     void Start()
     {
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
-
+        GetAllRooms();
         //retMsgDisplay = transform.Find("RetMsg").GetComponent<Text>();
 
     }
@@ -47,8 +47,45 @@ public class SearchRooms : MonoBehaviour
         GetRooms getRooms = new GetRooms();
         string getRoomsJson = JsonMapper.ToJson(getRooms);
         Debug.Log(getRoomsJson);
-        wl.Send(getRoomsJson);
+        //wl.Send(getRoomsJson);
+
+
         // TODO:根据返回消息更新房间列表
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd();
+        Debug.Log(json);
+        JsonData retallroom = JsonMapper.ToObject(json);
+        if(retallroom["type"].ToString() == "get rooms")
+        {
+            if(retallroom["success"].ToString() == "True")
+            {
+                foreach(JsonData roomjson in retallroom["content"])
+                {
+                    GameObject newroom = GameObject.Instantiate(roomItem) as GameObject;
+                    newroom.transform.parent = GameObject.FindGameObjectWithTag("RoomsView").transform;
+                    RoomItem newroomitem = newroom.GetComponent<RoomItem>();
+                    newroomitem.roomID = long.Parse(roomjson["roomID"].ToString());
+                    newroomitem.creator = roomjson["creator"].ToString();
+                    newroomitem.roomName = roomjson["roomName"].ToString();
+                    newroomitem.roomPassword = roomjson["password"].ToString();
+                    newroomitem.hasPassword = newroomitem.roomPassword == "" ? false : true;
+                    newroomitem.playerCount = int.Parse(roomjson["playerCount"].ToString());
+                    newroomitem.players = new string[roomjson["players"].Count];
+                    for (int i = 0; i < roomjson["players"].Count; i++)
+                    {
+                        newroomitem.players[i] = roomjson["players"][i].ToString();
+
+                    }
+                    newroomitem.gaming = roomjson["gaming"].ToString()=="True"?true:false;
+                    newroomitem.full = roomjson["full"].ToString() == "True" ? true : false;
+
+                }
+            }
+            else
+            {
+                Debug.Log("获取全部房间失败");
+            }
+        }
     }
 
     //打开搜索房间面板
@@ -68,10 +105,23 @@ public class SearchRooms : MonoBehaviour
     //随机加入房间
     public void RandomJoin()
     {
-        //发动随机加入请求
+        // 发动随机加入请求
 
-        //接收返回值
-        bool retSuc = true;
+        JsonData randomjoin = new JsonData();
+        randomjoin["type"] = "get a random room";
+        randomjoin["content"] = null;
+        string jsonstr = randomjoin.ToJson();
+        //wl.Send(jsonstr);
+
+        // 接收返回值
+        // 依然有BOM的问题，这里先放一个jsontest.txt做测试
+        //string retrandomjoinstr = wl.receiveJson;
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd();
+        Debug.Log(json);
+        JsonData retrandomjoin = JsonMapper.ToObject(json);
+
+        bool retSuc = retrandomjoin["success"].ToString()=="True"?true:false;
 
         if(retSuc == true)
         {
