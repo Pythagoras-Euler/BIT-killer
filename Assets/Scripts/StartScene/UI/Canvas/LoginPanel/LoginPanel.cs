@@ -88,6 +88,19 @@ public class LoginPanel : MonoBehaviour
         return ToHexStrFromByte(byteDatas);
     }
 
+    //TODO 发送请求
+    private string loginRequest(string username)
+    {
+        string type = "login salt";
+
+        //send "type":"login salt",
+        //send "content":"lbwnb"
+
+        //await json type = "login salt"
+        string salt = "qwertyuiopasdfghjklz";//getsalt
+        return salt;
+    }
+
     public void LoginCfmBtnClicked()
     {
 
@@ -99,21 +112,27 @@ public class LoginPanel : MonoBehaviour
         }
         else
         {
+            //TODO 两次发送与接受
+            string salt = loginRequest(acc);
+
 
             //string cipcher = Sha256(psw);
-            byte[] cipchers = Sha256(psw);
-            string cipcher = Encoding.UTF8.GetString(cipchers);
-            string cipchert = ToHexStrFromByte(cipchers);
+            byte[] cipchers = Sha256(salt+psw);
+            //string cipcher = Encoding.UTF8.GetString(cipchers);
+            string cipcher = ToHexStrFromByte(cipchers);
 
             byte[] ax = new byte[2] { 0xFF, 0xF0 };
 
             //string opPsw = ToHexString(cipcher, Encoding.ASCII);
-            Debug.Log($"标识\"login\",账号{acc}, 密码{cipchers}");
+            //Debug.Log($"标识\"login\",账号{acc}, 密码{cipchers}");
             Debug.Log($"ff00:{ToHexStrFromByte(ax)}");
-            Debug.Log($"标识\"login\",账号{acc}, 密码{cipchert}");
+            Debug.Log($"标识\"login\",账号{acc}, 密码{cipcher}");
+
+
+
 
             //TODO:发送请求
-            User user = new User("login", acc, cipcher);
+            User user = new User("login", acc, cipcher, salt);
             string userJson = JsonMapper.ToJson(user);
             wl.Send(userJson);
 

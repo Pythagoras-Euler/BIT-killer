@@ -57,6 +57,20 @@ namespace StartScene.UI.Canvas.SignupPanel
         }
 
 
+        private string NewSalt(int length)
+        {
+            string Alphabet = "ABCDEFGHIJKLMNOPQRSTUWVXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+            string salt = "";
+
+            for(int i = 0; i < length; i++)
+            {
+                salt += Alphabet[Random.Range(0, Alphabet.Length)];
+            }
+            Debug.Log("salt：" + salt);
+            return salt;
+        }
+
+
         private void OkButtonClicked()
         {
             var acc = account.GetComponent<Text>().text;
@@ -71,14 +85,14 @@ namespace StartScene.UI.Canvas.SignupPanel
                 errorInfo.text = "两次密码输入不一致";
                 //TODO:两次密码输入不一致
             }
-            else 
+            else //密码 长度/格式 限制
             {
-
-                string cipcher = Sha256(psw);
+                string salt= NewSalt(20);
+                string cipcher = Sha256(salt+psw);
                 Debug.Log($"标识\"register\",注册账号{acc}, 密码{cipcher}");
 
                 // 发送请求
-                User user = new User("register",acc,cipcher);
+                User user = new User("register", acc, cipcher, salt);
                 string userJson = JsonMapper.ToJson(user);
                 Debug.Log(userJson);
                 wl.Send(userJson);
