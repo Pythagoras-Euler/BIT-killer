@@ -6,6 +6,7 @@ using System.Threading;
 using System;
 using System.Threading.Tasks;
 using System.Text;
+using System.IO;
 
 // WebLink在切换场景时不销毁
 // 打开StartScene，连接websocket
@@ -16,6 +17,7 @@ public class WebLink : MonoBehaviour
     public string uri = "ws://localhost:8080";
     private string receiveStr; // 获取到的str
     public string receiveJson; // 转换成json
+    public byte[] reault;
 
 
 
@@ -35,12 +37,18 @@ public class WebLink : MonoBehaviour
         await ws.ConnectAsync(new Uri(uri), CancellationToken.None);
         while (true)
         {
-            var reault = new byte[4096];
+            reault = new byte[4096];
             //等待接收服务端发送的消息
             await ws.ReceiveAsync(new ArraySegment<byte>(reault), CancellationToken.None);
             UTF8Encoding m_utf8 = new UTF8Encoding(false);
             receiveStr = m_utf8.GetString(reault, 0, reault.Length);
-            receiveJson = receiveStr;
+            File.WriteAllText(Application.dataPath + "/jsontest.txt", receiveStr, m_utf8);
+            StreamReader sr = new StreamReader(Application.dataPath+"/jsontest.txt");
+            receiveJson = sr.ReadLine();
+            receiveJson.TrimEnd('\0');
+            // receiveJson = receiveStr;
+            //Debug.Log(receiveJson);
+            //Debug.Log(BitConverter.ToString(reault));
         }
     }
 

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using LitJson;
 using System.IO;
 using UnityEngine.SceneManagement;
+using System;
 
 public class CreateRoomPannel : MonoBehaviour
 {
@@ -46,13 +47,16 @@ public class CreateRoomPannel : MonoBehaviour
         CreateARoom crar = new CreateARoom("create room", creator, password, roomName);
         string crarJson = JsonMapper.ToJson(crar);
         Debug.Log(crarJson);
-        //wl.Send(crarJson);
+        wl.Send(crarJson);
 
         // TODO:处理返回消息
         // 依然有BOM的问题，这里先放一个jsontest.txt做测试
+        Debug.Log(wl.receiveJson);
+        Debug.Log(BitConverter.ToString (wl.reault));
         StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd();
+        string json = sr.ReadToEnd().TrimEnd('\0');
         Debug.Log(json);
+        //string json = wl.receiveJson;
         JsonData retcreatearoom = JsonMapper.ToObject(json);
         if(retcreatearoom["type"].ToString()== "create room") // 验证消息类型
         {

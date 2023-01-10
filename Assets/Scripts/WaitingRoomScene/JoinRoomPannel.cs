@@ -78,18 +78,19 @@ public class JoinRoomPannel : MonoBehaviour
         JsonData data1 = new JsonData();
         data1["type"] = "join room";
         data1["content"] = new JsonData();
-        data1["content"]["username"] = username;
+        data1["content"]["user"] = username;
         data1["content"]["roomID"] = roomID;
         data1["content"]["password"] = roompassword;
         string jrJson = data1.ToJson();
         Debug.Log(jrJson);
-        //wl.Send(jrJson);
+        wl.Send(jrJson);
 
         // 处理返回消息
         // 依然有BOM的问题，这里先放一个jsontest.txt做测试
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd();
-        Debug.Log(json);
+        //StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        //string json = sr.ReadToEnd();
+        //Debug.Log(json);
+        string json = wl.receiveJson;
         JsonData retjoinaroom = JsonMapper.ToObject(json);
         if (retjoinaroom["type"].ToString() == "join room") // 验证消息类型
         {

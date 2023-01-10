@@ -3933,8 +3933,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a950064cd5b2d479dcd5e35c91ddf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uri: ws://localhost:8080
+  uri: ws://152.136.145.133:8080/game
   receiveJson: '{"type":"register","success":true,"message":"Registrationsuccessful","content":null}'
+  reault: 
 --- !u!4 &1673667806
 Transform:
   m_ObjectHideFlags: 0
