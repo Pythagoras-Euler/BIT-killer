@@ -960,6 +960,7 @@ MonoBehaviour:
   curroom: {fileID: 0}
   seatNum: 0
   playerName: 
+  playerState: 0
 --- !u!4 &816571842
 Transform:
   m_ObjectHideFlags: 0
@@ -2970,7 +2971,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: -0.000021444963}
+  m_AnchoredPosition: {x: 0.00008254429, y: 0.0007345204}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5070452170922682219
@@ -3739,7 +3740,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 5070452171591486105}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.999988
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
