@@ -1,14 +1,14 @@
 {
-  "type" : "get a random room",
+  "type" : "join room",
   "success" : true,
-  "message" : "Get a random room successfully",
+  "message" : "Join the room successfully",
   "content" : {
         "roomID":1,
-        "creator" : "lbw",
+        "creator" : "lbwnb",
         "roomName" : "test room",
         "password" : "",
         "playerCount" : 4,
-        "players" : ["lbw","lcy","lgy","lx"],
+        "players" : ["lbwnb","lcy","lgy","lx"],
         "gaming" : false,
         "full" : false
   }

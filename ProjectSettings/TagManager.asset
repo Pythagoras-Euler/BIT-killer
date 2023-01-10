@@ -8,6 +8,8 @@ TagManager:
   - UserInfo
   - JoinRoomPannel
   - RoomsView
+  - RoomInfo
+  - DontDestroy
   layers:
   - Default
   - TransparentFX

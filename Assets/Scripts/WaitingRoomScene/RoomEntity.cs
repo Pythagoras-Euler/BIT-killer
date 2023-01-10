@@ -18,35 +18,10 @@ public class RetRooms // 获取所有房间的返回参数
     public bool success { get; set; }
     public string message { get; set; }
 
-    public List<Room> content;
     public RetRooms(bool s, string m, int ID, string creator, string roomName, string password, bool gameing, bool full)
     {
         type = "get rooms";
         success = s;
-    }
-}
-public class Room
-{
-    public int roomID;
-    public string creator;
-    public string roomName;
-    public string password;
-    public int playerCount;
-    public string[] players;
-    public bool gaming;
-    public bool full;
-
-    public Room() { }
-    public Room(int id, string c, string rn, string psw, int plc, string[] pl, bool g, bool f)
-    {
-        roomID = id;
-        creator = c;
-        roomName = rn;
-        password = psw;
-        playerCount = plc;
-        players = pl;
-        gaming = g;
-        full = f;
     }
 }
 public class GetTheRoom
@@ -63,13 +38,6 @@ public class GetTheRoom
     }
     public GetTheRoom() { }
 }
-public class RetTheRoom
-{
-    public string type;
-    public bool success;
-    public string message;
-    public List<Room> content;
-}
 public class CreateARoom
 {
     public string type;
@@ -85,29 +53,6 @@ public class CreateARoom
                 { "roomName", rn }
             };
     }
-}
-public class RetCreateARoom
-{
-    public string type;
-    public bool success;
-    public string message;
-    /*public Dictionary<string,string> content;
-    public RetCreateARoom()
-    {
-        content = new Dictionary<string, string>()
-        {
-            { "roomID",1} ,
-            { "creator","lbwnb"},
-            { "roomName","test room" },
-            { "password","" },
-            { "playerCount",1 },
-            { "players",["lbwnb"] },
-            { "gaming",false },
-            { "full"false }
-        };
-    }*/
-    public Room content;
-
 }
 public class JoinARoom
 {

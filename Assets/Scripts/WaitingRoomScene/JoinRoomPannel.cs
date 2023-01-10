@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class JoinRoomPannel : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class JoinRoomPannel : MonoBehaviour
     public string roomOwner;
     public string[] roomMembers;
     public int memberCount;
+
+    public GameObject roomInfo;
 
 
     private void Start()
@@ -80,7 +83,7 @@ public class JoinRoomPannel : MonoBehaviour
         data1["content"]["password"] = roompassword;
         string jrJson = data1.ToJson();
         Debug.Log(jrJson);
-        wl.Send(jrJson);
+        //wl.Send(jrJson);
 
         // 处理返回消息
         // 依然有BOM的问题，这里先放一个jsontest.txt做测试
@@ -91,12 +94,34 @@ public class JoinRoomPannel : MonoBehaviour
         Debug.Log(retjoinaroom["success"]);
         if (retjoinaroom["success"].ToString() == "True")
         {
-            //TODO:切换场景
+            // 保存房间信息
+            Room curroom = roomInfo.GetComponent<Room>();
+            curroom.roomID = roomID;
+            curroom.roomName = roomName;
+            curroom.creator = roomOwner;
+            curroom.iscurcreator = roomOwner == username ? true : false;
+            curroom.playerCount = memberCount+1; // 加入当前玩家
+            // TODO:继续将玩家填入到玩家数组里面，完善curroom
+            curroom.players = new string[memberCount+1];
+            for(int i=0;i<memberCount;i++)
+            {
+                curroom.players[i] = roomMembers[i];
+            }
+            curroom.players[memberCount] = username;
+            curroom.password = roompassword;
+            curroom.full = curroom.playerCount == 7 ? true : false;
+            curroom.gaming = false;
+            // 把roominfo放进Dontdestroy里
+            roomInfo.transform.parent = GameObject.FindGameObjectWithTag("DontDestroy").transform;
+            // 切换场景
+            Debug.Log("加入房间成功，即将切换场景");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
         else
         {
             //TODO:显示加入失败信息
-            retMsg.text = "加入房间失败，请重试";
+            retMsg.text = retjoinaroom["message"].ToString();
+            
         }
         
     }
