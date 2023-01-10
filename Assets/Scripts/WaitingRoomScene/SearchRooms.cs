@@ -125,6 +125,18 @@ public class SearchRooms : MonoBehaviour
 
         if(retSuc == true)
         {
+            JoinRoomPannel jrp = joinRoomPannel.GetComponent<JoinRoomPannel>();
+            jrp.roomID = long.Parse(retrandomjoin["content"]["roomID"].ToString());
+            jrp.roomName = retrandomjoin["content"]["roomName"].ToString();
+            jrp.hasPassword = false;
+            jrp.roomOwner = retrandomjoin["content"]["creator"].ToString();
+            jrp.memberCount = int.Parse(retrandomjoin["content"]["playerCount"].ToString());
+            jrp.roomMembers = new string[jrp.memberCount];
+            for (int i = 0; i < jrp.memberCount; i++)
+            {
+                jrp.roomMembers[i] = retrandomjoin["content"]["players"][i].ToString();
+            }
+            jrp.canJoin = true;
             JoinRoom();//TODO:获取房间信息的部分我没找到在哪（是上面那个searchroom么）
         }
         else

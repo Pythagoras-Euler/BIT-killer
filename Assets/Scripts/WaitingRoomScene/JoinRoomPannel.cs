@@ -15,6 +15,7 @@ public class JoinRoomPannel : MonoBehaviour
     public Text retMsg;
     public WebLink wl;
     public long roomID;
+    public string roomName;
     public bool hasPassword;
     public bool canJoin;
     public string roomOwner;
@@ -60,6 +61,8 @@ public class JoinRoomPannel : MonoBehaviour
         }
         roomInfoDisplay.text = "房间号："+ roomID + " \n 房主："+roomOwner + " \n 成员:" + rM + " \n 人数："+ memberCount + "/7 \n ";
         //TODO 格式有点问题,string[]需要更换显示方式
+        if (canJoin)
+            retMsg.text = "该房间可加入";
     }
     public void JoinBtn()
     {

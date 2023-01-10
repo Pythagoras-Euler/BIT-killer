@@ -1,47 +1,15 @@
 {
-  "type" : "get rooms",
+  "type" : "get a random room",
   "success" : true,
-  "message" : "Get rooms successfully",
-  "content" : [
-        {
-          "roomID":1,
-          "creator" : "lbwnb",
-          "roomName" : "test room",
-          "password" : "",
-          "playerCount" : 4,
-          "players" : ["lbwnb","lcy","lgy","lx"],
-          "gaming" : false,
-          "full" : false
-        },
-       {
-          "roomID":2,
-          "creator" : "lxnb",
-          "roomName" : "test room2",
-          "password" : "123456",
-          "playerCount" : 3,
-          "players" : ["lbwnb","lcy","lgy","lx"],
-          "gaming" : false,
-          "full" : false
-        },
-       {
-          "roomID":3,
-          "creator" : "lcynb",
-          "roomName" : "test room3",
-          "password" : "123456",
-          "playerCount" : 3,
-          "players" : ["lcy","lgy","lx"],
-          "gaming" : false,
-          "full" : false
-        },
-       {
-          "roomID":4,
-          "creator" : "lgynb",
-          "roomName" : "test room4",
-          "password" : "",
-          "playerCount" : 3,
-          "players" : ["lbwnb","lcy","lx"],
-          "gaming" : false,
-          "full" : false
-        }
-    ]
+  "message" : "Get a random room successfully",
+  "content" : {
+        "roomID":1,
+        "creator" : "lbw",
+        "roomName" : "test room",
+        "password" : "",
+        "playerCount" : 4,
+        "players" : ["lbw","lcy","lgy","lx"],
+        "gaming" : false,
+        "full" : false
+  }
 }
