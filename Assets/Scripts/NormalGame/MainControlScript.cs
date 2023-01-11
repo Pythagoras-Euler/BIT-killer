@@ -6,6 +6,7 @@ public class MainControlScript : MonoBehaviour
 {
     enum Identity {viliager, wolf, witch, prophet };
     int PoliceId;
+    [SerializeField] GameControl gameControl;
 
 
     // Start is called before the first frame update
@@ -17,9 +18,37 @@ public class MainControlScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch(1)//判断现在的阶段并执行相应函数
+        switch(gameControl.gameState)//判断现在的阶段并执行相应函数
         {
-
+            case GameControl.GameState.WAIT:
+                Waiting();
+                break;
+            case GameControl.GameState.START:
+                StartGame();
+                break;
+            case GameControl.GameState.KILL:
+                WolfVote();
+                break;
+            case GameControl.GameState.PROPHET:
+                ProphetExamine();
+                break;
+            case GameControl.GameState.WITCH:
+                WitchPison();//需要修改
+                WitchSave();
+                break;
+            case GameControl.GameState.DISCUSS:
+                break;
+            case GameControl.GameState.ELECT:
+                ElectPolice();
+                break;
+            case GameControl.GameState.VOTE:
+                VoteKill();
+                break;
+            case GameControl.GameState.WORDS:
+                LastWords();
+                break;
+            case GameControl.GameState.END:
+                break;
         }
     }
 
@@ -30,10 +59,15 @@ public class MainControlScript : MonoBehaviour
 
     void StartGame()
     {
-
+        
     }
 
     void SetNight()
+    {
+
+    }
+
+    void SetDay()
     {
 
     }
@@ -42,6 +76,7 @@ public class MainControlScript : MonoBehaviour
     {
 
     }
+
 
     void WitchPison()
     {
@@ -72,7 +107,7 @@ public class MainControlScript : MonoBehaviour
         return winNum;
     }
 
-    void HasLastWords()
+    void LastWords()
     {
 
     }
@@ -83,13 +118,19 @@ public class MainControlScript : MonoBehaviour
         return isLive;
     }
 
-    void VotePolice()
+    void ElectPolice()
     {
 
     }
 
 
     void VoteKill()
+    {
+        //send btn
+
+    }
+
+    void Ending()
     {
 
     }

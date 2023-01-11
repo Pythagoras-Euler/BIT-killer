@@ -6,6 +6,7 @@ public class GameControl : MonoBehaviour
 {
     public enum GameState
     {
+        WAIT,       // 等待开始
         START,      // 游戏开始
         KILL,       // 狼人刀人
         PROPHET,    // 预言家查验
