@@ -400,6 +400,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerBand (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: seatNum
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: gameControl
+      value: 
+      objectReference: {fileID: 1457207220}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: mainControl
+      value: 
+      objectReference: {fileID: 2008692470}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: playerAssignment
+      value: 
+      objectReference: {fileID: 816571841}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
 --- !u!224 &484340907 stripped
@@ -643,7 +659,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 0.00007709281}
+  m_AnchoredPosition: {x: 0.00008254429, y: 0.00018697846}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &948324428
@@ -758,7 +774,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: lgy
+  m_Text: lbwnb
 --- !u!222 &978870834
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -862,6 +878,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerBand (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: seatNum
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: gameControl
+      value: 
+      objectReference: {fileID: 1457207220}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: mainControl
+      value: 
+      objectReference: {fileID: 2008692470}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: playerAssignment
+      value: 
+      objectReference: {fileID: 816571841}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
 --- !u!224 &995106957 stripped
@@ -1563,6 +1595,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerBand (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: seatNum
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: gameControl
+      value: 
+      objectReference: {fileID: 1457207220}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: mainControl
+      value: 
+      objectReference: {fileID: 2008692470}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: playerAssignment
+      value: 
+      objectReference: {fileID: 816571841}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
 --- !u!224 &1527546762 stripped
@@ -1665,6 +1713,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerBand (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: seatNum
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: gameControl
+      value: 
+      objectReference: {fileID: 1457207220}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: mainControl
+      value: 
+      objectReference: {fileID: 2008692470}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: playerAssignment
+      value: 
+      objectReference: {fileID: 816571841}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
 --- !u!224 &1644622139 stripped
@@ -2180,6 +2244,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerBand (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: seatNum
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: gameControl
+      value: 
+      objectReference: {fileID: 1457207220}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: mainControl
+      value: 
+      objectReference: {fileID: 2008692470}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: playerAssignment
+      value: 
+      objectReference: {fileID: 816571841}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
 --- !u!224 &1995991057 stripped
@@ -2364,6 +2444,8 @@ MonoBehaviour:
   playerAssignment: {fileID: 0}
   wl: {fileID: 0}
   room: {fileID: 0}
+  WolfChatMsg: {fileID: 0}
+  VillagerChatMsg: {fileID: 0}
 --- !u!4 &2008692471
 Transform:
   m_ObjectHideFlags: 0
@@ -2563,6 +2645,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerBand (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: seatNum
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: gameControl
+      value: 
+      objectReference: {fileID: 1457207220}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: mainControl
+      value: 
+      objectReference: {fileID: 2008692470}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: playerAssignment
+      value: 
+      objectReference: {fileID: 816571841}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
 --- !u!224 &2058195065 stripped
@@ -2577,6 +2675,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1028396}
     m_Modifications:
+    - target: {fileID: 2599192138388726662, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3279311227716450983, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2664,6 +2766,38 @@ PrefabInstance:
     - target: {fileID: 3502894745382564600, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
       propertyPath: m_Name
       value: PlayerBand
+      objectReference: {fileID: 0}
+    - target: {fileID: 4436271639778813513, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: seatNum
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: multyBtn
+      value: 
+      objectReference: {fileID: 440617099}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: gameControl
+      value: 
+      objectReference: {fileID: 1457207220}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: mainControl
+      value: 
+      objectReference: {fileID: 2008692470}
+    - target: {fileID: 5165772525220896626, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: playerAssignment
+      value: 
+      objectReference: {fileID: 816571841}
+    - target: {fileID: 5784209158527179802, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094853378723977951, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
@@ -3001,7 +3135,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 0.00007709281}
+  m_AnchoredPosition: {x: 0.00008254429, y: 0.00018697846}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5070452170922682219

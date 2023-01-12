@@ -155,6 +155,81 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\u9009Ta"
+--- !u!1 &1280196971755140492
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3335282574815356240}
+  - component: {fileID: 1872682627441872587}
+  - component: {fileID: 7346519724584840399}
+  m_Layer: 5
+  m_Name: DoubtIcon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3335282574815356240
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280196971755140492}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7663538012380561184}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 60.85, y: -14.6}
+  m_SizeDelta: {x: 20, y: 20}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1872682627441872587
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280196971755140492}
+  m_CullTransparentMesh: 1
+--- !u!114 &7346519724584840399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1280196971755140492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1965792422457345775
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,7 +429,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3633989429408072399}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5165772525220896626}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: WolfVote
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2909194839049003858
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,13 +563,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3502894745382564600}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 5165772525220896626}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: WitchPison
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -593,19 +680,25 @@ MonoBehaviour:
   gameControl: {fileID: 0}
   room: {fileID: 0}
   wl: {fileID: 0}
+  needRefreshFlag: 0
   mainControl: {fileID: 0}
   multyBtn: {fileID: 0}
-  doubtPan: {fileID: 0}
-  electPan: {fileID: 0}
-  statePan: {fileID: 0}
-  villagerPan: {fileID: 0}
-  wolfPan: {fileID: 0}
-  witchPan: {fileID: 0}
-  seerPan: {fileID: 0}
-  votePan: {fileID: 0}
-  idenIcon: {fileID: 0}
-  playerNum: {fileID: 0}
-  playerName: {fileID: 0}
+  doubtPan: {fileID: 5148425784825587652}
+  doubtIcon: {fileID: 7346519724584840399}
+  electPan: {fileID: 7094853378723977951}
+  electBtn: {fileID: 4436271639778813513}
+  policeStar: {fileID: 7473409620864726203}
+  statePan: {fileID: 6553092980544392589}
+  villagerPan: {fileID: 9058912297205539525}
+  wolfPan: {fileID: 5784209158527179802}
+  witchPan: {fileID: 5932731472809970680}
+  witchSaveBtn: {fileID: 7910797025323538029}
+  witchPoiBtn: {fileID: 2909194839049003858}
+  seerPan: {fileID: 203599837146374373}
+  votePan: {fileID: 5072761898704334303}
+  idenIcon: {fileID: 5130250802494689978}
+  playerNum: {fileID: 6547524419472777011}
+  playerName: {fileID: 3297172124020794105}
 --- !u!1 &4436271639778813513
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,7 +819,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3257345905306041260}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5165772525220896626}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: VotePolice
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5072761898704334303
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,6 +1013,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 76410108614388187}
+  - {fileID: 3335282574815356240}
   m_Father: {fileID: 3279311227716450983}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1845,7 +1951,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7581790913611812699}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5165772525220896626}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: MakeVote
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7094853378723977951
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,7 +2313,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7070369367006718699}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5165772525220896626}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: WitchSave
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7988608325418182773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2549,4 +2679,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5486633907865688903}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5165772525220896626}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: ProphetExamined
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

@@ -1,8 +1,8 @@
-TODO list 2023.1.4
+TODO list 2023.1.12
 
 1.login窗口和register窗口的淡入淡出动画
 2.button Clicked事件Scripts优化到MainPanel下（已完成）
-3.sha256加密
+3.sha256加密(已完成)
 4.MainPanel重命名
 5.保存密码
 6.调整设置退出按键大小贴图调整
