@@ -22,4 +22,6 @@ public class PlayerBand : MonoBehaviour
     {
         // 根据游戏状态和当前客户端玩家身份决定显示哪个panel
     }
+
+
 }
