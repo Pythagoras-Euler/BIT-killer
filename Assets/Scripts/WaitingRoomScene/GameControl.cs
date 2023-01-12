@@ -36,4 +36,9 @@ public class GameControl : MonoBehaviour
     public DayEvent dayEvent;
     ArrayList DayEvenList = new ArrayList();
 
+    public string[] players;
+    public HashSet<string> playerCharacterMap;
+    public string captain;
+    public HashSet<string> playerStateMap;
+
 }

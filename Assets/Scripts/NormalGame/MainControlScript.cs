@@ -1,5 +1,8 @@
+using LitJson;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class MainControlScript : MonoBehaviour
@@ -7,7 +10,7 @@ public class MainControlScript : MonoBehaviour
 
     int PoliceId;
     [SerializeField] GameControl gameControl;
-    public GameObject multyBtn;
+    public GameObject multyBtn; // 只有房主有，开启游戏按钮
     public GameObject doubtPan;
     public GameObject electPan;
     public GameObject statePan;
@@ -23,6 +26,9 @@ public class MainControlScript : MonoBehaviour
     private int maxWaitTime;
     private int maxPlayerNum;
 
+    [SerializeField] WebLink wl;
+    [SerializeField] Room room;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +38,8 @@ public class MainControlScript : MonoBehaviour
         multyBtn.SetActive(false);
 
         playerAssignment = GameObject.Find("/PlayerAssignment").GetComponent<PlayerAssignment>();
+        wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
+        room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
     }
 
     // Update is called once per frame
@@ -73,10 +81,40 @@ public class MainControlScript : MonoBehaviour
     //等待页面，将所有icon设置为不可用
     void Waiting()
     {
-        SetDay();
+        SetDay();//TODO
 
-        bool everyoneReady = true;
+        // 处理返回消息
+        Debug.Log(wl.receiveJson);
+        Debug.Log(BitConverter.ToString(wl.reault));
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd().TrimEnd('\0');
+        Debug.Log(json);
+        //string json = wl.receiveJson;
+        JsonData retnewjoinroom = JsonMapper.ToObject(json);
+        if (retnewjoinroom["type"].ToString() == "join room") // 验证消息类型，加入房间
+        {
+            if(retnewjoinroom["success"].ToString()=="True"&&long.Parse(retnewjoinroom["content"]["roomID"].ToString())==room.roomID)// 成功加入当前房间
+            {
+                int playerCount = retnewjoinroom["content"]["players"].Count;
+                gameControl.players = new string[playerCount];
+                for (int i = 0; i < playerCount; i++)
+                    gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+            }
+        }
+        else if (retnewjoinroom["type"].ToString() == "leave room") // 验证消息类型，退出房间
+        {
+            if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功加入当前房间
+            {
+                int playerCount = int.Parse(retnewjoinroom["content"]["playerCount"].ToString());
+                gameControl.players = new string[playerCount];
+                for (int i = 0; i < playerCount; i++)
+                    gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+            }
+        }
 
+        bool everyoneReady = false;
+        if (gameControl.players.Length == 7)
+        { everyoneReady = true; }
 
         if (everyoneReady)//所有人准备
         {
@@ -137,7 +175,7 @@ public class MainControlScript : MonoBehaviour
             }
             else
             {
-                int waittime = Random.Range(minWaitTime, maxWaitTime);
+                int waittime = UnityEngine.Random.Range(minWaitTime, maxWaitTime);
                 //TODO 随机倒计时，假装人没死
             }
         }
