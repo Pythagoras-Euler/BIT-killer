@@ -10,6 +10,7 @@ TagManager:
   - RoomsView
   - RoomInfo
   - DontDestroy
+  - PlayerList
   layers:
   - Default
   - TransparentFX
