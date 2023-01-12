@@ -45,7 +45,8 @@ public class MainControlScript : MonoBehaviour
     // Update is called once per frame
     void Update()//阶段更新收发放到GameControl里
     {
-        switch(gameControl.gameState)//判断现在的阶段并执行相应函数
+        HasVictory(); // 检查游戏是否有赢家
+        switch (gameControl.gameState)//判断现在的阶段并执行相应函数
         {
             case GameControl.GameState.WAIT:
                 Waiting();
@@ -53,10 +54,10 @@ public class MainControlScript : MonoBehaviour
             case GameControl.GameState.START://分发身份牌
                 StartGame();
                 break;
-            case GameControl.GameState.KILL:
+            case GameControl.GameState.KILL: // 狼人行动
                 WolfAct();
                 break;
-            case GameControl.GameState.PROPHET:
+            case GameControl.GameState.PROPHET: // 预言家行动
                 ProphetExamine();
                 break;
             case GameControl.GameState.WITCH:
@@ -74,9 +75,11 @@ public class MainControlScript : MonoBehaviour
                 LastWords();
                 break;
             case GameControl.GameState.END://结算，宣布胜者
+                
                 break;
         }
     }
+
 
     //等待页面，将所有icon设置为不可用
     void Waiting()
@@ -133,6 +136,8 @@ public class MainControlScript : MonoBehaviour
                     for (int i = 0; i < playerCount; i++) {
                         gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
                         gameControl.playerCharacterMap[retnewjoinroom["content"]["players"][i].ToString()] = retnewjoinroom["content"]["playerCharacterMap"][retnewjoinroom["content"]["players"][i].ToString()].ToString();
+                        gameControl.playerStateMap[retnewjoinroom["content"]["players"][i].ToString()] = retnewjoinroom["content"]["playerStateMap"][retnewjoinroom["content"]["players"][i].ToString()].ToString()=="True"?true:false;
+
                     }
                     gameControl.gameState = GameControl.GameState.START;// 更新游戏状态
                 }
@@ -179,7 +184,6 @@ public class MainControlScript : MonoBehaviour
         {
             if (playerAssignment.playerState == true)
             {
-                wolfPan.SetActive(true);
                 //TODO 还应该有一个倒计时模块
             }
             else//显示信息但是按钮无效
@@ -222,13 +226,13 @@ public class MainControlScript : MonoBehaviour
 
     void WitchSave()
     {
-        witchPan.SetActive(false);
-        //TODO 发送消息
+        // witchPan.SetActive(false);
+        // TODO 发送消息
     }
 
     void ProphetAct()
     {
-        seerPan.SetActive(true);
+        // seerPan.SetActive(true);
     }
 
     void ProphetExamine()
@@ -259,9 +263,31 @@ public class MainControlScript : MonoBehaviour
 
     }
 
-    int HasVictory()
+    void HasVictory()
     {
-        int winNum = 0;//0没人赢，1好人赢，2狼人赢
+        // 处理返回消息
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd().TrimEnd('\0');
+        Debug.Log(json);
+        //string json = wl.receiveJson;
+        JsonData retgameend = JsonMapper.ToObject(json);
+        if (retgameend["type"].ToString() == "game end") // 验证消息类型，游戏结束
+        { 
+            if(retgameend["success"].ToString() == "True"&&long.Parse(retgameend["content"]["roomID"].ToString()) == room.roomID)
+            {
+                if(retgameend["winner"].ToString() == "WOLF") // 狼人胜利
+                {
+                    // TODO:添加狼人胜利UI提示
+                    Debug.Log("教务部胜利");
+                }
+                else
+                {
+                    // TODO:添加好人胜利UI提示
+                    Debug.Log("好人胜利");
+                }
+            }
+        }
+            int winNum = 0;//0没人赢，1好人赢，2狼人赢
 
         return winNum;
     }
