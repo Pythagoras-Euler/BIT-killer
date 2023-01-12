@@ -7,13 +7,15 @@ using UnityEngine.UI;
 public class PlayerBand : MonoBehaviour
 {
     [SerializeField] UserInfo userInfo;// 存放玩家名
-    [SerializeField] PlayerAssignment playerAssignment;// 存放玩家身份和座位号等信息
+    [SerializeField] PlayerAssignment playerAssignment;// 存放客户端玩家身份和座位号等信息
     [SerializeField] string userName;
     [SerializeField] int seatNum;
     [SerializeField] GameControl gameControl;
     [SerializeField] Room room;
     [SerializeField] WebLink wl;
 
+
+    public bool needRefreshFlag = false;//万一需要外界强制刷新，可以修改这个Flag
     public MainControlScript mainControl;
     public GameObject multyBtn; // 只有房主有，开启游戏按钮
     public GameObject doubtPan;
@@ -29,8 +31,9 @@ public class PlayerBand : MonoBehaviour
     public Text playerNum;
     public Text playerName;
 
-    string targetname;
-    int maxPlayerNum = 7;
+    private string targetName = "";
+    PlayerAssignment.Character targetCharacter;
+    PlayerAssignment.Character NowMark;
 
     // Start is called before the first frame update
     void Start()
@@ -43,40 +46,83 @@ public class PlayerBand : MonoBehaviour
         room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
 
-        string thisnBandIden = gameControl.playerCharacterMap[targetname];
+        NowMark = PlayerAssignment.Character.UNDEF;
+        targetCharacter = PlayerAssignment.Character.UNDEF;
+
+        InfoRefresh();
+
     }
+
+    PlayerAssignment.Character thisChara()
+    {
+        string thisnBandIden = gameControl.playerCharacterMap[targetName];
+        PlayerAssignment.Character thisChe;
+        if (thisnBandIden == "VILLAGE")
+        {
+            thisChe = PlayerAssignment.Character.VILLAGE;
+        }
+        else if(thisnBandIden == "WOLF")
+        {
+            thisChe = PlayerAssignment.Character.WOLF;
+        }
+        else if (thisnBandIden == "PROPHET")
+        {
+            thisChe = PlayerAssignment.Character.PROPHET;
+        }
+        else if (thisnBandIden == "WITCH")
+        {
+            thisChe = PlayerAssignment.Character.WITCH;
+        }
+        else if (thisnBandIden == "UNDEF")
+        {
+            thisChe = PlayerAssignment.Character.UNDEF;
+        }
+        else
+        {
+            thisChe = PlayerAssignment.Character.UNDEF;
+        }
+
+        return thisChe;
+    }
+
 
     // Update is called once per frame
     void Update()
     {
+        if(needRefreshFlag == true)
+        {
+            InfoRefresh();
+        }
+
 
         switch(gameControl.gameState)//判断现在的阶段并执行相应函数
         {
-            case GameControl.GameState.WAIT:
+            case GameControl.GameState.WAIT://等待开始
                 Waiting();
                 InfoRefresh();
                 break;
             case GameControl.GameState.START://分发身份牌
                 StartGame();
+                InfoRefresh();
                 break;
-            case GameControl.GameState.KILL:
+            case GameControl.GameState.KILL://狼人回合
                 WolfAct();
                 break;
-            case GameControl.GameState.PROPHET:
+            case GameControl.GameState.PROPHET://预言家回合
                 ProphetAct();
                 break;
-            case GameControl.GameState.WITCH:
+            case GameControl.GameState.WITCH://女巫回合
                 WitchAct();
                 break;
-            case GameControl.GameState.DISCUSS:
+            case GameControl.GameState.DISCUSS://讨论环节
                 break;
-            case GameControl.GameState.ELECT:
+            case GameControl.GameState.ELECT://选举警长
                 ElectPolice();
                 break;
-            case GameControl.GameState.VOTE:
+            case GameControl.GameState.VOTE://投票环节
                 VoteKill();
                 break;
-            case GameControl.GameState.WORDS:
+            case GameControl.GameState.WORDS://遗言环节
                 LastWords();
                 break;
             case GameControl.GameState.END://结算，宣布胜者
@@ -86,14 +132,14 @@ public class PlayerBand : MonoBehaviour
 
     void InfoRefresh()
     {
-        playerName.text = gameControl.players[seatNum - 1];
+        targetName = gameControl.players[seatNum - 1];
+        playerName.text = targetName;
 
     }
 
     //等待页面，将所有icon设置为不可用
     void Waiting()
     {
-        SetDay();
         doubtPan.SetActive(false);
         electPan.SetActive(false);
         statePan.SetActive(false);
@@ -108,23 +154,17 @@ public class PlayerBand : MonoBehaviour
     //分发身份牌,可以弹出一个窗口，也可以在聊天栏有一个系统消息
     void StartGame()
     {
-        SetNight();
+        NowMark = PlayerAssignment.Character.UNDEF;
+
+        InfoRefresh();
+
+        targetCharacter = thisChara();
     }
 
-    //
-    void SetNight()
-    {
-        //背景由白天变成黑夜
-    }
 
-    void SetDay()
-    {
-        //背景由黑夜变成白天
-    }
 
     void WolfAct()//狼人是不是应该能看到队友投了谁
     {
-        SetNight();
         if (playerAssignment.playerCharacter == PlayerAssignment.Character.WOLF)
         {
             if (gameControl.hasDown == false)
@@ -206,7 +246,8 @@ public class PlayerBand : MonoBehaviour
 
     public void MarkBtn()
     {
-
+        NowMark++;
+        //重新加载图片
     }
 
 
