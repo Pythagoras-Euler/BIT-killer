@@ -163,7 +163,7 @@ public class PlayerBand : MonoBehaviour
 
 
 
-    void WolfAct()//狼人是不是应该能看到队友投了谁
+    void WolfAct()//TODO 狼人是不是应该能看到队友投了谁
     {
         if (playerAssignment.playerCharacter == PlayerAssignment.Character.WOLF)
         {
