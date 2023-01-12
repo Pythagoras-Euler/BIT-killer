@@ -1,3 +1,4 @@
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class PlayerBand : MonoBehaviour
     [SerializeField] string userName;
     [SerializeField] int seatNum;
     [SerializeField] GameControl gameControl;
+    [SerializeField] Room room;
+    [SerializeField] WebLink wl;
 
     public MainControlScript mainControl;
     public GameObject multyBtn; // 只有房主有，开启游戏按钮
@@ -37,6 +40,8 @@ public class PlayerBand : MonoBehaviour
         playerAssignment = GameObject.Find("PlayerAssignment").GetComponent<PlayerAssignment>();
         seatNum = playerAssignment.seatNum;
         playerNum.text = seatNum.ToString();
+        room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
+        wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
 
         string thisnBandIden = gameControl.playerCharacterMap[targetname];
     }
@@ -144,6 +149,15 @@ public class PlayerBand : MonoBehaviour
         gameControl.hasDown = true;
         //TODO 倒计时此时停止并重置
         //TODO 发送投票信息
+        JsonData data1 = new JsonData();
+        data1["type"] = "kill";
+        data1["content"] = new JsonData();
+        data1["content"]["roomID"] =room.roomID;
+        data1["content"]["voter"] = userName;
+        string klJson = data1.ToJson();
+        Debug.Log(klJson);
+        wl.Send(klJson);
+
     }
 
     void WitchAct()//就直接做救/毒二选一吧，写起来简单一些

@@ -55,7 +55,7 @@ public class MainControlScript : MonoBehaviour
                 StartGame();
                 break;
             case GameControl.GameState.KILL: // 狼人行动
-                WolfAct();
+                RetWolfAct();
                 break;
             case GameControl.GameState.PROPHET: // 预言家行动
                 ProphetExamine();
@@ -177,9 +177,8 @@ public class MainControlScript : MonoBehaviour
         //背景由黑夜变成白天
     }
 
-    void WolfAct()//狼人是不是应该能看到队友投了谁
+    void RetWolfAct()
     {
-        SetNight();
         if (playerAssignment.playerCharacter == PlayerAssignment.Character.WOLF)
         {
             if (playerAssignment.playerState == true)
