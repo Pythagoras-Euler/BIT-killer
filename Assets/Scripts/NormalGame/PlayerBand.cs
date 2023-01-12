@@ -43,6 +43,7 @@ public class PlayerBand : MonoBehaviour
         room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
 
+        string thisnBandIden = gameControl.playerCharacterMap[targetname];
     }
 
     // Update is called once per frame
