@@ -762,7 +762,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 0.000032062642}
+  m_AnchoredPosition: {x: 0.00008254429, y: 0.000017223345}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &948324428
@@ -1103,6 +1103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState: 0
   DayCount: 0
+  hasDown: 0
   dayEvent:
     killed: 
     saved: 
@@ -1111,6 +1112,7 @@ MonoBehaviour:
     checkIden: 
     voted: 
     isnew: 0
+    nowPolice: 
 --- !u!4 &1457207221
 Transform:
   m_ObjectHideFlags: 0
@@ -2421,6 +2423,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameControl: {fileID: 0}
+  multyBtn: {fileID: 0}
+  doubtPan: {fileID: 0}
+  electPan: {fileID: 0}
+  statePan: {fileID: 0}
+  villagerPan: {fileID: 0}
+  wolfPan: {fileID: 0}
+  witchPan: {fileID: 0}
+  seerPan: {fileID: 0}
+  votePan: {fileID: 0}
+  idenIcon: {fileID: 0}
+  userInfo: {fileID: 0}
+  playerAssignment: {fileID: 0}
 --- !u!4 &2008692471
 Transform:
   m_ObjectHideFlags: 0
@@ -2760,6 +2774,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2474133267726442580, guid: 3e9783cb8b72bfa499aad3c03ac51a14, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4263805928189990632, guid: 3e9783cb8b72bfa499aad3c03ac51a14, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
@@ -2859,6 +2877,26 @@ PrefabInstance:
     - target: {fileID: 4864130011480321782, guid: 3e9783cb8b72bfa499aad3c03ac51a14, type: 3}
       propertyPath: m_Name
       value: PlayerBand1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4991735364967872814, guid: 3e9783cb8b72bfa499aad3c03ac51a14, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050212432355210681, guid: 3e9783cb8b72bfa499aad3c03ac51a14, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5480514932321152858, guid: 3e9783cb8b72bfa499aad3c03ac51a14, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523369525627617281, guid: 3e9783cb8b72bfa499aad3c03ac51a14, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7901946848424222928, guid: 3e9783cb8b72bfa499aad3c03ac51a14, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8956324903464450854, guid: 3e9783cb8b72bfa499aad3c03ac51a14, type: 3}
       propertyPath: m_IsActive
@@ -3007,7 +3045,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 0.000032062642}
+  m_AnchoredPosition: {x: 0.00008254429, y: 0.000017223345}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5070452170922682219
