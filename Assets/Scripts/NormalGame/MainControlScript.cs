@@ -84,8 +84,6 @@ public class MainControlScript : MonoBehaviour
         SetDay();//TODO
 
         // 处理返回消息
-        Debug.Log(wl.receiveJson);
-        Debug.Log(BitConverter.ToString(wl.reault));
         StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
         string json = sr.ReadToEnd().TrimEnd('\0');
         Debug.Log(json);
@@ -103,7 +101,7 @@ public class MainControlScript : MonoBehaviour
         }
         else if (retnewjoinroom["type"].ToString() == "leave room") // 验证消息类型，退出房间
         {
-            if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功加入当前房间
+            if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功离开当前房间
             {
                 int playerCount = int.Parse(retnewjoinroom["content"]["playerCount"].ToString());
                 gameControl.players = new string[playerCount];
@@ -119,12 +117,47 @@ public class MainControlScript : MonoBehaviour
         if (everyoneReady)//所有人准备
         {
             multyBtn.SetActive(true);
+
+            // 处理服务器发来可以开始游戏返回值
+            sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+            json = sr.ReadToEnd().TrimEnd('\0');
+            Debug.Log(json);
+            //string json = wl.receiveJson;
+            JsonData retStartGame = JsonMapper.ToObject(json);
+            if (retStartGame["type"].ToString() == "game start") // 验证消息类型，开始游戏
+            {
+                if (retStartGame["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)
+                {
+                    int playerCount = int.Parse(retnewjoinroom["content"]["playerCount"].ToString());
+                    gameControl.players = new string[playerCount];
+                    for (int i = 0; i < playerCount; i++) {
+                        gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+                        gameControl.playerCharacterMap[retnewjoinroom["content"]["players"][i].ToString()] = retnewjoinroom["content"]["playerCharacterMap"][retnewjoinroom["content"]["players"][i].ToString()].ToString();
+                    }
+                    gameControl.gameState = GameControl.GameState.START;// 更新游戏状态
+                }
+            }
+
         }
+    }
+
+    public void onClickMultyBtn()
+    {
+        // 向服务器发送开始游戏请求
+        // 发送json
+        JsonData startJson = new JsonData();
+        startJson["type"] = "game start";
+        startJson["content"] = new JsonData();
+        startJson["content"]["roomID"] = room.roomID;
+        string startJsonStr = startJson.ToJson();
+        wl.Send(startJsonStr);
+
     }
 
     //分发身份牌,可以弹出一个窗口，也可以在聊天栏有一个系统消息
     void StartGame()
     {
+        // 
         SetNight();
     }
 
