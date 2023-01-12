@@ -588,7 +588,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5458983081568271585}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 261535268806883452}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: ProphetExamine
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3588066190629715608
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,7 +721,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4251227623336418756}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 261535268806883452}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: MakeVote
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3881587717731954830
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,7 +854,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5880255271141930980}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 261535268806883452}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: WitchSave
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4087042186166742452
 GameObject:
   m_ObjectHideFlags: 0
@@ -1031,13 +1067,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4864130011480321782}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 261535268806883452}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: WitchPison
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1221,6 +1257,20 @@ MonoBehaviour:
   playerAssignment: {fileID: 0}
   userName: 
   seatNum: 0
+  gameControl: {fileID: 0}
+  mainControl: {fileID: 0}
+  multyBtn: {fileID: 0}
+  doubtPan: {fileID: 4991735364967872814}
+  electPan: {fileID: 1104818356652928207}
+  statePan: {fileID: 8956324903464450854}
+  villagerPan: {fileID: 7901946848424222928}
+  wolfPan: {fileID: 2474133267726442580}
+  witchPan: {fileID: 7563359777441947083}
+  seerPan: {fileID: 4703004344213476703}
+  votePan: {fileID: 5050212432355210681}
+  idenIcon: {fileID: 5480514932321152858}
+  playerNum: {fileID: 4352216859106193907}
+  playerName: {fileID: 2929934236361583597}
 --- !u!1 &4899375408207297875
 GameObject:
   m_ObjectHideFlags: 0
@@ -1341,7 +1391,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6374528820230615680}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 261535268806883452}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: WolfVote
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4991735364967872814
 GameObject:
   m_ObjectHideFlags: 0
@@ -1581,7 +1643,7 @@ GameObject:
   - component: {fileID: 2701821242468466748}
   - component: {fileID: 6003543295760552692}
   m_Layer: 5
-  m_Name: elect
+  m_Name: elected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2179,7 +2241,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2848918449351004057}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 261535268806883452}
+        m_TargetAssemblyTypeName: PlayerBand, Assembly-CSharp
+        m_MethodName: MarkBtn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8782438913188677122
 GameObject:
   m_ObjectHideFlags: 0

@@ -189,6 +189,12 @@ public class PlayerBand : MonoBehaviour
         }
     }
 
+    public void MarkBtn()
+    {
+
+    }
+
+
     public void ProphetExamine()
     {
         //string IdenRet = "";
