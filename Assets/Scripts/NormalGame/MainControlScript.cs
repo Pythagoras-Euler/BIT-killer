@@ -55,7 +55,7 @@ public class MainControlScript : MonoBehaviour
                 StartGame();
                 break;
             case GameControl.GameState.KILL: // 狼人行动
-                WolfAct();
+                RetWolfAct();
                 break;
             case GameControl.GameState.PROPHET: // 预言家行动
                 ProphetExamine();
