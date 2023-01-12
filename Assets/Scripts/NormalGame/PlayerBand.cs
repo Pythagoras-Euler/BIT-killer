@@ -38,6 +38,7 @@ public class PlayerBand : MonoBehaviour
         seatNum = playerAssignment.seatNum;
         playerNum.text = seatNum.ToString();
 
+        string thisnBandIden = gameControl.playerCharacterMap[targetname];
     }
 
     // Update is called once per frame
