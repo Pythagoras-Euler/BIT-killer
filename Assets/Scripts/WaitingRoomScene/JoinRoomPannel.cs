@@ -90,7 +90,8 @@ public class JoinRoomPannel : MonoBehaviour
         //StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
         //string json = sr.ReadToEnd();
         //Debug.Log(json);
-        string json = wl.receiveJson;
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd();
         JsonData retjoinaroom = JsonMapper.ToObject(json);
         if (retjoinaroom["type"].ToString() == "join room") // 验证消息类型
         {

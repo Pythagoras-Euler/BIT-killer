@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainControlScript : MonoBehaviour
 {
@@ -28,6 +29,10 @@ public class MainControlScript : MonoBehaviour
 
     [SerializeField] WebLink wl;
     [SerializeField] Room room;
+    [SerializeField] Text WolfChatMsg;
+    [SerializeField] Text VillagerChatMsg;
+
+    bool clare = false; // 今天有没有发过死讯
 
     // Start is called before the first frame update
     void Start()
@@ -57,13 +62,14 @@ public class MainControlScript : MonoBehaviour
             case GameControl.GameState.KILL: // 狼人行动
                 RetWolfAct();
                 break;
-            case GameControl.GameState.PROPHET: // 预言家行动
-                ProphetExamine();
-                break;
             case GameControl.GameState.WITCH:
-                WitchAct();
+                RetWitchAct();
+                break;
+            case GameControl.GameState.PROPHET: // 预言家行动
+                RetProphetAct();
                 break;
             case GameControl.GameState.DISCUSS:
+                DiscussAct();
                 break;
             case GameControl.GameState.ELECT:
                 ElectPolice();
@@ -79,6 +85,8 @@ public class MainControlScript : MonoBehaviour
                 break;
         }
     }
+
+    
 
 
     //等待页面，将所有icon设置为不可用
@@ -179,59 +187,97 @@ public class MainControlScript : MonoBehaviour
 
     void RetWolfAct()
     {
-        if (playerAssignment.playerCharacter == PlayerAssignment.Character.WOLF)
+        //等待所有狼人确认完毕，这个发送给所有狼人
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd().TrimEnd('\0');
+        JsonData retJson = JsonMapper.ToObject(json);
+        if(retJson["type"].ToString()=="kill")
         {
-            if (playerAssignment.playerState == true)
+            if(retJson["success"].ToString() == "True")
             {
-                //TODO 还应该有一个倒计时模块
+                string target = retJson["content"]["target"].ToString();
+                // 发送给所有狼人
+                if(playerAssignment.playerCharacter==PlayerAssignment.Character.WOLF)
+                {
+                    WolfChatMsg.text += "系统：确认挂科人为"+ target + "\n";
+                }
+
+                gameControl.dayEvent.killed = target;
             }
-            else//显示信息但是按钮无效
+        }
+        else if(retJson["type"].ToString()=="finish")
+        {
+            if (retJson["success"].ToString() == "True" && retJson["message"].ToString()=="kill finish")
             {
-                //TODO
+                VillagerChatMsg.text = "系统：教务部已操作完毕" + "\n";
+                gameControl.gameState = GameControl.GameState.WITCH; // 进入女巫环节
+                gameControl.hasDown = false;
+            }
+            else
+            {
+                Debug.Log(retJson["message"].ToString());
             }
         }
     }
 
-    //BTN响应事件
-    void WolfVote()
+    void RetWitchAct()//就直接做救/毒二选一吧，写起来简单一些
     {
-        wolfPan.SetActive(false);
-        //TODO 倒计时此时停止并重置
-        //TODO 发送投票信息
-    }
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd().TrimEnd('\0');
+        JsonData retJson = JsonMapper.ToObject(json);
 
-    void WitchAct()//就直接做救/毒二选一吧，写起来简单一些
-    {
-        if (playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH)
+        if (playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH) // 如果是女巫
         {
-            if ( playerAssignment.playerState == true)
+            if (retJson["type"].ToString() == "kill result")
             {
-                witchPan.SetActive(true);
-                //TODO 还应该有一个倒计时模块
+                if (retJson["success"].ToString() == "True")
+                {
+                    string target = retJson["content"]["target"].ToString();
+                    VillagerChatMsg.text += "系统：今夜挂科人为" + target + "\n";
+                }
+            }
+           
+        }
+        if (retJson["type"].ToString() == "witch"|| retJson["type"].ToString() == "finish") // 返回接口中没有说明毒或者救的人是谁，需要客户端指定
+        {
+            if (retJson["success"].ToString() == "True" && retJson["message"].ToString() == "witch finish")
+            {
+                VillagerChatMsg.text += "系统：任课老师已操作完毕" + "\n";
+                gameControl.gameState = GameControl.GameState.PROPHET;// 女巫环节结束，进入预言家环节。
+                gameControl.hasDown = false;
             }
             else
             {
-                int waittime = UnityEngine.Random.Range(minWaitTime, maxWaitTime);
-                //TODO 随机倒计时，假装人没死
+                Debug.Log(retJson["message"].ToString());
             }
         }
     }    
 
-    void WitchPison()
+    void RetProphetAct()
     {
-        witchPan.SetActive(false);
-        //TODO 发送消息
-    }
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd().TrimEnd('\0');
+        JsonData retJson = JsonMapper.ToObject(json);
 
-    void WitchSave()
-    {
-        // witchPan.SetActive(false);
-        // TODO 发送消息
-    }
+        if (playerAssignment.playerCharacter == PlayerAssignment.Character.PROPHET) // 如果是预言家
+        {
+            if (retJson["type"].ToString() == "prophet")
+            {
+                if (retJson["success"].ToString() == "True")
+                {
+                    string target = retJson["content"]["target"].ToString();
+                    string chara = retJson["content"]["character"].ToJson() == "WOLF" ? "令人挂科的人" : "让人好好过年的人";
+                    VillagerChatMsg.text += "系统：查验目标"+target+"为" + chara + "\n";
+                    gameControl.dayEvent.inspected = target;
+                    gameControl.dayEvent.checkIden = retJson["content"]["character"].ToJson();
+                    clare = false;
+                    gameControl.gameState = GameControl.GameState.DISCUSS;
+                    gameControl.hasDown = false;
+                    
+                }
+            }
 
-    void ProphetAct()
-    {
-        // seerPan.SetActive(true);
+        }
     }
 
     void ProphetExamine()
@@ -244,7 +290,50 @@ public class MainControlScript : MonoBehaviour
 
         //
     }
+    void DiscussAct()
+    {
+        //这个发送给所有人
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd().TrimEnd('\0');
+        JsonData retjson = JsonMapper.ToObject(json);
+        
+        if(clare == false && retjson["type"].ToString() == "night end")
+        {
+            if(retjson["success"].ToString()=="True")
+            {
+                int playerCnt = retjson["content"]["players"].Count;
+                gameControl.players = new string[playerCnt];
+                for(int i =0;i<playerCnt;i++)
+                {
+                    gameControl.players[i] = retjson["content"]["players"][i].ToString();
+                }
+                gameControl.playerCharacterMap = new HashMap<string, string>();
+                for (int i = 0; i < retjson["content"]["playerCharacterMap"].Count; i++)
+                {
+                    gameControl.playerCharacterMap[retjson["content"]["playerCharacterMap"][i].Keys.ToString()] = retjson["content"]["players"][i].ToString();
+                }
+                gameControl.captain = retjson["content"]["captain"].ToString();
 
+                clare = true;
+
+                // TODO: VillagerChatMsg+="系统：昨晚挂科的人是" + gameControl.dayEvent.killed + "和"
+
+                if(retjson["content"]["electCaptain"].ToString()=="True")
+                {
+                    // 票选警长
+                    gameControl.gameState = GameControl.GameState.ELECT;
+                    gameControl.hasDown = false;
+                }
+                else
+                {
+                    // TODO:允许发言
+                    gameControl.gameState = GameControl.GameState.VOTE;
+                    gameControl.hasDown = false;
+                }
+            }
+        }
+
+    }
     void DeadCheck()
     {
 
@@ -267,8 +356,6 @@ public class MainControlScript : MonoBehaviour
         // 处理返回消息
         StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
         string json = sr.ReadToEnd().TrimEnd('\0');
-        Debug.Log(json);
-        //string json = wl.receiveJson;
         JsonData retgameend = JsonMapper.ToObject(json);
         if (retgameend["type"].ToString() == "game end") // 验证消息类型，游戏结束
         { 
@@ -303,7 +390,26 @@ public class MainControlScript : MonoBehaviour
 
     void ElectPolice()
     {
-        electPan.SetActive(true);
+        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        string json = sr.ReadToEnd().TrimEnd('\0');
+        JsonData retJson = JsonMapper.ToObject(json);
+        if(retJson["type"].ToString() == "elect")
+        {
+            if(retJson["success"].ToString()=="True")
+            {
+                string result = retJson["content"]["result"].ToString();
+                VillagerChatMsg.text += "系统：选举警长为" + result +"\n";
+                gameControl.dayEvent.nowPolice = result;
+                for(int i = 0; i < retJson["content"]["voterTargetMap"].Count;i++)
+                {
+                    VillagerChatMsg.text += retJson["content"]["voterTargetMap"][i].Keys.ToString() + "投给了" + retJson["content"]["voterTargetMap"][i].ToString()+"\n";
+                }
+                gameControl.gameState = GameControl.GameState.DISCUSS;// 进入讨论环节
+                gameControl.hasDown = false;
+
+            }
+        }
+        
     }
 
     void VotePolice()
