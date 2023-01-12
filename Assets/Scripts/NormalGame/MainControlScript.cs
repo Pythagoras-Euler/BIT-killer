@@ -289,7 +289,6 @@ public class MainControlScript : MonoBehaviour
         }
             int winNum = 0;//0没人赢，1好人赢，2狼人赢
 
-        return winNum;
     }
 
     void LastWords()
