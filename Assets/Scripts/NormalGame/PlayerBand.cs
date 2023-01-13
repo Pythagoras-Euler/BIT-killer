@@ -139,6 +139,7 @@ public class PlayerBand : MonoBehaviour
                 LastWords();
                 break;
             case GameControl.GameState.END://结算，宣布胜者
+                Ending();
                 break;
         }
     }
@@ -247,7 +248,8 @@ public class PlayerBand : MonoBehaviour
         data1["type"] = "kill";
         data1["content"] = new JsonData();
         data1["content"]["roomID"] =room.roomID;
-        data1["content"]["voter"] = userName;
+        data1["content"]["voter"] = myName;
+        data1["content"]["target"] = targetName;
         string klJson = data1.ToJson();
         Debug.Log(klJson);
         wl.Send(klJson);
@@ -278,7 +280,7 @@ public class PlayerBand : MonoBehaviour
             if (IAmAlive == true && targetIsDead == false)
             {
                 witchPan.SetActive(true);
-                if(targetName == gameControl.dayEvent.killed)
+                if(targetName == gameControl.dayEvent.killed && gameControl.canDo[0] > 0)//目标为本回合死人且解药没用过时可使用
                 {
                     witchSaveBtn.SetActive(true);
                 }
@@ -286,7 +288,14 @@ public class PlayerBand : MonoBehaviour
                 {
                     witchSaveBtn.SetActive(false);
                 }
-
+                if(gameControl.canDo[1] > 0)//毒药没用过时可使用
+                {
+                    witchPoiBtn.SetActive(true);
+                }
+                else
+                {
+                    witchPoiBtn.SetActive(false);
+                }
             }
             else
             {
@@ -304,8 +313,17 @@ public class PlayerBand : MonoBehaviour
 
         gameControl.hasDown = true;
         witchPan.SetActive(false);
+        gameControl.canDo[1] -= 1;
         //TODO 发送消息
-
+        JsonData data1 = new JsonData();
+        data1["type"] = "witch";
+        data1["content"] = new JsonData();
+        data1["content"]["roomID"] = room.roomID;
+        data1["content"]["target"] = targetName;
+        data1["content"]["drug"] = "POISON";
+        string klJson = data1.ToJson();
+        Debug.Log(klJson);
+        wl.Send(klJson);
     }
 
     public void WitchSave()
@@ -313,7 +331,17 @@ public class PlayerBand : MonoBehaviour
 
         gameControl.hasDown = true;
         witchPan.SetActive(false);
+        gameControl.canDo[0] -= 1;
         //TODO 发送消息
+        JsonData data1 = new JsonData();
+        data1["type"] = "witch";
+        data1["content"] = new JsonData();
+        data1["content"]["roomID"] = room.roomID;
+        data1["content"]["target"] = targetName;
+        data1["content"]["drug"] = "ANTIDOTE";
+        string klJson = data1.ToJson();
+        Debug.Log(klJson);
+        wl.Send(klJson);
     }
     
     bool IsMe()
@@ -357,9 +385,13 @@ public class PlayerBand : MonoBehaviour
         //GameControl里面维护一个表显示验过的玩家身份
         //好像不需要发后端？
         bool isChecked = false;
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
         {
             //if遍历一遍checked数组
+            if (gameControl.seenPlayers[i] == name)
+            {
+                isChecked = true;
+            }
         }
         return isChecked;
     }
@@ -375,6 +407,27 @@ public class PlayerBand : MonoBehaviour
             seerPan.SetActive(false);
         }
     }
+
+    public void ProphetExamining()
+    {
+        int i;
+        gameControl.hasDown = true;
+
+        for (i = 0; i < 7 && gameControl.seenPlayers[i] == ""; i++) ;
+
+        gameControl.seenPlayers[i] = targetName;
+
+        //TODO 发送消息
+        JsonData data1 = new JsonData();
+        data1["type"] = "prophet";
+        data1["content"] = new JsonData();
+        data1["content"]["roomID"] = room.roomID;
+        data1["content"]["target"] = targetName;
+        string klJson = data1.ToJson();
+        Debug.Log(klJson);
+        wl.Send(klJson);
+    }
+
 
     public void MarkBtn()
     {
@@ -399,12 +452,6 @@ public class PlayerBand : MonoBehaviour
     }
 
 
-    public void ProphetExamining()
-    {
-        gameControl.hasDown = true;
-        //TODO 发送消息
-
-    }
 
 
 
@@ -455,6 +502,15 @@ public class PlayerBand : MonoBehaviour
     {
         electPan.SetActive(false);
         //TODO 发送投票信息
+        JsonData data1 = new JsonData();
+        data1["type"] = "elect";
+        data1["content"] = new JsonData();
+        data1["content"]["roomID"] = room.roomID;
+        data1["content"]["voter"] = myName;
+        data1["content"]["target"] = targetName;
+        string klJson = data1.ToJson();
+        Debug.Log(klJson);
+        wl.Send(klJson);
     }
 
     void DisplayPolice()
@@ -498,11 +554,20 @@ public class PlayerBand : MonoBehaviour
     {
         gameControl.hasDown = true;
         votePan.SetActive(false);
+        //TODO 信息发送
+        JsonData dataVote = new JsonData();
+        dataVote["type"] = "vote";
+        dataVote["content"] = new JsonData();
+        dataVote["content"]["roomID"] = room.roomID;
+        dataVote["content"]["voter"] = myName;
+        dataVote["content"]["target"] = targetName;
+        string klJson = dataVote.ToJson();
+        Debug.Log(klJson);
+        wl.Send(klJson);
     }
 
     void Ending()
     {
-        Waiting();
         AllSeen();
     }
 

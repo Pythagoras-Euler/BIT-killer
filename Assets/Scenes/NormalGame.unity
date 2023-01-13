@@ -659,7 +659,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 52.28461}
+  m_AnchoredPosition: {x: 0.00008254429, y: 0.0000122331}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &948324428
@@ -1371,6 +1371,8 @@ MonoBehaviour:
     nowPolice: 
   players: []
   captain: 
+  seenPlayers: []
+  canDo: 
 --- !u!4 &1457207221
 Transform:
   m_ObjectHideFlags: 0
@@ -2767,6 +2769,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerBand
       objectReference: {fileID: 0}
+    - target: {fileID: 3581372613255866844, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ProphetExamining
+      objectReference: {fileID: 0}
     - target: {fileID: 4436271639778813513, guid: b874479d7e2694e47943a50ecaebd6af, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -2955,7 +2961,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 808337850}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.77272624
+  m_Size: 0.9999686
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3135,7 +3141,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 52.28461}
+  m_AnchoredPosition: {x: 0.00008254429, y: 0.0000122331}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5070452170922682219
@@ -3953,7 +3959,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 5070452171591486105}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.77272624
+  m_Size: 0.9999686
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

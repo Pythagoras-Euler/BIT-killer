@@ -46,6 +46,7 @@ public class MainControlScript : MonoBehaviour
         gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
         room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
+
     }
 
     // Update is called once per frame
@@ -168,11 +169,26 @@ public class MainControlScript : MonoBehaviour
 
     }
 
-    //分发身份牌,可以弹出一个窗口，也可以在聊天栏有一个系统消息
+    //分发身份牌,可以弹出一个窗口，也可以在聊天栏有一个系统消息，同时初始化对局信息
     void StartGame()
     {
         // 
         SetNight();
+
+        if (playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH)
+        {
+            gameControl.canDo[0] = 1;
+            gameControl.canDo[1] = 1;
+        }
+        else
+        {
+            gameControl.canDo[0] = 0;
+            gameControl.canDo[1] = 0;
+        }
+        for (int i = 0; i < 7; i++)
+        {
+            gameControl.seenPlayers[i] = "";
+        }
     }
 
     //
@@ -374,7 +390,6 @@ public class MainControlScript : MonoBehaviour
                 }
             }
         }
-            int winNum = 0;//0没人赢，1好人赢，2狼人赢
 
     }
 
