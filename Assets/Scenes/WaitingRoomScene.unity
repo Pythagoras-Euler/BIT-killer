@@ -3307,9 +3307,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1358558232}
-        m_TargetAssemblyTypeName: JoinRoomPannel, Assembly-CSharp
-        m_MethodName: CloseBtn
+      - m_Target: {fileID: 666801511}
+        m_TargetAssemblyTypeName: SearchRooms, Assembly-CSharp
+        m_MethodName: CloseJoinRoomPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5755,6 +5755,7 @@ MonoBehaviour:
   roomOwner: 
   roomMembers: []
   memberCount: 0
+  joinRoomPannel: {fileID: 1358558228}
   roomInfo: {fileID: 2023197217}
 --- !u!1 &1361635870
 GameObject:

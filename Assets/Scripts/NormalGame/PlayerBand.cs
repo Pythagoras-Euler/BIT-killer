@@ -50,7 +50,7 @@ public class PlayerBand : MonoBehaviour
         userName = userInfo.username;
         playerAssignment = GameObject.FindGameObjectWithTag("PlayerAssignment").GetComponent<PlayerAssignment>();
         //seatNum = playerAssignment.seatNum;
-        //playerNum.text = seatNum.ToString();
+        playerNum.text = seatNum.ToString();
         room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
         gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
