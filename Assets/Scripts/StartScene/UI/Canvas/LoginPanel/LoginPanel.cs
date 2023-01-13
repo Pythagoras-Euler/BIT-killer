@@ -22,9 +22,9 @@ public class LoginPanel : MonoBehaviour
     public Toggle pswDisplayTog;
     public GameObject userInfo;
 
-    byte[] cipchers;
-    string cipcher;
-
+    byte[] cipcher;
+    string cipchers;
+    private  string salt;
     // Start is called before the first frame update
 
 
@@ -93,16 +93,25 @@ public class LoginPanel : MonoBehaviour
     }
 
     //TODO 发送请求
-    private string loginRequest(string username)
+    private void loginRequest(string username)
     {
-        string type = "login salt";
+        //string type = "login salt";
 
         //send "type":"login salt",
         //send "content":"lbwnb"
 
         //await json type = "login salt"
-        string salt = "qwertyuiopasdfghjklz";//getsalt
-        return salt;
+        //string salt = "qwertyuiopasdfghjklz";//getsalt
+        //return salt;
+
+        JsonData userJson = new JsonData();
+        userJson["type"] = "login salt";
+        userJson["content"] = new JsonData();
+        userJson["content"] = acc;
+        string userJsonStr = userJson.ToJson();
+        Debug.Log(userJsonStr);
+        wl.Send(userJsonStr);
+
     }
 
     string acc;
@@ -119,44 +128,51 @@ public class LoginPanel : MonoBehaviour
         else
         {
             //TODO 两次发送与接受
-            string salt = loginRequest(acc);
+            loginRequest(acc);
 
 
-            //string cipcher = Sha256(psw);
-            byte[] cipchers = Sha256(salt+psw);
-            //string cipcher = Encoding.UTF8.GetString(cipchers);
-            string cipcher = ToHexStrFromByte(cipchers);
 
-            byte[] ax = new byte[2] { 0xFF, 0xF0 };
-
-            //string opPsw = ToHexString(cipcher, Encoding.ASCII);
-            //Debug.Log($"标识\"login\",账号{acc}, 密码{cipchers}");
-            Debug.Log($"ff00:{ToHexStrFromByte(ax)}");
-            Debug.Log($"标识\"login\",账号{acc}, 密码{cipcher}");
-
-            // 发送请求
-            JsonData userJson = new JsonData();
-            userJson["type"] = "login";
-            userJson["content"] = new JsonData();
-            userJson["content"]["username"] = acc;
-            userJson["content"]["password"] = cipcher;
-            userJson["content"]["salt"] = "";
-            string userJsonStr = userJson.ToJson();
-            Debug.Log(userJsonStr);
-            wl.Send(userJsonStr);
         }
     }
+
+    private void login()
+    {
+        //string cipcher = Sha256(psw);
+        cipcher = Sha256(salt + psw);
+        cipchers = ToHexStrFromByte(cipcher);
+        //string cipcher = Encoding.UTF8.GetString(cipchers);
+        //string cipcher = ToHexStrFromByte(cipchers);
+
+        byte[] ax = new byte[2] { 0xFF, 0xF0 };
+
+        //string opPsw = ToHexString(cipcher, Encoding.ASCII);
+        //Debug.Log($"标识\"login\",账号{acc}, 密码{cipchers}");
+        //Debug.Log($"ff00:{ToHexStrFromByte(ax)}");
+        //Debug.Log($"标识\"login\",账号{acc}, 密码{cipchers}");
+        Debug.Log($"salt:{salt},psw:{psw}");
+        // 发送请求
+        JsonData userJson = new JsonData();
+        userJson["type"] = "login";
+        userJson["content"] = new JsonData();
+        userJson["content"]["username"] = acc;
+        userJson["content"]["password"] = cipchers;
+        userJson["content"]["salt"] = "";
+        string userJsonStr = userJson.ToJson();
+        //Debug.Log(userJsonStr);
+        wl.Send(userJsonStr);
+    }
+
     private void Update()
     {
         // 处理返回值
         //StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
         //string json = sr.ReadToEnd().TrimEnd('\0');
-        Debug.Log(wl.receiveJson);
+        //Debug.Log(wl.receiveJson);
         JsonData retuser = JsonMapper.ToObject(wl.receiveJson);
-        Debug.Log("retuser");
+        //Debug.Log("retuser");
         if (retuser["type"].ToString() == "login") // 如果是登录 
         {
-
+            Debug.Log("retuser");
             string retType = retuser["type"].ToString();//接收服务器返回值
             bool retSuccess = retuser["success"].ToString() == "True" ? true : false;
             string retMes = retuser["message"].ToString();
@@ -172,7 +188,7 @@ public class LoginPanel : MonoBehaviour
                 {
                     promptInfo.text = "该用户名未被注册";//用户名错误
                 }
-                else if (retMes == "Wrong Password")
+                else if (retMes == "Wrong username")//Wrong Password
                 {
                     promptInfo.text = "密码错误";//密码错误
 
@@ -199,6 +215,36 @@ public class LoginPanel : MonoBehaviour
                                                                                      //如果需要的话可以设置一个过渡动画
 
             }
+        }
+        else if(retuser["type"].ToString() == "login salt")
+        {
+            string retType = retuser["type"].ToString();//接收服务器返回值
+            bool retSuccess = retuser["success"].ToString() == "True" ? true : false;
+            string retMes = retuser["message"].ToString();
+            string retContent = retuser["content"].ToString();
+
+            if (retType != "login salt")//不知道什么时候会出现这种错误（大概是用户乱点？
+            {
+                promptInfo.text = "未知错误(请勿频繁操作）";
+            }
+            else if (retMes != "Salt")//返回出现错误retSuccess == false
+            {
+                if (retMes == "Invalid Username")//登陆失败
+                {
+                    promptInfo.text = "该用户名未被注册";//用户名错误
+                }
+                else//其他错误
+                {
+                    promptInfo.text = retMes + "!!!";
+                    Debug.Log(retMes);
+                }
+            }
+            else if (retType == "login salt" && retMes == "Salt")//成功
+            {
+                //Debug.Log(retContent);
+                salt = retContent;
+                login();
+            }    
         }
     }
 
