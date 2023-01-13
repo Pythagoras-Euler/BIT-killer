@@ -120,7 +120,7 @@ public class LoginPanel : MonoBehaviour
     {
 
         acc = account.GetComponent<Text>().text;
-        psw = password.GetComponent<Text>().text;
+        psw = pswInputField.GetComponent<InputField>().text;
         if (psw.Length <= 6)
         {
             promptInfo.text = "请输入大于6位的密码";
