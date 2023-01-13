@@ -1,1 +1,0 @@
-{"type":"register","success":true,"message":"Registration successful","content":null}

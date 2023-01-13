@@ -10,7 +10,7 @@ public class MainControlScript : MonoBehaviour
 {
 
     int PoliceId;
-    [SerializeField] GameControl gameControl;
+    public GameControl gameControl;
     public GameObject multyBtn; // 只有房主有，开启游戏按钮
     public GameObject doubtPan;
     public GameObject electPan;
@@ -42,7 +42,8 @@ public class MainControlScript : MonoBehaviour
         maxWaitTime = 9999;//同上
         multyBtn.SetActive(false);
 
-        playerAssignment = GameObject.Find("/PlayerAssignment").GetComponent<PlayerAssignment>();
+        playerAssignment = GameObject.FindGameObjectWithTag("PlayerAssignment").GetComponent<PlayerAssignment>();
+        gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
         room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
     }

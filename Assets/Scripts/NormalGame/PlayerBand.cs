@@ -16,8 +16,6 @@ public class PlayerBand : MonoBehaviour
 
     
     public bool needRefreshFlag = false;//万一需要外界强制刷新，可以修改这个Flag
-    public MainControlScript mainControl;
-    public GameObject multyBtn; // 只有房主有，开启游戏按钮
     public GameObject doubtPan;
     public Image doubtIcon;
     public GameObject electPan;
@@ -50,11 +48,12 @@ public class PlayerBand : MonoBehaviour
     {
         userInfo = GameObject.FindGameObjectWithTag("UserInfo").GetComponent<UserInfo>();
         userName = userInfo.username;
-        playerAssignment = GameObject.Find("PlayerAssignment").GetComponent<PlayerAssignment>();
+        playerAssignment = GameObject.FindGameObjectWithTag("PlayerAssignment").GetComponent<PlayerAssignment>();
         //seatNum = playerAssignment.seatNum;
         //playerNum.text = seatNum.ToString();
         room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
+        gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
 
         NowMark = PlayerAssignment.Character.UNDEF;
         targetCharacter = PlayerAssignment.Character.UNDEF;

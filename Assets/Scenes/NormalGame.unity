@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 816571841}
   m_Layer: 0
   m_Name: PlayerAssignment
-  m_TagString: Untagged
+  m_TagString: PlayerAssignment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -607,7 +607,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curroom: {fileID: 0}
-  playerCharacter: 0
+  playerCharacter: 1
   seatNum: 0
   playerName: 
   playerState: 0
@@ -659,7 +659,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 0.00018697846}
+  m_AnchoredPosition: {x: 0.00008254429, y: 52.28461}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &948324428
@@ -1340,7 +1340,7 @@ GameObject:
   - component: {fileID: 1457207220}
   m_Layer: 0
   m_Name: GameControl
-  m_TagString: Untagged
+  m_TagString: GameControl
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2955,7 +2955,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 808337850}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.77272624
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3135,7 +3135,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 0.00018697846}
+  m_AnchoredPosition: {x: 0.00008254429, y: 52.28461}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5070452170922682219
@@ -3953,7 +3953,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 5070452171591486105}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.77272624
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
