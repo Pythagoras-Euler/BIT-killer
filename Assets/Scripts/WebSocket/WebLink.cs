@@ -45,7 +45,7 @@ public class WebLink : MonoBehaviour
             File.WriteAllText(Application.dataPath + "/jsontest.txt", receiveStr, m_utf8);
             StreamReader sr = new StreamReader(Application.dataPath+"/jsontest.txt");
             receiveJson = sr.ReadLine();
-            receiveJson.TrimEnd('\0');
+            receiveJson =receiveJson.TrimEnd('\0');
             // receiveJson = receiveStr;
             //Debug.Log(receiveJson);
             //Debug.Log(BitConverter.ToString(reault));

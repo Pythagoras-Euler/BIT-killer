@@ -11,6 +11,8 @@ TagManager:
   - RoomInfo
   - DontDestroy
   - PlayerList
+  - PlayerAssignment
+  - GameControl
   layers:
   - Default
   - TransparentFX

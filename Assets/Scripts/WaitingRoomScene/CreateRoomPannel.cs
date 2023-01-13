@@ -49,15 +49,15 @@ public class CreateRoomPannel : MonoBehaviour
         Debug.Log(crarJson);
         wl.Send(crarJson);
 
+        
+    }
+    private void Update()
+    {
         // 处理返回消息
         Debug.Log(wl.receiveJson);
-        Debug.Log(BitConverter.ToString (wl.reault));
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
-        Debug.Log(json);
         //string json = wl.receiveJson;
-        JsonData retcreatearoom = JsonMapper.ToObject(json);
-        if(retcreatearoom["type"].ToString()== "create room") // 验证消息类型
+        JsonData retcreatearoom = JsonMapper.ToObject(wl.receiveJson);
+        if (retcreatearoom["type"].ToString() == "create room") // 验证消息类型
         {
             if (retcreatearoom["success"].ToString() == "True")
             {
@@ -91,7 +91,6 @@ public class CreateRoomPannel : MonoBehaviour
             Debug.Log(retcreatearoom["type"].ToString());
         }
     }
-
     public void ClosePannel()
     {
         this.gameObject.SetActive(false);
