@@ -37,29 +37,14 @@ public class SearchRooms : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    //获取全部房间列表
-    public void GetAllRooms()
-    {
-        // 发送请求
-        GetRooms getRooms = new GetRooms();
-        string getRoomsJson = JsonMapper.ToJson(getRooms);
-        Debug.Log(getRoomsJson);
-        //wl.Send(getRoomsJson);
-
-
         // TODO:根据返回消息更新房间列表
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd();
-        Debug.Log(json);
-        JsonData retallroom = JsonMapper.ToObject(json);
-        if(retallroom["type"].ToString() == "get rooms")
+            JsonData retmsg = JsonMapper.ToObject(wl.receiveJson);
+
+        if (retmsg["type"].ToString() == "get rooms")
         {
-            if(retallroom["success"].ToString() == "True")
+            if (retmsg["success"].ToString() == "True")
             {
-                foreach(JsonData roomjson in retallroom["content"])
+                foreach (JsonData roomjson in retmsg["content"])
                 {
                     GameObject newroom = GameObject.Instantiate(roomItem) as GameObject;
                     newroom.transform.parent = GameObject.FindGameObjectWithTag("RoomsView").transform;
@@ -76,16 +61,60 @@ public class SearchRooms : MonoBehaviour
                         newroomitem.players[i] = roomjson["players"][i].ToString();
 
                     }
-                    newroomitem.gaming = roomjson["gaming"].ToString()=="True"?true:false;
+                    newroomitem.gaming = roomjson["gaming"].ToString() == "True" ? true : false;
                     newroomitem.full = roomjson["full"].ToString() == "True" ? true : false;
 
                 }
+                wl.receiveJson = "";
             }
             else
             {
                 Debug.Log("获取全部房间失败");
             }
         }
+        else if (retmsg["type"].ToString() == "get a random room") // 验证消息类型
+        {
+
+            bool retSuc = retmsg["success"].ToString() == "True" ? true : false;
+
+            if (retSuc == true)
+            {
+                JoinRoomPannel jrp = joinRoomPannel.GetComponent<JoinRoomPannel>();
+                jrp.roomID = long.Parse(retmsg["content"]["roomID"].ToString());
+                jrp.roomName = retmsg["content"]["roomName"].ToString();
+                jrp.hasPassword = false;
+                jrp.roomOwner = retmsg["content"]["creator"].ToString();
+                jrp.memberCount = int.Parse(retmsg["content"]["playerCount"].ToString());
+                jrp.roomMembers = new string[jrp.memberCount];
+                for (int i = 0; i < jrp.memberCount; i++)
+                {
+                    jrp.roomMembers[i] = retmsg["content"]["players"][i].ToString();
+                }
+                jrp.canJoin = true;
+                if(joinRoomPannel.activeInHierarchy == false)
+                {
+                    JoinRoom();//TODO:获取房间信息的部分我没找到在哪（是上面那个searchroom么）
+                    wl.receiveJson = "";
+                }
+            }
+            else
+            {
+                if (createRoomPannel.activeInHierarchy == false)
+                    CreateRoom();//找不到房间就创建房间
+            }
+        }
+
+
+    }
+
+    //获取全部房间列表
+    public void GetAllRooms()
+    {
+        // 发送请求
+        GetRooms getRooms = new GetRooms();
+        string getRoomsJson = JsonMapper.ToJson(getRooms);
+        Debug.Log(getRoomsJson);
+        wl.Send(getRoomsJson);
     }
 
     //打开搜索房间面板
@@ -111,41 +140,9 @@ public class SearchRooms : MonoBehaviour
         randomjoin["type"] = "get a random room";
         randomjoin["content"] = null;
         string jsonstr = randomjoin.ToJson();
-        //wl.Send(jsonstr);
+        Debug.Log(jsonstr);
+        wl.Send(jsonstr);
 
-        // 接收返回值
-        // 依然有BOM的问题，这里先放一个jsontest.txt做测试
-        //string retrandomjoinstr = wl.receiveJson;
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd();
-        Debug.Log(json);
-        JsonData retrandomjoin = JsonMapper.ToObject(json);
-        if (retrandomjoin["type"].ToString() == "get a random room") // 验证消息类型
-        {
-
-            bool retSuc = retrandomjoin["success"].ToString() == "True" ? true : false;
-
-            if (retSuc == true)
-            {
-                JoinRoomPannel jrp = joinRoomPannel.GetComponent<JoinRoomPannel>();
-                jrp.roomID = long.Parse(retrandomjoin["content"]["roomID"].ToString());
-                jrp.roomName = retrandomjoin["content"]["roomName"].ToString();
-                jrp.hasPassword = false;
-                jrp.roomOwner = retrandomjoin["content"]["creator"].ToString();
-                jrp.memberCount = int.Parse(retrandomjoin["content"]["playerCount"].ToString());
-                jrp.roomMembers = new string[jrp.memberCount];
-                for (int i = 0; i < jrp.memberCount; i++)
-                {
-                    jrp.roomMembers[i] = retrandomjoin["content"]["players"][i].ToString();
-                }
-                jrp.canJoin = true;
-                JoinRoom();//TODO:获取房间信息的部分我没找到在哪（是上面那个searchroom么）
-            }
-            else
-            {
-                CreateRoom();//找不到房间就创建房间
-            }
-        }
     }
 
     //创建房间事件
@@ -162,5 +159,9 @@ public class SearchRooms : MonoBehaviour
         joinRoomPannel.SetActive(true);
         // TODO:如果加入则发送join room请求
         // TODO:处理返回消息
+    }
+    public void CloseJoinRoomPanel()
+    {
+        joinRoomPannel.SetActive(false);
     }
 }

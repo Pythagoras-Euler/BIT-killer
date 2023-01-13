@@ -20,7 +20,6 @@ public class WebLink : MonoBehaviour
     public byte[] reault;
 
 
-
     // private WebLink() { }
 
     // public string sendStr;
@@ -51,6 +50,10 @@ public class WebLink : MonoBehaviour
             //Debug.Log(BitConverter.ToString(reault));
         }
     }
+
+    // server --> json --> local 
+    // many json files   Queue  来存储这个files
+    // 有一个消息处理队列。
 
     // Update is called once per frame
     void Update()

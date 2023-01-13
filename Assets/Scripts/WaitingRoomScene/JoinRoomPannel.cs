@@ -20,9 +20,9 @@ public class JoinRoomPannel : MonoBehaviour
     public bool hasPassword;
     public bool canJoin;
     public string roomOwner;
-    public string[] roomMembers;
+    public string[] roomMembers=new string[7];
     public int memberCount;
-
+    [SerializeField] GameObject joinRoomPannel;
     public GameObject roomInfo;
 
 
@@ -53,46 +53,7 @@ public class JoinRoomPannel : MonoBehaviour
             }
             joinBtn.SetActive(true);
         }
-    }
-
-    private void RoomInfoDisplay()
-    {
-        string rM = roomMembers[0];
-        for(int i =1;i<roomMembers.Length;i++)
-        {
-            rM = rM + "," + roomMembers[i];
-        }
-        roomInfoDisplay.text = "房间号："+ roomID + " \n 房主："+roomOwner + " \n 成员:" + rM + " \n 人数："+ memberCount + "/7 \n ";
-        //TODO 格式有点问题,string[]需要更换显示方式
-        if (canJoin)
-            retMsg.text = "该房间可加入";
-    }
-    public void JoinBtn()
-    {
-        // 发送加入请求
-        string roompassword;
-        if (hasPassword)
-            roompassword = roomPasswordText.GetComponent<Text>().text;
-        else
-            roompassword = "";
-        JsonData data1 = new JsonData();
-        data1["type"] = "join room";
-        data1["content"] = new JsonData();
-        data1["content"]["user"] = username;
-        data1["content"]["roomID"] = roomID;
-        data1["content"]["password"] = roompassword;
-        string jrJson = data1.ToJson();
-        Debug.Log(jrJson);
-        wl.Send(jrJson);
-
-        // 处理返回消息
-        // 依然有BOM的问题，这里先放一个jsontest.txt做测试
-        //StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        //string json = sr.ReadToEnd();
-        //Debug.Log(json);
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd();
-        JsonData retjoinaroom = JsonMapper.ToObject(json);
+        JsonData retjoinaroom = JsonMapper.ToObject(wl.receiveJson);
         if (retjoinaroom["type"].ToString() == "join room") // 验证消息类型
         {
 
@@ -106,10 +67,11 @@ public class JoinRoomPannel : MonoBehaviour
                 curroom.creator = roomOwner;
                 curroom.iscurcreator = roomOwner == username ? true : false;
                 curroom.playerCount = memberCount + 1; // 加入当前玩家
-                                                       // TODO:继续将玩家填入到玩家数组里面，完善curroom
                 curroom.players = new string[memberCount + 1];
+                roomMembers = new string[memberCount + 1];
                 for (int i = 0; i < memberCount; i++)
                 {
+                    roomMembers[i] = retjoinaroom["content"]["players"][i].ToString();
                     curroom.players[i] = roomMembers[i];
                 }
                 curroom.players[memberCount] = username;
@@ -129,10 +91,67 @@ public class JoinRoomPannel : MonoBehaviour
 
             }
         }
+
+        JsonData retmsg = JsonMapper.ToObject(wl.receiveJson);
+        if (retmsg["type"].ToString() == "get a room") // 验证消息类型
+        {
+            Debug.Log("get a room");            
+            bool retSuc = retmsg["success"].ToString() == "True" ? true : false;
+
+            if (retSuc == true)
+            {
+                roomID = long.Parse(retmsg["content"]["roomID"].ToString());
+                roomName = retmsg["content"]["roomName"].ToString();
+                hasPassword = retmsg["content"]["password"].ToString() == ""?false:true;
+                roomOwner = retmsg["content"]["creator"].ToString();
+                memberCount = int.Parse(retmsg["content"]["playerCount"].ToString());
+                roomMembers = new string[memberCount];
+                for (int i = 0; i < memberCount; i++)
+                {
+                    roomMembers[i] = retmsg["content"]["players"][i].ToString();
+                }
+                canJoin = true;
+            }
+        }
+    }
+
+    private void RoomInfoDisplay()
+    {
+        string rM = "";
+        for(int i = 0;i<roomMembers.Length;i++)
+        {
+            rM = rM + "," + roomMembers[i];
+        }
+        roomInfoDisplay.text = "房间号："+ roomID + " \n 房主："+roomOwner + " \n 成员:" + rM + " \n 人数："+ memberCount + "/7 \n ";
+        //TODO 格式有点问题,string[]需要更换显示方式
+        if (canJoin)
+            retMsg.text = "该房间可加入";
+    }
+
+    string roompassword;
+    public void JoinBtn()
+    {
+        // 发送加入请求
+        if (hasPassword)
+            roompassword = roomPasswordText.GetComponent<Text>().text;
+        else
+            roompassword = "";
+        JsonData data1 = new JsonData();
+        data1["type"] = "join room";
+        data1["content"] = new JsonData();
+        data1["content"]["user"] = username;
+        data1["content"]["roomID"] = roomID;
+        data1["content"]["password"] = roompassword;
+        string jrJson = data1.ToJson();
+        Debug.Log(jrJson);
+        wl.Send(jrJson);
+
+        
         
     }
     public void CloseBtn()
     {
-        this.gameObject.SetActive(false);
+        joinRoomPannel.SetActive(false);
+        Debug.Log("joinroompanel False");
     }
 }

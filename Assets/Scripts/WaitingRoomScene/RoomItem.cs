@@ -1,3 +1,4 @@
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,11 +28,13 @@ public class RoomItem : MonoBehaviour
 
     [SerializeField] GameObject joinRoomPannel;
     [SerializeField] GameObject joinBtn;
+    [SerializeField] WebLink wl;
 
     // Start is called before the first frame update
     void Start()
     {
         joinRoomPannel = GameObject.Find("Canvas").transform.Find("JoinRoomPannel").gameObject;
+        wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
         Debug.Log("find");
     }
 
@@ -65,6 +68,13 @@ public class RoomItem : MonoBehaviour
     {
         joinRoomPannel.GetComponent<JoinRoomPannel>().roomID = roomID;
         joinRoomPannel.GetComponent<JoinRoomPannel>().hasPassword = hasPassword;
+        // 发送一个获取特定房间的请求
+        JsonData data1 = new JsonData();
+        data1["type"] = "get a room";
+        data1["content"] = new JsonData();
+        data1["content"]["roomID"] = roomID;
+        string srJson = data1.ToJson();
+        wl.Send(srJson);
         joinRoomPannel.SetActive(true);
     }
 }

@@ -1576,7 +1576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &301922149
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3307,9 +3307,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1358558232}
-        m_TargetAssemblyTypeName: JoinRoomPannel, Assembly-CSharp
-        m_MethodName: CloseBtn
+      - m_Target: {fileID: 666801511}
+        m_TargetAssemblyTypeName: SearchRooms, Assembly-CSharp
+        m_MethodName: CloseJoinRoomPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4774,6 +4774,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1241400050}
   - component: {fileID: 1241400052}
+  - component: {fileID: 1241400051}
   m_Layer: 5
   m_Name: PlayerInfo
   m_TagString: Untagged
@@ -4802,6 +4803,21 @@ RectTransform:
   m_AnchoredPosition: {x: -50, y: -100}
   m_SizeDelta: {x: 400, y: -734.485}
   m_Pivot: {x: 1, y: 1}
+--- !u!114 &1241400051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241400049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad1551fffc5c26a409754bbd94473678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nickName: 
+  userID: 
+  UserID: {fileID: 135365280}
 --- !u!222 &1241400052
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5755,6 +5771,7 @@ MonoBehaviour:
   roomOwner: 
   roomMembers: []
   memberCount: 0
+  joinRoomPannel: {fileID: 1358558228}
   roomInfo: {fileID: 2023197217}
 --- !u!1 &1361635870
 GameObject:
