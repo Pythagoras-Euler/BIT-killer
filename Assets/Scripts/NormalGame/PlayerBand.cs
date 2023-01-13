@@ -37,6 +37,8 @@ public class PlayerBand : MonoBehaviour
     private string myName = "";
     private bool IAmAlive = false;
 
+    private bool isEmpty = true;
+
     private string targetName = "";
     private bool targetIsDead = false;
     PlayerAssignment.Character targetCharacter;
@@ -147,11 +149,18 @@ public class PlayerBand : MonoBehaviour
     void InfoRefresh()
     {
         playerNum.text = seatNum.ToString();
-
-        targetName = gameControl.players[seatNum - 1];
-        playerName.text = targetName;
-        myName = playerAssignment.name;
-        myCharacter = playerAssignment.playerCharacter;
+        if (gameControl.players[seatNum - 1] != "")
+        {
+            isEmpty = false;
+            targetName = gameControl.players[seatNum - 1];
+            playerName.text = targetName;
+            myName = playerAssignment.name;
+            myCharacter = playerAssignment.playerCharacter;
+        }
+        else
+        {
+            isEmpty = true;
+        }
     }
 
     //等待页面，将所有icon设置为不可用
