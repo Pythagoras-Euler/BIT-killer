@@ -20,7 +20,7 @@ public class JoinRoomPannel : MonoBehaviour
     public bool hasPassword;
     public bool canJoin;
     public string roomOwner;
-    public string[] roomMembers;
+    public string[] roomMembers=new string[7];
     public int memberCount;
     [SerializeField] GameObject joinRoomPannel;
     public GameObject roomInfo;
@@ -53,13 +53,6 @@ public class JoinRoomPannel : MonoBehaviour
             }
             joinBtn.SetActive(true);
         }
-        // 处理返回消息
-        // 依然有BOM的问题，这里先放一个jsontest.txt做测试
-        //StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        //string json = sr.ReadToEnd();
-        //Debug.Log(json);
-        //StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        //string json = sr.ReadToEnd();
         JsonData retjoinaroom = JsonMapper.ToObject(wl.receiveJson);
         if (retjoinaroom["type"].ToString() == "join room") // 验证消息类型
         {
@@ -75,8 +68,10 @@ public class JoinRoomPannel : MonoBehaviour
                 curroom.iscurcreator = roomOwner == username ? true : false;
                 curroom.playerCount = memberCount + 1; // 加入当前玩家
                 curroom.players = new string[memberCount + 1];
+                roomMembers = new string[memberCount + 1];
                 for (int i = 0; i < memberCount; i++)
                 {
+                    roomMembers[i] = retjoinaroom["content"]["players"][i].ToString();
                     curroom.players[i] = roomMembers[i];
                 }
                 curroom.players[memberCount] = username;
@@ -96,12 +91,34 @@ public class JoinRoomPannel : MonoBehaviour
 
             }
         }
+
+        JsonData retmsg = JsonMapper.ToObject(wl.receiveJson);
+        if (retmsg["type"].ToString() == "get a room") // 验证消息类型
+        {
+            Debug.Log("get a room");            
+            bool retSuc = retmsg["success"].ToString() == "True" ? true : false;
+
+            if (retSuc == true)
+            {
+                roomID = long.Parse(retmsg["content"]["roomID"].ToString());
+                roomName = retmsg["content"]["roomName"].ToString();
+                hasPassword = retmsg["content"]["password"].ToString() == ""?false:true;
+                roomOwner = retmsg["content"]["creator"].ToString();
+                memberCount = int.Parse(retmsg["content"]["playerCount"].ToString());
+                roomMembers = new string[memberCount];
+                for (int i = 0; i < memberCount; i++)
+                {
+                    roomMembers[i] = retmsg["content"]["players"][i].ToString();
+                }
+                canJoin = true;
+            }
+        }
     }
 
     private void RoomInfoDisplay()
     {
-        string rM = roomMembers[0];
-        for(int i =1;i<roomMembers.Length;i++)
+        string rM = "";
+        for(int i = 0;i<roomMembers.Length;i++)
         {
             rM = rM + "," + roomMembers[i];
         }

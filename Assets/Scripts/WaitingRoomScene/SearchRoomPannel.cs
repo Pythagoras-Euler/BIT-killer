@@ -25,13 +25,8 @@ public class SearchRoomPannel : MonoBehaviour
     {
 
         // 处理返回消息
-        // 放一个jsontest.txt测试
-        // StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        // string json = sr.ReadToEnd();
-        // Debug.Log(json);
         JsonData retgetaroom = JsonMapper.ToObject(wl.receiveJson);
-        // Debug.Log(retgetaroom["success"]);
-        if (retgetaroom["success"].ToString() == "True") // 查找成功
+        if (retgetaroom["type"].ToString() == "get a room"&&retgetaroom["success"].ToString() == "True") // 查找成功
         {
             //TODO:找到房间询问是否加入
             if (int.Parse(retgetaroom["content"]["playerCount"].ToString()) >= 7) //房间已满

@@ -38,7 +38,8 @@ public class SearchRooms : MonoBehaviour
     void Update()
     {
         // TODO:根据返回消息更新房间列表
-        JsonData retmsg = JsonMapper.ToObject(wl.receiveJson);
+            JsonData retmsg = JsonMapper.ToObject(wl.receiveJson);
+
         if (retmsg["type"].ToString() == "get rooms")
         {
             if (retmsg["success"].ToString() == "True")
@@ -64,6 +65,7 @@ public class SearchRooms : MonoBehaviour
                     newroomitem.full = roomjson["full"].ToString() == "True" ? true : false;
 
                 }
+                wl.receiveJson = "";
             }
             else
             {
@@ -89,11 +91,16 @@ public class SearchRooms : MonoBehaviour
                     jrp.roomMembers[i] = retmsg["content"]["players"][i].ToString();
                 }
                 jrp.canJoin = true;
-                JoinRoom();//TODO:获取房间信息的部分我没找到在哪（是上面那个searchroom么）
+                if(joinRoomPannel.activeInHierarchy == false)
+                {
+                    JoinRoom();//TODO:获取房间信息的部分我没找到在哪（是上面那个searchroom么）
+                    wl.receiveJson = "";
+                }
             }
             else
             {
-                CreateRoom();//找不到房间就创建房间
+                if (createRoomPannel.activeInHierarchy == false)
+                    CreateRoom();//找不到房间就创建房间
             }
         }
 
@@ -133,6 +140,7 @@ public class SearchRooms : MonoBehaviour
         randomjoin["type"] = "get a random room";
         randomjoin["content"] = null;
         string jsonstr = randomjoin.ToJson();
+        Debug.Log(jsonstr);
         wl.Send(jsonstr);
 
     }
