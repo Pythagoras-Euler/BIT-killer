@@ -208,6 +208,7 @@ public class PlayerBand : MonoBehaviour
             idenIcon.SetActive(true);
             IdenIconDisplay(true);
         }
+        DisplayPolice();
     }
 
     void AllSeen()
@@ -466,6 +467,20 @@ public class PlayerBand : MonoBehaviour
         }
     }
 
+    private void ChangePolice()
+    {
+        if (gameControl.hasDown == false && targetIsDead == false)
+        {
+            electPan.SetActive(true);
+            electBtn.SetActive(true);
+            policeStar.SetActive(false);
+        }
+        else
+        {
+            electBtn.SetActive(false);
+        }
+    }
+
     void VoteKill()
     {
         //send btn enable
@@ -488,6 +503,7 @@ public class PlayerBand : MonoBehaviour
     void Ending()
     {
         Waiting();
+        AllSeen();
     }
 
 }
