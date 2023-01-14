@@ -51,6 +51,7 @@ public class MainControlScript : MonoBehaviour
     string json;
     JsonData retjson;
     bool sendFlag = false;
+    bool killFlag = false;
     // Update is called once per frame
     void Update()//阶段更新收发放到GameControl里
     {
@@ -272,13 +273,19 @@ public class MainControlScript : MonoBehaviour
 
                 countDown.setCountDown(0, 0, 5);
         }
-        if (countDown.countDownSlider == null || countDown.countDownSlider.value == 0)
+        if (CountIsDown())
         {
             // 倒计时结束，开启下一阶段
             gameControl.gameState = GameControl.GameState.KILL;
             Debug.Log("Kill");
+            countDown.setCountDown(0, 0, 30);
         }
     
+    }
+
+    public bool CountIsDown()
+    {
+        return countDown.countDownSlider == null || countDown.countDownSlider.value == 0;
     }
 
     //
@@ -308,7 +315,11 @@ public class MainControlScript : MonoBehaviour
                 // 发送给所有狼人
                 if(playerAssignment.playerCharacter==PlayerAssignment.Character.WOLF)
                 {
-                    WolfChatMsg.text += "系统：确认挂科人为"+ target + "\n";
+                    if(killFlag == false)
+                    {
+                        WolfChatMsg.text += "系统：确认挂科人为" + target + "\n";
+                        killFlag = true;
+                    }
                 }
 
                 gameControl.dayEvent.killed = target;
@@ -411,16 +422,18 @@ public class MainControlScript : MonoBehaviour
                 {
                     gameControl.players[i] = retjson["content"]["players"][i].ToString();
                 }
-                gameControl.playerCharacterMap = new Hashtable();
+                //gameControl.playerCharacterMap = new Hashtable();
                 for (int i = 0; i < retjson["content"]["playerCharacterMap"].Count; i++)
                 {
                     gameControl.playerCharacterMap[retjson["content"]["playerCharacterMap"][i].Keys.ToString()] = retjson["content"]["players"][i].ToString();
                 }
                 gameControl.captain = retjson["content"]["captain"].ToString();
 
+                VillagerChatMsg.text += "系统：昨晚挂科的人是" + gameControl.dayEvent.killed + "和" + gameControl.dayEvent.poisoned;
+
                 clare = true;
 
-                // TODO: VillagerChatMsg+="系统：昨晚挂科的人是" + gameControl.dayEvent.killed + "和"
+                killFlag = false;
 
                 if(retjson["content"]["electCaptain"].ToString()=="True")
                 {

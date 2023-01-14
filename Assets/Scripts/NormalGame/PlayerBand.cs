@@ -11,6 +11,7 @@ public class PlayerBand : MonoBehaviour
     [SerializeField] string userName;
     [SerializeField] int seatNum;
     [SerializeField] GameControl gameControl;
+    [SerializeField] MainControlScript mainControl;
     public Room room;
     public WebLink wl;
 
@@ -230,9 +231,14 @@ public class PlayerBand : MonoBehaviour
         IdenIconDisplay();
     }
 
+    bool CanAct()
+    {
+        return gameControl.hasDown == false && !mainControl.CountIsDown();
+    }
+
     void WolfAct()//TODO 狼人是不是应该能看到队友投了谁
     {
-        if (playerAssignment.playerCharacter == PlayerAssignment.Character.WOLF)
+        if (playerAssignment.playerCharacter == PlayerAssignment.Character.WOLF && CanAct() )
         {
             if (gameControl.hasDown == false)
             {
@@ -247,6 +253,10 @@ public class PlayerBand : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            wolfPan.SetActive(false);
+        }
     }
 
     //BTN响应事件
@@ -255,7 +265,8 @@ public class PlayerBand : MonoBehaviour
         wolfPan.SetActive(false);
         gameControl.hasDown = true;
         //TODO 倒计时此时停止并重置
-        //TODO 发送投票信息
+
+        //发送投票信息
         JsonData data1 = new JsonData();
         data1["type"] = "kill";
         data1["content"] = new JsonData();
@@ -287,7 +298,7 @@ public class PlayerBand : MonoBehaviour
 
     void WitchAct()//就直接做救/毒二选一吧，写起来简单一些 TODO IMPORTANT 女巫只能毒一次！
     {
-        if (myCharacter == PlayerAssignment.Character.WITCH && gameControl.hasDown == false)
+        if (myCharacter == PlayerAssignment.Character.WITCH && CanAct())
         {
             if (IAmAlive == true && targetIsDead == false)
             {
