@@ -27,8 +27,8 @@ public class MainControlScript : MonoBehaviour
     private int maxWaitTime;
     private int maxPlayerNum;
 
-    [SerializeField] WebLink wl;
-    [SerializeField] Room room;
+    public WebLink wl;
+    public Room room;
     [SerializeField] Text WolfChatMsg;
     [SerializeField] Text VillagerChatMsg;
 
@@ -42,10 +42,10 @@ public class MainControlScript : MonoBehaviour
         maxWaitTime = 9999;//同上
         multyBtn.SetActive(false);
 
-        playerAssignment = GameObject.FindGameObjectWithTag("PlayerAssignment").GetComponent<PlayerAssignment>();
-        gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
         room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
+        playerAssignment = GameObject.FindGameObjectWithTag("PlayerAssignment").GetComponent<PlayerAssignment>();
+        gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
 
     }
 
@@ -97,14 +97,26 @@ public class MainControlScript : MonoBehaviour
         SetDay();//TODO
 
         // 处理返回消息
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
+        //StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+        //string json = sr.ReadToEnd().TrimEnd('\0');
+        //Debug.Log(json);
+
+        string json = wl.receiveJson;
         Debug.Log(json);
-        //string json = wl.receiveJson;
         JsonData retnewjoinroom = JsonMapper.ToObject(json);
         if (retnewjoinroom["type"].ToString() == "join room") // 验证消息类型，加入房间
         {
-            if(retnewjoinroom["success"].ToString()=="True"&&long.Parse(retnewjoinroom["content"]["roomID"].ToString())==room.roomID)// 成功加入当前房间
+            if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功加入当前房间
+            {
+                int playerCount = retnewjoinroom["content"]["players"].Count;
+                gameControl.players = new string[playerCount];
+                for (int i = 0; i < playerCount; i++)
+                    gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+            }
+        }
+        if (retnewjoinroom["type"].ToString() == "create room") // 验证消息类型，加入房间
+        {
+            if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功加入当前房间
             {
                 int playerCount = retnewjoinroom["content"]["players"].Count;
                 gameControl.players = new string[playerCount];
@@ -132,10 +144,10 @@ public class MainControlScript : MonoBehaviour
             multyBtn.SetActive(true);
 
             // 处理服务器发来可以开始游戏返回值
-            sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-            json = sr.ReadToEnd().TrimEnd('\0');
-            Debug.Log(json);
-            //string json = wl.receiveJson;
+            //sr = new StreamReader(Application.dataPath + "/jsontest.txt");
+            //json = sr.ReadToEnd().TrimEnd('\0');
+            //Debug.Log(json);
+            json = wl.receiveJson;
             JsonData retStartGame = JsonMapper.ToObject(json);
             if (retStartGame["type"].ToString() == "game start") // 验证消息类型，开始游戏
             {

@@ -63,16 +63,16 @@ public class CreateRoomPannel : MonoBehaviour
             {
                 // 保存房间信息
                 Room curroom = roomInfo.GetComponent<Room>();
-                curroom.roomID = long.Parse(retcreatearoom["content"]["roomID"].ToString());
-                curroom.roomName = retcreatearoom["content"]["roomName"].ToString();
-                curroom.creator = retcreatearoom["content"]["creator"].ToString();
-                curroom.iscurcreator = true;
-                curroom.playerCount = 1; // 加入当前玩家
-                curroom.players = new string[1];
-                curroom.players[0] = username;
-                curroom.password = retcreatearoom["content"]["password"].ToString();
-                curroom.full = false;
-                curroom.gaming = false;
+                roomInfo.GetComponent<Room>().roomID = long.Parse(retcreatearoom["content"]["roomID"].ToString());
+                roomInfo.GetComponent<Room>().roomName = retcreatearoom["content"]["roomName"].ToString();
+                roomInfo.GetComponent<Room>().creator = retcreatearoom["content"]["creator"].ToString();
+                roomInfo.GetComponent<Room>().iscurcreator = true;
+                roomInfo.GetComponent<Room>().playerCount = 1; // 加入当前玩家
+                roomInfo.GetComponent<Room>().players = new string[7];
+                roomInfo.GetComponent<Room>().players[0] = username;
+                roomInfo.GetComponent<Room>().password = retcreatearoom["content"]["password"].ToString();
+                roomInfo.GetComponent<Room>().full = false;
+                roomInfo.GetComponent<Room>().gaming = false;
                 // 把roominfo放进Dontdestroy里
                 roomInfo.transform.parent = GameObject.FindGameObjectWithTag("DontDestroy").transform;
                 // 切换场景

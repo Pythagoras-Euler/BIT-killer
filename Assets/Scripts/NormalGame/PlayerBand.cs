@@ -11,8 +11,8 @@ public class PlayerBand : MonoBehaviour
     [SerializeField] string userName;
     [SerializeField] int seatNum;
     [SerializeField] GameControl gameControl;
-    [SerializeField] Room room;
-    [SerializeField] WebLink wl;
+    public Room room;
+    public WebLink wl;
 
     
     public bool needRefreshFlag = false;//万一需要外界强制刷新，可以修改这个Flag
@@ -48,13 +48,16 @@ public class PlayerBand : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
+        room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
         userInfo = GameObject.FindGameObjectWithTag("UserInfo").GetComponent<UserInfo>();
+        playerNum.text = seatNum.ToString();
+        playerName.text = room.players[seatNum - 1];
         userName = userInfo.username;
         playerAssignment = GameObject.FindGameObjectWithTag("PlayerAssignment").GetComponent<PlayerAssignment>();
-        //seatNum = playerAssignment.seatNum;
-        playerNum.text = seatNum.ToString();
-        room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
-        wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
+        
+        Debug.Log(gameControl.players[seatNum - 1]);
+        Debug.Log(playerName.text);
         gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
 
         NowMark = PlayerAssignment.Character.UNDEF;
