@@ -29,13 +29,19 @@ public class HeartBeat : MonoBehaviour
         SpeedCheck();
     }
 
-    void GetHeartBeat()
+    long GetHeartBeat()
     {
-        JsonData retuser = JsonMapper.ToObject(wl.receiveJson);
-        if (retuser["type"].ToString() == "heartbeat") // 如果是登录 
+        JsonData retMsg = JsonMapper.ToObject(wl.receiveJson);
+        long heartBeat = 0;
+        if (retMsg["type"].ToString() == "heartbeat") // 如果是心跳包
         {
             //TODO 怎么读取time,没弄明白
+            if(retMsg["success"].ToString()=="True")
+            {
+                heartBeat = long.Parse(retMsg["content"]["time"].ToString());
+            }
         }
+        return heartBeat;//如果不是心跳包或读取失败
         }
 
     void SpeedCheck()

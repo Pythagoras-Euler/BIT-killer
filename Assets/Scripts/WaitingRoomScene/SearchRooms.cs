@@ -4,6 +4,7 @@ using UnityEngine;
 using LitJson;
 using UnityEngine.UI;
 using System.IO;
+using System.Text;
 
 public class SearchRooms : MonoBehaviour
 {
@@ -29,7 +30,11 @@ public class SearchRooms : MonoBehaviour
     void Start()
     {
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
-        GetAllRooms();
+
+        UTF8Encoding m_utf8 = new UTF8Encoding(false);
+        File.WriteAllText(Application.dataPath + "/jsontest.txt", "", m_utf8);
+        Invoke("GetAllRooms", 2);
+        //GetAllRooms();
         //retMsgDisplay = transform.Find("RetMsg").GetComponent<Text>();
 
     }
@@ -38,12 +43,14 @@ public class SearchRooms : MonoBehaviour
     void Update()
     {
         // TODO:根据返回消息更新房间列表
-            JsonData retmsg = JsonMapper.ToObject(wl.receiveJson);
-
+        JsonData retmsg = JsonMapper.ToObject(wl.receiveJson);
+        Debug.Log(retmsg["type"].ToString());
         if (retmsg["type"].ToString() == "get rooms")
         {
+            Debug.Log("get rooms");
             if (retmsg["success"].ToString() == "True")
             {
+                Debug.Log("get rooms");
                 foreach (JsonData roomjson in retmsg["content"])
                 {
                     GameObject newroom = GameObject.Instantiate(roomItem) as GameObject;

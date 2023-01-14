@@ -95,14 +95,6 @@ public class LoginPanel : MonoBehaviour
     //TODO 发送请求
     private void loginRequest(string username)
     {
-        //string type = "login salt";
-
-        //send "type":"login salt",
-        //send "content":"lbwnb"
-
-        //await json type = "login salt"
-        //string salt = "qwertyuiopasdfghjklz";//getsalt
-        //return salt;
 
         JsonData userJson = new JsonData();
         userJson["type"] = "login salt";
@@ -129,9 +121,6 @@ public class LoginPanel : MonoBehaviour
         {
             //TODO 两次发送与接受
             loginRequest(acc);
-
-
-
         }
     }
 
@@ -157,9 +146,9 @@ public class LoginPanel : MonoBehaviour
         userJson["content"]["username"] = acc;
         userJson["content"]["password"] = cipchers;
         userJson["content"]["salt"] = "";
-        string userJsonStr = userJson.ToJson();
-        //Debug.Log(userJsonStr);
+        string userJsonStr = JsonMapper.ToJson(userJson);
         wl.Send(userJsonStr);
+        Debug.Log(userJsonStr);
     }
 
     private void Update()
@@ -170,6 +159,7 @@ public class LoginPanel : MonoBehaviour
         //Debug.Log(wl.receiveJson);
         JsonData retuser = JsonMapper.ToObject(wl.receiveJson);
         //Debug.Log("retuser");
+        Debug.Log(wl.receiveJson);
         if (retuser["type"].ToString() == "login") // 如果是登录 
         {
             Debug.Log("retuser");
@@ -206,6 +196,8 @@ public class LoginPanel : MonoBehaviour
             {
 
                 promptInfo.text = "登录成功！";
+                UTF8Encoding m_utf8 = new UTF8Encoding(false);
+                File.WriteAllText(Application.dataPath + "/jsontest.txt", "", m_utf8);
                 mask.SetActive(false);
                 this.gameObject.SetActive(false);
                 userInfo.GetComponent<UserInfo>().username = acc;
@@ -222,6 +214,7 @@ public class LoginPanel : MonoBehaviour
             bool retSuccess = retuser["success"].ToString() == "True" ? true : false;
             string retMes = retuser["message"].ToString();
             string retContent = retuser["content"].ToString();
+            Debug.Log(retType + ":" + retMes);
 
             if (retType != "login salt")//不知道什么时候会出现这种错误（大概是用户乱点？
             {
@@ -241,9 +234,9 @@ public class LoginPanel : MonoBehaviour
             }
             else if (retType == "login salt" && retMes == "Salt")//成功
             {
-                //Debug.Log(retContent);
+                // Debug.Log("retSalt");
                 salt = retContent;
-                login();
+                Invoke("login", 1);
             }    
         }
     }

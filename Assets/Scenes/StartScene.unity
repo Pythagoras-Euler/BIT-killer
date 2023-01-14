@@ -3934,7 +3934,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uri: ws://152.136.145.133:8080/game
-  receiveJson: '{"type":"register","success":true,"message":"Registrationsuccessful","content":null}'
+  receiveJson: 
   reault: 
 --- !u!4 &1673667806
 Transform:
@@ -5085,7 +5085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fddfbdf860f8d754b9c9639a7c05efa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  username: lcyy
+  username: lcy
 --- !u!1 &2065728072
 GameObject:
   m_ObjectHideFlags: 0

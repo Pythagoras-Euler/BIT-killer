@@ -36,7 +36,7 @@ public class WebLink : MonoBehaviour
         await ws.ConnectAsync(new Uri(uri), CancellationToken.None);
         while (true)
         {
-            reault = new byte[4096];
+            reault = new byte[40960];
             //等待接收服务端发送的消息
             await ws.ReceiveAsync(new ArraySegment<byte>(reault), CancellationToken.None);
             UTF8Encoding m_utf8 = new UTF8Encoding(false);
@@ -45,9 +45,6 @@ public class WebLink : MonoBehaviour
             StreamReader sr = new StreamReader(Application.dataPath+"/jsontest.txt");
             receiveJson = sr.ReadLine();
             receiveJson =receiveJson.TrimEnd('\0');
-            // receiveJson = receiveStr;
-            //Debug.Log(receiveJson);
-            //Debug.Log(BitConverter.ToString(reault));
         }
     }
 
