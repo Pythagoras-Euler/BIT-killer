@@ -14,6 +14,7 @@ public class MainControlScript : MonoBehaviour
     public GameObject multyBtn; // 只有房主有，开启游戏按钮
     [SerializeField] UserInfo userInfo;
     [SerializeField] PlayerAssignment playerAssignment;
+    [SerializeField] ChatPanel chatPanel;
     private int minWaitTime;
     private int maxWaitTime;
     private int maxPlayerNum;
@@ -177,6 +178,13 @@ public class MainControlScript : MonoBehaviour
                     Debug.Log(retjson["content"]["players"][i].ToString() + ":" + retjson["content"]["playerCharacterMap"][retjson["content"]["players"][i].ToString()].ToString());
                     //gameControl.playerStateMap[retjson["content"]["players"][i].ToString()] = retjson["content"]["playerStateMap"][retjson["content"]["players"][i].ToString()].ToString() == "True" ? "true" : "false";
                     gameControl.playerStateMap.Add(retjson["content"]["players"][i].ToString(), retjson["content"]["playerStateMap"][retjson["content"]["players"][i].ToString()].ToString() == "True" ? "true" : "false");
+                    
+                    playerAssignment.playerCharacter = GetChara();
+                    if(playerAssignment.playerCharacter!=PlayerAssignment.Character.WOLF)
+                    {
+                        chatPanel.TeamBtn.SetActive(false);
+                        WolfChatMsg.gameObject.SetActive(false);
+                    }
                 }
                 multyBtn.SetActive(false);
                 gameControl.gameState = GameControl.GameState.START;// 更新游戏状态
@@ -201,6 +209,37 @@ public class MainControlScript : MonoBehaviour
         }
     }
 
+    PlayerAssignment.Character GetChara()
+    {
+        string thisnBandIden = gameControl.playerCharacterMap[userInfo.username].ToString();
+        PlayerAssignment.Character thisChe;
+        if (thisnBandIden == "VILLAGE")
+        {
+            thisChe = PlayerAssignment.Character.VILLAGE;
+        }
+        else if (thisnBandIden == "WOLF")
+        {
+            thisChe = PlayerAssignment.Character.WOLF;
+        }
+        else if (thisnBandIden == "PROPHET")
+        {
+            thisChe = PlayerAssignment.Character.PROPHET;
+        }
+        else if (thisnBandIden == "WITCH")
+        {
+            thisChe = PlayerAssignment.Character.WITCH;
+        }
+        else if (thisnBandIden == "UNDEF")
+        {
+            thisChe = PlayerAssignment.Character.UNDEF;
+        }
+        else
+        {
+            thisChe = PlayerAssignment.Character.UNDEF;
+        }
+
+        return thisChe;
+    }
     public void onClickMultyBtn()
     {
         // 向服务器发送开始游戏请求
@@ -240,20 +279,39 @@ public class MainControlScript : MonoBehaviour
     {
         // 
         SetNight();
+
+
+
         if (!sendFlag)
         {
             sendFlag = !sendFlag;//~sendFlag
             VillagerChatMsg.text += "您的本局身份为" + CharacterInChinese() + "\n";
-
-            for(int i =0;i<7;i++)
-            {
-                if(gameControl.playerCharacterMap[gameControl.players[i]].ToString()=="WOLF" && gameControl.players[i] != userInfo.username)
+            if(playerAssignment.playerCharacter == PlayerAssignment.Character.WOLF)// 如果是狼
+                for (int i =0;i<7;i++)
                 {
+                    if(playerAssignment.playerCharacter == PlayerAssignment.Character.WOLF && gameControl.players[i] != userInfo.username)
+                    {
 
-                    VillagerChatMsg.text += "您的同事为" + gameControl.players[i] + "\n";
-                    VillagerChatMsg.text += "请致力于让学生们全部挂科吧！";
-                    break;
+                        VillagerChatMsg.text += "您的同事为" + gameControl.players[i] + "\n";
+                        VillagerChatMsg.text += "请致力于让学生们全部挂科吧！\n";
+                        break;
+                    }
                 }
+            else if(playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH)
+            {
+                VillagerChatMsg.text += "别人的及格与挂科只在你的一念之间\n";
+            }
+            else if (playerAssignment.playerCharacter == PlayerAssignment.Character.VILLAGE)
+            {
+                VillagerChatMsg.text += "享受每一刻吧\n";
+            }
+            else if (playerAssignment.playerCharacter == PlayerAssignment.Character.PROPHET)
+            {
+                VillagerChatMsg.text += "你可以探查所有人的身份\n";
+            }
+            else
+            {
+
             }
 
             if (playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH)
@@ -278,6 +336,7 @@ public class MainControlScript : MonoBehaviour
             // 倒计时结束，开启下一阶段
             gameControl.gameState = GameControl.GameState.KILL;
             Debug.Log("Kill");
+            VillagerChatMsg.text += "<b><color=red>系统：现在是教务部操作时间</color></b>\n";
             countDown.setCountDown(0, 0, 30);
         }
     
@@ -318,9 +377,10 @@ public class MainControlScript : MonoBehaviour
                     if(killFlag == false)
                     {
                         WolfChatMsg.text += "系统：确认挂科人为" + target + "\n";
-                        killFlag = true;
                     }
                 }
+
+                killFlag = true;
 
                 gameControl.dayEvent.killed = target;
             }
@@ -329,9 +389,15 @@ public class MainControlScript : MonoBehaviour
         {
             if (retjson["success"].ToString() == "True" && retjson["message"].ToString()=="kill finish")
             {
-                VillagerChatMsg.text = "系统：教务部已操作完毕" + "\n";
-                gameControl.gameState = GameControl.GameState.WITCH; // 进入女巫环节
-                gameControl.hasDown = false;
+                if (CountIsDown())
+                {
+                    VillagerChatMsg.text = "系统：教务部已操作完毕" + "\n";
+                    killFlag = false;
+                    gameControl.gameState = GameControl.GameState.WITCH; // 进入女巫环节
+                    countDown.setCountDown(0, 0, 30);
+                    gameControl.hasDown = false;
+                    VillagerChatMsg.text += "<b><color=red>系统：现在是任课老师操作时间</color></b>\n";
+                }
             }
             else
             {
@@ -340,9 +406,10 @@ public class MainControlScript : MonoBehaviour
         }
     }
 
+    bool witchinformed = false;
+    bool witchacted = false;
     void RetWitchAct()//就直接做救/毒二选一吧，写起来简单一些
     {
-
 
         if (playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH) // 如果是女巫
         {
@@ -350,8 +417,16 @@ public class MainControlScript : MonoBehaviour
             {
                 if (retjson["success"].ToString() == "True")
                 {
-                    string target = retjson["content"]["target"].ToString();
-                    VillagerChatMsg.text += "系统：今夜挂科人为" + target + "\n";
+                    if(witchinformed == false)
+                    {
+                        if (CountIsDown())
+                        {
+                            string target = retjson["content"]["target"].ToString();
+                            VillagerChatMsg.text += "系统：今夜挂科人为" + target + "\n";
+                            witchinformed = true;
+
+                        }
+                    }
                 }
             }
            
@@ -360,9 +435,19 @@ public class MainControlScript : MonoBehaviour
         {
             if (retjson["success"].ToString() == "True" && retjson["message"].ToString() == "witch finish")
             {
-                VillagerChatMsg.text += "系统：任课老师已操作完毕" + "\n";
-                gameControl.gameState = GameControl.GameState.PROPHET;// 女巫环节结束，进入预言家环节。
-                gameControl.hasDown = false;
+                if(witchacted == false)
+                {
+                    if (CountIsDown())
+                    {
+                        VillagerChatMsg.text += "系统：任课老师已操作完毕" + "\n";
+                        gameControl.gameState = GameControl.GameState.PROPHET;// 女巫环节结束，进入预言家环节。
+                        gameControl.hasDown = false;
+                        witchacted = true;
+                        countDown.setCountDown(0, 0, 30);
+
+                        VillagerChatMsg.text += "系统：现在是网信操作时间" + "\n";
+                    }
+                }
             }
             else
             {

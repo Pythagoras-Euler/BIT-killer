@@ -2742,7 +2742,8 @@ MonoBehaviour:
   gameControl: {fileID: 1457207220}
   multyBtn: {fileID: 458632108}
   userInfo: {fileID: 0}
-  playerAssignment: {fileID: 0}
+  playerAssignment: {fileID: 816571841}
+  chatPanel: {fileID: 5070452171447861545}
   wl: {fileID: 0}
   room: {fileID: 0}
   WolfChatMsg: {fileID: 948324428}

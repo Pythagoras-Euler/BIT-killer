@@ -197,13 +197,17 @@ public class PlayerBand : MonoBehaviour
     {
         ISeen();
 
-        if(myCharacter == PlayerAssignment.Character.WITCH)//女巫视野
+        if(myCharacter == PlayerAssignment.Character.WOLF)//狼人视野
         {
             WolfSeen();
         }
-        else if(myCharacter == PlayerAssignment.Character.PROPHET)//狼人视野
+        else if(myCharacter == PlayerAssignment.Character.PROPHET)//预言家视野
         {
             ProphetSeen();
+        }
+        else
+        {
+            NoSeen();
         }
 
         if(IAmAlive == false)//挂科人视野
@@ -224,6 +228,14 @@ public class PlayerBand : MonoBehaviour
         }
         DisplayPolice();
     }
+    void NoSeen()
+    {
+        if  (!IsMe())
+        {
+            idenIcon.SetActive(false);
+        }
+    
+    }
 
     void AllSeen()
     {
@@ -233,7 +245,7 @@ public class PlayerBand : MonoBehaviour
 
     bool CanAct()
     {
-        return gameControl.hasDown == false && !mainControl.CountIsDown();
+        return gameControl.hasDown == false && !mainControl.CountIsDown() ;
     }
 
     void WolfAct()//TODO 狼人是不是应该能看到队友投了谁
@@ -421,7 +433,7 @@ public class PlayerBand : MonoBehaviour
 
     void ProphetAct()
     {
-        if (myCharacter == PlayerAssignment.Character.WITCH && IAmAlive == true && gameControl.hasDown == false)
+        if (myCharacter == PlayerAssignment.Character.PROPHET && CanAct())
         {
             seerPan.SetActive(true);
         }
@@ -436,7 +448,7 @@ public class PlayerBand : MonoBehaviour
         int i;
         gameControl.hasDown = true;
 
-        for (i = 0; i < 7 && gameControl.seenPlayers[i] == ""; i++) ;
+        for (i = 0; i < 7 && gameControl.seenPlayers[i] != ""; i++) ;//增加一个已验（是不是有一个add()能用
 
         gameControl.seenPlayers[i] = targetName;
 

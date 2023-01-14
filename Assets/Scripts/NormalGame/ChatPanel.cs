@@ -17,7 +17,7 @@ public class ChatPanel : MonoBehaviour
     [SerializeField] GameControl gameControl;
     [SerializeField] GameObject VillagerScrollView;
     [SerializeField] GameObject WolfScrollView;
-    [SerializeField] GameObject TeamBtn;
+    public GameObject TeamBtn;
     public enum ChatChannel
     {
         WOLVES, ALL
@@ -51,10 +51,8 @@ public class ChatPanel : MonoBehaviour
     }
     public void RecChat() // 时刻获取聊天消息
     {
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
-        Debug.Log(json);
-        //string json = wl.receiveJson;
+       
+        string json = wl.receiveJson;
         JsonData recChatJson = JsonMapper.ToObject(json);
         if(recChatJson["type"].ToString()=="send message")
         {
@@ -105,10 +103,8 @@ public class ChatPanel : MonoBehaviour
     }
     public void recLastWord()
     {
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
-        Debug.Log(json);
-        //string json = wl.receiveJson;
+        ;
+        string json = wl.receiveJson;
         JsonData recLastWordJson = JsonMapper.ToObject(json);
         if (recLastWordJson["type"].ToString() == "last words")
         {
