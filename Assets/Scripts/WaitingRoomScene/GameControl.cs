@@ -19,7 +19,7 @@ public class GameControl : MonoBehaviour
     }
     public GameState gameState;
     public int DayCount;
-    public bool hasDown;
+    public bool hasDown;//hasDone，用于限制每回合操作次数（避免同时按俩按钮），至于拼写的问题我是文盲，不要在意这些细节，求轻喷（
 
     [System.Serializable]
     public struct DayEvent

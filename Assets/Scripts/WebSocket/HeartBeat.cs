@@ -8,7 +8,7 @@ public class HeartBeat : MonoBehaviour
 {
 
     public WebLink wl;
-    public Text DelayDisplay;
+    public Text DelayDisplay;//延迟的英文名其实是lag，但是我懒得改了
     public Image NetStatusImage;
 
     private long localTime;
@@ -25,7 +25,7 @@ public class HeartBeat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetHeartBeat();
+        serverTime = GetHeartBeat();
         SpeedCheck();
     }
 
