@@ -12,15 +12,6 @@ public class MainControlScript : MonoBehaviour
     int PoliceId;
     public GameControl gameControl;
     public GameObject multyBtn; // 只有房主有，开启游戏按钮
-    public GameObject doubtPan;
-    public GameObject electPan;
-    public GameObject statePan;
-    public GameObject villagerPan;
-    public GameObject wolfPan;
-    public GameObject witchPan;
-    public GameObject seerPan;
-    public GameObject votePan;
-    public GameObject idenIcon;
     [SerializeField] UserInfo userInfo;
     [SerializeField] PlayerAssignment playerAssignment;
     private int minWaitTime;
@@ -31,22 +22,30 @@ public class MainControlScript : MonoBehaviour
     public Room room;
     [SerializeField] Text WolfChatMsg;
     [SerializeField] Text VillagerChatMsg;
+    [SerializeField] Text playerInfoDisplay;
+    [SerializeField] Text roomInfoDisplay;
 
     bool clare = false; // 今天有没有发过死讯
 
     // Start is called before the first frame update
     void Start()
     {
+
+        wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
+        room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
+        userInfo = GameObject.FindGameObjectWithTag("UserInfo").GetComponent<UserInfo>();
+        playerAssignment = GameObject.FindGameObjectWithTag("PlayerAssignment").GetComponent<PlayerAssignment>();
+        gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
+        playerInfoDisplay.text = playerAssignment.playerName;
+        roomInfoDisplay.text = room.roomID.ToString();
+
         PoliceId = -1;
         minWaitTime = 0;//TODO 一个合适的值，取决于计时器
         maxWaitTime = 9999;//同上
         multyBtn.SetActive(false);
 
-        wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
-        room = GameObject.FindGameObjectWithTag("RoomInfo").GetComponent<Room>();
-        playerAssignment = GameObject.FindGameObjectWithTag("PlayerAssignment").GetComponent<PlayerAssignment>();
-        gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
-
+        Waiting();
+        
     }
 
     // Update is called once per frame
@@ -56,6 +55,7 @@ public class MainControlScript : MonoBehaviour
         switch (gameControl.gameState)//判断现在的阶段并执行相应函数
         {
             case GameControl.GameState.WAIT:
+                Debug.Log("wait");
                 Waiting();
                 break;
             case GameControl.GameState.START://分发身份牌
@@ -97,21 +97,26 @@ public class MainControlScript : MonoBehaviour
         SetDay();//TODO
 
         // 处理返回消息
-        //StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        //string json = sr.ReadToEnd().TrimEnd('\0');
-        //Debug.Log(json);
-
         string json = wl.receiveJson;
         Debug.Log(json);
         JsonData retnewjoinroom = JsonMapper.ToObject(json);
         if (retnewjoinroom["type"].ToString() == "join room") // 验证消息类型，加入房间
         {
-            if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功加入当前房间
+            Debug.Log(retnewjoinroom["success"].ToString()+":"+ retnewjoinroom["content"]["roomID"].ToString()+":"+ room.roomID.ToString());
+            if (retnewjoinroom["success"].ToString() == "True" && retnewjoinroom["content"]["roomID"].ToString() == room.roomID.ToString())// 成功加入当前房间
             {
+                Debug.Log(retnewjoinroom["success"].ToString());
                 int playerCount = retnewjoinroom["content"]["players"].Count;
+                room.playerCount = playerCount;
                 gameControl.players = new string[playerCount];
+                room.players = new string[playerCount];
                 for (int i = 0; i < playerCount; i++)
+                {
                     gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+                    room.players[i] = gameControl.players[i];
+                    Debug.Log(room.players[i]);
+                }
+                
             }
         }
         if (retnewjoinroom["type"].ToString() == "create room") // 验证消息类型，加入房间
@@ -119,19 +124,29 @@ public class MainControlScript : MonoBehaviour
             if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功加入当前房间
             {
                 int playerCount = retnewjoinroom["content"]["players"].Count;
+                room.playerCount = playerCount;
                 gameControl.players = new string[playerCount];
-                for (int i = 0; i < playerCount; i++)
+                room.players = new string[playerCount];
+                for (int i = 0; i < playerCount; i++) {
+
                     gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+                    room.players[i] = gameControl.players[i];
+                }
             }
         }
         else if (retnewjoinroom["type"].ToString() == "leave room") // 验证消息类型，退出房间
         {
             if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功离开当前房间
             {
-                int playerCount = int.Parse(retnewjoinroom["content"]["playerCount"].ToString());
+                int playerCount = retnewjoinroom["content"]["players"].Count;
+                room.playerCount = playerCount;
                 gameControl.players = new string[playerCount];
+                room.players = new string[playerCount];
                 for (int i = 0; i < playerCount; i++)
+                {
                     gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+                    room.players[i] = gameControl.players[i];
+                }
             }
         }
 
@@ -217,8 +232,8 @@ public class MainControlScript : MonoBehaviour
     void RetWolfAct()
     {
         //等待所有狼人确认完毕，这个发送给所有狼人
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
+        string json = wl.receiveJson;
+        Debug.Log(json);
         JsonData retJson = JsonMapper.ToObject(json);
         if(retJson["type"].ToString()=="kill")
         {
@@ -251,8 +266,9 @@ public class MainControlScript : MonoBehaviour
 
     void RetWitchAct()//就直接做救/毒二选一吧，写起来简单一些
     {
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
+
+        string json = wl.receiveJson;
+        //Debug.Log(json);
         JsonData retJson = JsonMapper.ToObject(json);
 
         if (playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH) // 如果是女巫
@@ -284,8 +300,9 @@ public class MainControlScript : MonoBehaviour
 
     void RetProphetAct()
     {
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
+
+        string json = wl.receiveJson;
+        //Debug.Log(json);
         JsonData retJson = JsonMapper.ToObject(json);
 
         if (playerAssignment.playerCharacter == PlayerAssignment.Character.PROPHET) // 如果是预言家
@@ -322,8 +339,9 @@ public class MainControlScript : MonoBehaviour
     void DiscussAct()
     {
         //这个发送给所有人
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
+
+        string json = wl.receiveJson;
+        //Debug.Log(json);
         JsonData retjson = JsonMapper.ToObject(json);
         
         if(clare == false && retjson["type"].ToString() == "night end")
@@ -336,7 +354,7 @@ public class MainControlScript : MonoBehaviour
                 {
                     gameControl.players[i] = retjson["content"]["players"][i].ToString();
                 }
-                gameControl.playerCharacterMap = new HashMap<string, string>();
+                gameControl.playerCharacterMap = new Hashtable();
                 for (int i = 0; i < retjson["content"]["playerCharacterMap"].Count; i++)
                 {
                     gameControl.playerCharacterMap[retjson["content"]["playerCharacterMap"][i].Keys.ToString()] = retjson["content"]["players"][i].ToString();
@@ -383,8 +401,8 @@ public class MainControlScript : MonoBehaviour
     void HasVictory()
     {
         // 处理返回消息
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
+
+        string json = wl.receiveJson;
         JsonData retgameend = JsonMapper.ToObject(json);
         if (retgameend["type"].ToString() == "game end") // 验证消息类型，游戏结束
         { 
@@ -402,6 +420,10 @@ public class MainControlScript : MonoBehaviour
                 }
             }
         }
+        else
+        {
+
+        }
 
     }
 
@@ -418,8 +440,9 @@ public class MainControlScript : MonoBehaviour
 
     void ElectPolice()
     {
-        StreamReader sr = new StreamReader(Application.dataPath + "/jsontest.txt");
-        string json = sr.ReadToEnd().TrimEnd('\0');
+
+        string json = wl.receiveJson;
+        //]Debug.Log(json);
         JsonData retJson = JsonMapper.ToObject(json);
         if(retJson["type"].ToString() == "elect")
         {
@@ -442,7 +465,6 @@ public class MainControlScript : MonoBehaviour
 
     void VotePolice()
     {
-        electPan.SetActive(false);
         //TODO 发送投票信息
     }
 
@@ -450,7 +472,6 @@ public class MainControlScript : MonoBehaviour
     void VoteKill()
     {
         //send btn enable
-        votePan.SetActive(true);
     }
 
     void Ending()

@@ -69,7 +69,7 @@ public class PlayerBand : MonoBehaviour
 
     PlayerAssignment.Character GetChara(string Name)
     {
-        string thisnBandIden = gameControl.playerCharacterMap[Name];
+        string thisnBandIden = gameControl.playerCharacterMap[Name].ToString();
         PlayerAssignment.Character thisChe;
         if (thisnBandIden == "VILLAGE")
         {
@@ -103,10 +103,9 @@ public class PlayerBand : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(needRefreshFlag == true)
-        {
-            InfoRefresh();
-        }
+        
+         InfoRefresh();
+        
 
         PlayerCheckLive();
         TargetDeadCheck();
@@ -470,7 +469,7 @@ public class PlayerBand : MonoBehaviour
     //ƒø±Í£®player£©À¿√ªÀ¿
     void TargetDeadCheck()
     {
-        if(gameControl.playerStateMap[targetName] == true)
+        if(gameControl.playerStateMap[targetName].ToString() == "true" || gameControl.playerStateMap[targetName].ToString() == "True")
         {
             targetIsDead = false;
             statePan.SetActive(false);

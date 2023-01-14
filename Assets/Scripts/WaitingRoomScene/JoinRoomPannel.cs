@@ -61,23 +61,26 @@ public class JoinRoomPannel : MonoBehaviour
             if (retjoinaroom["success"].ToString() == "True")
             {
                 // 保存房间信息
-                Room curroom = roomInfo.GetComponent<Room>();
-                curroom.roomID = roomID;
-                curroom.roomName = roomName;
-                curroom.creator = roomOwner;
-                curroom.iscurcreator = roomOwner == username ? true : false;
-                curroom.playerCount = memberCount + 1; // 加入当前玩家
-                curroom.players = new string[memberCount + 1];
+                roomID =long.Parse(retjoinaroom["content"]["roomID"].ToString());
+                roomInfo.GetComponent<Room>().roomID = roomID;
+                roomName = retjoinaroom["content"]["roomName"].ToString();
+                roomInfo.GetComponent<Room>().roomName = roomName;
+                roomOwner = retjoinaroom["content"]["creator"].ToString();
+                roomInfo.GetComponent<Room>().creator = roomOwner;
+                roomInfo.GetComponent<Room>().iscurcreator = roomOwner == username ? true : false;
+                memberCount = int.Parse(retjoinaroom["content"]["playerCount"].ToString());
+                roomInfo.GetComponent<Room>().playerCount = memberCount + 1; // 加入当前玩家
+                roomInfo.GetComponent<Room>().players = new string[memberCount + 1];
                 roomMembers = new string[memberCount + 1];
                 for (int i = 0; i < memberCount; i++)
                 {
                     roomMembers[i] = retjoinaroom["content"]["players"][i].ToString();
-                    curroom.players[i] = roomMembers[i];
+                    roomInfo.GetComponent<Room>().players[i] = roomMembers[i];
                 }
-                curroom.players[memberCount] = username;
-                curroom.password = roompassword;
-                curroom.full = curroom.playerCount == 7 ? true : false;
-                curroom.gaming = false;
+                roomInfo.GetComponent<Room>().players[memberCount] = username;
+                roomInfo.GetComponent<Room>().password = roompassword;
+                roomInfo.GetComponent<Room>().full = roomInfo.GetComponent<Room>().playerCount == 7 ? true : false;
+                roomInfo.GetComponent<Room>().gaming = false;
                 // 把roominfo放进Dontdestroy里
                 roomInfo.transform.parent = GameObject.FindGameObjectWithTag("DontDestroy").transform;
                 // 切换场景

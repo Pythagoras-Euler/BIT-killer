@@ -73,6 +73,10 @@ public class CountDownSlider : MonoBehaviour
     {
         countDown = new CountDown(0, 1, 0);//开始倒计时构造一个一分钟的倒计时对象
     }
+    public void setCountDown(int hour,int minute,int second)
+    {
+        countDown = new CountDown(hour, minute,second);
+    }
 
     void Update()
     {
