@@ -24,6 +24,7 @@ public class MainControlScript : MonoBehaviour
     [SerializeField] Text VillagerChatMsg;
     [SerializeField] Text playerInfoDisplay;
     [SerializeField] Text roomInfoDisplay;
+    [SerializeField] CountDownSlider countDown;
 
     bool clare = false; // 今天有没有发过死讯
 
@@ -47,11 +48,19 @@ public class MainControlScript : MonoBehaviour
         Waiting();
         
     }
-
+    string json;
+    JsonData retjson;
+    bool sendFlag = false;
     // Update is called once per frame
     void Update()//阶段更新收发放到GameControl里
     {
-        HasVictory(); // 检查游戏是否有赢家
+
+        json = wl.receiveJson;
+        Debug.Log(json);
+        retjson = JsonMapper.ToObject(json);
+        Debug.Log(retjson.ToString());
+        Debug.Log(retjson["type"].ToString());
+
         switch (gameControl.gameState)//判断现在的阶段并执行相应函数
         {
             case GameControl.GameState.WAIT:
@@ -62,9 +71,12 @@ public class MainControlScript : MonoBehaviour
                 StartGame();
                 break;
             case GameControl.GameState.KILL: // 狼人行动
+
+                HasVictory(); // 检查游戏是否有赢家
                 RetWolfAct();
                 break;
             case GameControl.GameState.WITCH:
+
                 RetWitchAct();
                 break;
             case GameControl.GameState.PROPHET: // 预言家行动
@@ -97,88 +109,93 @@ public class MainControlScript : MonoBehaviour
         SetDay();//TODO
 
         // 处理返回消息
-        string json = wl.receiveJson;
-        Debug.Log(json);
-        JsonData retnewjoinroom = JsonMapper.ToObject(json);
-        if (retnewjoinroom["type"].ToString() == "join room") // 验证消息类型，加入房间
+        if (retjson["type"].ToString() == "join room") // 验证消息类型，加入房间
         {
-            Debug.Log(retnewjoinroom["success"].ToString()+":"+ retnewjoinroom["content"]["roomID"].ToString()+":"+ room.roomID.ToString());
-            if (retnewjoinroom["success"].ToString() == "True" && retnewjoinroom["content"]["roomID"].ToString() == room.roomID.ToString())// 成功加入当前房间
+            Debug.Log(retjson["success"].ToString()+":"+ retjson["content"]["roomID"].ToString()+":"+ room.roomID.ToString());
+            if (retjson["success"].ToString() == "True" && retjson["content"]["roomID"].ToString() == room.roomID.ToString())// 成功加入当前房间
             {
-                Debug.Log(retnewjoinroom["success"].ToString());
-                int playerCount = retnewjoinroom["content"]["players"].Count;
+                Debug.Log(retjson["success"].ToString());
+                int playerCount = retjson["content"]["players"].Count;
                 room.playerCount = playerCount;
                 gameControl.players = new string[playerCount];
                 room.players = new string[playerCount];
                 for (int i = 0; i < playerCount; i++)
                 {
-                    gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+                    gameControl.players[i] = retjson["content"]["players"][i].ToString(); // 更新玩家表
                     room.players[i] = gameControl.players[i];
                     Debug.Log(room.players[i]);
                 }
                 
             }
         }
-        if (retnewjoinroom["type"].ToString() == "create room") // 验证消息类型，加入房间
+        if (retjson["type"].ToString() == "create room") // 验证消息类型，加入房间
         {
-            if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功加入当前房间
+            if (retjson["success"].ToString() == "True" && long.Parse(retjson["content"]["roomID"].ToString()) == room.roomID)// 成功加入当前房间
             {
-                int playerCount = retnewjoinroom["content"]["players"].Count;
+                int playerCount = retjson["content"]["players"].Count;
                 room.playerCount = playerCount;
                 gameControl.players = new string[playerCount];
                 room.players = new string[playerCount];
                 for (int i = 0; i < playerCount; i++) {
 
-                    gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+                    gameControl.players[i] = retjson["content"]["players"][i].ToString(); // 更新玩家表
                     room.players[i] = gameControl.players[i];
                 }
             }
         }
-        else if (retnewjoinroom["type"].ToString() == "leave room") // 验证消息类型，退出房间
+        else if (retjson["type"].ToString() == "leave room") // 验证消息类型，退出房间
         {
-            if (retnewjoinroom["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)// 成功离开当前房间
+            if (retjson["success"].ToString() == "True" && long.Parse(retjson["content"]["roomID"].ToString()) == room.roomID)// 成功离开当前房间
             {
-                int playerCount = retnewjoinroom["content"]["players"].Count;
+                int playerCount = retjson["content"]["players"].Count;
                 room.playerCount = playerCount;
                 gameControl.players = new string[playerCount];
                 room.players = new string[playerCount];
                 for (int i = 0; i < playerCount; i++)
                 {
-                    gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
+                    gameControl.players[i] = retjson["content"]["players"][i].ToString(); // 更新玩家表
                     room.players[i] = gameControl.players[i];
                 }
             }
         }
-
+        else if (retjson["type"].ToString() == "game start") // 验证消息类型，开始游戏
+        {
+            Debug.Log("success start");
+            if (retjson["success"].ToString() == "True" && long.Parse(retjson["content"]["roomID"].ToString()) == room.roomID)
+            {
+                Debug.Log("start");
+                int playerCount = retjson["content"]["players"].Count;
+                gameControl.players = new string[playerCount];
+                gameControl.playerCharacterMap = new Hashtable(7);
+                gameControl.playerStateMap = new Hashtable(7);
+                for (int i = 0; i < playerCount; i++)
+                {
+                    gameControl.players[i] = retjson["content"]["players"][i].ToString(); // 更新玩家表
+                    //gameControl.playerCharacterMap[retjson["content"]["players"][i].ToString()] = retjson["content"]["playerCharacterMap"][retjson["content"]["players"][i].ToString()].ToString();
+                    gameControl.playerCharacterMap.Add(retjson["content"]["players"][i].ToString(), retjson["content"]["playerCharacterMap"][retjson["content"]["players"][i].ToString()].ToString());
+                    Debug.Log(retjson["content"]["players"][i].ToString() + ":" + retjson["content"]["playerCharacterMap"][retjson["content"]["players"][i].ToString()].ToString());
+                    //gameControl.playerStateMap[retjson["content"]["players"][i].ToString()] = retjson["content"]["playerStateMap"][retjson["content"]["players"][i].ToString()].ToString() == "True" ? "true" : "false";
+                    gameControl.playerStateMap.Add(retjson["content"]["players"][i].ToString(), retjson["content"]["playerStateMap"][retjson["content"]["players"][i].ToString()].ToString() == "True" ? "true" : "false");
+                }
+                multyBtn.SetActive(false);
+                gameControl.gameState = GameControl.GameState.START;// 更新游戏状态
+                return;
+            }
+        }
         bool everyoneReady = false;
         if (gameControl.players.Length == 7)
         { everyoneReady = true; }
 
         if (everyoneReady)//所有人准备
         {
-            multyBtn.SetActive(true);
+            if(room.iscurcreator)
+                multyBtn.SetActive(true);
 
             // 处理服务器发来可以开始游戏返回值
             //sr = new StreamReader(Application.dataPath + "/jsontest.txt");
             //json = sr.ReadToEnd().TrimEnd('\0');
             //Debug.Log(json);
-            json = wl.receiveJson;
-            JsonData retStartGame = JsonMapper.ToObject(json);
-            if (retStartGame["type"].ToString() == "game start") // 验证消息类型，开始游戏
-            {
-                if (retStartGame["success"].ToString() == "True" && long.Parse(retnewjoinroom["content"]["roomID"].ToString()) == room.roomID)
-                {
-                    int playerCount = int.Parse(retnewjoinroom["content"]["playerCount"].ToString());
-                    gameControl.players = new string[playerCount];
-                    for (int i = 0; i < playerCount; i++) {
-                        gameControl.players[i] = retnewjoinroom["content"]["players"][i].ToString(); // 更新玩家表
-                        gameControl.playerCharacterMap[retnewjoinroom["content"]["players"][i].ToString()] = retnewjoinroom["content"]["playerCharacterMap"][retnewjoinroom["content"]["players"][i].ToString()].ToString();
-                        gameControl.playerStateMap[retnewjoinroom["content"]["players"][i].ToString()] = retnewjoinroom["content"]["playerStateMap"][retnewjoinroom["content"]["players"][i].ToString()].ToString()=="True"?true:false;
-
-                    }
-                    gameControl.gameState = GameControl.GameState.START;// 更新游戏状态
-                }
-            }
+            
 
         }
     }
@@ -193,53 +210,101 @@ public class MainControlScript : MonoBehaviour
         startJson["content"]["roomID"] = room.roomID;
         string startJsonStr = startJson.ToJson();
         wl.Send(startJsonStr);
+    }
 
+    string CharacterInChinese()
+    {
+        string chinese = "谜语人";
+        switch (playerAssignment.playerCharacter)
+        {
+            case PlayerAssignment.Character.VILLAGE:
+                chinese = "普通学生";
+                break;
+            case PlayerAssignment.Character.PROPHET:
+                chinese= "网信人员";
+                break;
+            case PlayerAssignment.Character.WITCH:
+                chinese= "任课老师";
+                break;
+            case PlayerAssignment.Character.WOLF:
+                chinese =  "教务部";
+                break;
+        }
+        return chinese;
     }
 
     //分发身份牌,可以弹出一个窗口，也可以在聊天栏有一个系统消息，同时初始化对局信息
+    int count = 0;
     void StartGame()
     {
         // 
         SetNight();
+        if (!sendFlag)
+        {
+            sendFlag = !sendFlag;//~sendFlag
+            VillagerChatMsg.text += "您的本局身份为" + CharacterInChinese() + "\n";
 
-        if (playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH)
-        {
-            gameControl.canDo[0] = 1;
-            gameControl.canDo[1] = 1;
+            for(int i =0;i<7;i++)
+            {
+                if(gameControl.playerCharacterMap[gameControl.players[i]].ToString()=="WOLF" && gameControl.players[i] != userInfo.username)
+                {
+
+                    VillagerChatMsg.text += "您的同事为" + gameControl.players[i] + "\n";
+                    VillagerChatMsg.text += "请致力于让学生们全部挂科吧！";
+                    break;
+                }
+            }
+
+            if (playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH)
+            {
+                gameControl.canDo[0] = 1;
+                gameControl.canDo[1] = 1;
+            }
+            else
+            {
+                gameControl.canDo[0] = 0;
+                gameControl.canDo[1] = 0;
+            }
+            for (int i = 0; i < 7; i++)
+            {
+                gameControl.seenPlayers[i] = "";
+            }
+
+                countDown.setCountDown(0, 0, 5);
         }
-        else
+        if (countDown.countDownSlider == null || countDown.countDownSlider.value == 0)
         {
-            gameControl.canDo[0] = 0;
-            gameControl.canDo[1] = 0;
+            // 倒计时结束，开启下一阶段
+            gameControl.gameState = GameControl.GameState.KILL;
+            Debug.Log("Kill");
         }
-        for (int i = 0; i < 7; i++)
-        {
-            gameControl.seenPlayers[i] = "";
-        }
+    
     }
 
     //
     void SetNight()
     {
+
+        HasVictory(); // 检查游戏是否有赢家
         //背景由白天变成黑夜
     }
 
     void SetDay()
     {
+
+        HasVictory(); // 检查游戏是否有赢家
         //背景由黑夜变成白天
     }
 
     void RetWolfAct()
     {
+        SetNight();
         //等待所有狼人确认完毕，这个发送给所有狼人
-        string json = wl.receiveJson;
-        Debug.Log(json);
-        JsonData retJson = JsonMapper.ToObject(json);
-        if(retJson["type"].ToString()=="kill")
+        if(retjson["type"].ToString()=="kill")
         {
-            if(retJson["success"].ToString() == "True")
+            if(retjson["success"].ToString() == "True")
             {
-                string target = retJson["content"]["target"].ToString();
+                string target = retjson["content"]["target"].ToString();
                 // 发送给所有狼人
                 if(playerAssignment.playerCharacter==PlayerAssignment.Character.WOLF)
                 {
@@ -249,9 +314,9 @@ public class MainControlScript : MonoBehaviour
                 gameControl.dayEvent.killed = target;
             }
         }
-        else if(retJson["type"].ToString()=="finish")
+        else if(retjson["type"].ToString()=="finish")
         {
-            if (retJson["success"].ToString() == "True" && retJson["message"].ToString()=="kill finish")
+            if (retjson["success"].ToString() == "True" && retjson["message"].ToString()=="kill finish")
             {
                 VillagerChatMsg.text = "系统：教务部已操作完毕" + "\n";
                 gameControl.gameState = GameControl.GameState.WITCH; // 进入女巫环节
@@ -259,7 +324,7 @@ public class MainControlScript : MonoBehaviour
             }
             else
             {
-                Debug.Log(retJson["message"].ToString());
+                Debug.Log(retjson["message"].ToString());
             }
         }
     }
@@ -267,25 +332,22 @@ public class MainControlScript : MonoBehaviour
     void RetWitchAct()//就直接做救/毒二选一吧，写起来简单一些
     {
 
-        string json = wl.receiveJson;
-        //Debug.Log(json);
-        JsonData retJson = JsonMapper.ToObject(json);
 
         if (playerAssignment.playerCharacter == PlayerAssignment.Character.WITCH) // 如果是女巫
         {
-            if (retJson["type"].ToString() == "kill result")
+            if (retjson["type"].ToString() == "kill result")
             {
-                if (retJson["success"].ToString() == "True")
+                if (retjson["success"].ToString() == "True")
                 {
-                    string target = retJson["content"]["target"].ToString();
+                    string target = retjson["content"]["target"].ToString();
                     VillagerChatMsg.text += "系统：今夜挂科人为" + target + "\n";
                 }
             }
            
         }
-        if (retJson["type"].ToString() == "witch"|| retJson["type"].ToString() == "finish") // 返回接口中没有说明毒或者救的人是谁，需要客户端指定
+        if (retjson["type"].ToString() == "witch"|| retjson["type"].ToString() == "finish") // 返回接口中没有说明毒或者救的人是谁，需要客户端指定
         {
-            if (retJson["success"].ToString() == "True" && retJson["message"].ToString() == "witch finish")
+            if (retjson["success"].ToString() == "True" && retjson["message"].ToString() == "witch finish")
             {
                 VillagerChatMsg.text += "系统：任课老师已操作完毕" + "\n";
                 gameControl.gameState = GameControl.GameState.PROPHET;// 女巫环节结束，进入预言家环节。
@@ -293,7 +355,7 @@ public class MainControlScript : MonoBehaviour
             }
             else
             {
-                Debug.Log(retJson["message"].ToString());
+                Debug.Log(retjson["message"].ToString());
             }
         }
     }    
@@ -301,21 +363,18 @@ public class MainControlScript : MonoBehaviour
     void RetProphetAct()
     {
 
-        string json = wl.receiveJson;
-        //Debug.Log(json);
-        JsonData retJson = JsonMapper.ToObject(json);
 
         if (playerAssignment.playerCharacter == PlayerAssignment.Character.PROPHET) // 如果是预言家
         {
-            if (retJson["type"].ToString() == "prophet")
+            if (retjson["type"].ToString() == "prophet")
             {
-                if (retJson["success"].ToString() == "True")
+                if (retjson["success"].ToString() == "True")
                 {
-                    string target = retJson["content"]["target"].ToString();
-                    string chara = retJson["content"]["character"].ToJson() == "WOLF" ? "令人挂科的人" : "让人好好过年的人";
+                    string target = retjson["content"]["target"].ToString();
+                    string chara = retjson["content"]["character"].ToJson() == "WOLF" ? "令人挂科的人" : "让人好好过年的人";
                     VillagerChatMsg.text += "系统：查验目标"+target+"为" + chara + "\n";
                     gameControl.dayEvent.inspected = target;
-                    gameControl.dayEvent.checkIden = retJson["content"]["character"].ToJson();
+                    gameControl.dayEvent.checkIden = retjson["content"]["character"].ToJson();
                     clare = false;
                     gameControl.gameState = GameControl.GameState.DISCUSS;
                     gameControl.hasDown = false;
@@ -338,11 +397,9 @@ public class MainControlScript : MonoBehaviour
     }
     void DiscussAct()
     {
+        SetDay();
         //这个发送给所有人
 
-        string json = wl.receiveJson;
-        //Debug.Log(json);
-        JsonData retjson = JsonMapper.ToObject(json);
         
         if(clare == false && retjson["type"].ToString() == "night end")
         {
@@ -401,14 +458,11 @@ public class MainControlScript : MonoBehaviour
     void HasVictory()
     {
         // 处理返回消息
-
-        string json = wl.receiveJson;
-        JsonData retgameend = JsonMapper.ToObject(json);
-        if (retgameend["type"].ToString() == "game end") // 验证消息类型，游戏结束
+        if (retjson["type"].ToString() == "game end") // 验证消息类型，游戏结束
         { 
-            if(retgameend["success"].ToString() == "True"&&long.Parse(retgameend["content"]["roomID"].ToString()) == room.roomID)
+            if(retjson["success"].ToString() == "True"&&long.Parse(retjson["content"]["roomID"].ToString()) == room.roomID)
             {
-                if(retgameend["winner"].ToString() == "WOLF") // 狼人胜利
+                if(retjson["winner"].ToString() == "WOLF") // 狼人胜利
                 {
                     // TODO:添加狼人胜利UI提示
                     Debug.Log("教务部胜利");
@@ -422,14 +476,14 @@ public class MainControlScript : MonoBehaviour
         }
         else
         {
-
+            return;
         }
 
     }
 
     void LastWords()
     {
-
+        SetDay();
     }
 
     bool CheckLive()
@@ -440,20 +494,16 @@ public class MainControlScript : MonoBehaviour
 
     void ElectPolice()
     {
-
-        string json = wl.receiveJson;
-        //]Debug.Log(json);
-        JsonData retJson = JsonMapper.ToObject(json);
-        if(retJson["type"].ToString() == "elect")
+        if(retjson["type"].ToString() == "elect")
         {
-            if(retJson["success"].ToString()=="True")
+            if(retjson["success"].ToString()=="True")
             {
-                string result = retJson["content"]["result"].ToString();
+                string result = retjson["content"]["result"].ToString();
                 VillagerChatMsg.text += "系统：选举警长为" + result +"\n";
                 gameControl.dayEvent.nowPolice = result;
-                for(int i = 0; i < retJson["content"]["voterTargetMap"].Count;i++)
+                for(int i = 0; i < retjson["content"]["voterTargetMap"].Count;i++)
                 {
-                    VillagerChatMsg.text += retJson["content"]["voterTargetMap"][i].Keys.ToString() + "投给了" + retJson["content"]["voterTargetMap"][i].ToString()+"\n";
+                    VillagerChatMsg.text += retjson["content"]["voterTargetMap"][i].Keys.ToString() + "投给了" + retjson["content"]["voterTargetMap"][i].ToString()+"\n";
                 }
                 gameControl.gameState = GameControl.GameState.DISCUSS;// 进入讨论环节
                 gameControl.hasDown = false;

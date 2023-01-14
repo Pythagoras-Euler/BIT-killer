@@ -59,7 +59,8 @@ public class PlayerBand : MonoBehaviour
         Debug.Log(gameControl.players[seatNum - 1]);
         Debug.Log(playerName.text);
         gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
-
+        //gameControl.playerStateMap = new Hashtable();
+       // gameControl.playerCharacterMap = new Hashtable();
         NowMark = PlayerAssignment.Character.UNDEF;
         targetCharacter = PlayerAssignment.Character.UNDEF;
 
@@ -204,7 +205,7 @@ public class PlayerBand : MonoBehaviour
             ProphetSeen();
         }
 
-        if(IAmAlive == false)//死人视野
+        if(IAmAlive == false)//挂科人视野
         {
             AllSeen();
         }
@@ -469,7 +470,7 @@ public class PlayerBand : MonoBehaviour
     //目标（player）死没死
     void TargetDeadCheck()
     {
-        if(gameControl.playerStateMap[targetName].ToString() == "true" || gameControl.playerStateMap[targetName].ToString() == "True")
+        if(targetName!="" && gameControl.playerStateMap[targetName].ToString() == "true")
         {
             targetIsDead = false;
             statePan.SetActive(false);

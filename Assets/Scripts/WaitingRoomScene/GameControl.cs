@@ -37,10 +37,17 @@ public class GameControl : MonoBehaviour
     ArrayList DayEvenList = new ArrayList();
 
     public string[] players;//玩家列表
-    public Hashtable playerCharacterMap;//角色身份表
+    public Hashtable playerCharacterMap ;//角色身份表
     public string captain;//房主
-    public Hashtable playerStateMap;//角色状态（死亡）表，true代表活着
+    public Hashtable playerStateMap=new Hashtable();//角色状态（死亡）表，true代表活着
 
     public string[] seenPlayers;//（预言家的）视野
     public int[] canDo;//初步设想：用于限制女巫每局行动次数。以后也可以改为其他角色的行动次数
+    private void Start()
+    {
+        playerCharacterMap = new Hashtable(7);
+        playerStateMap = new Hashtable(7);
+        seenPlayers = new string[7] { "", "", "", "", "", "", "" };
+        canDo = new int[3] { 1, 1, 1 };
+    }
 }

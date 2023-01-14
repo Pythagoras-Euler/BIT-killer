@@ -401,7 +401,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &440617100
 RectTransform:
   m_ObjectHideFlags: 0
@@ -541,7 +541,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 458632111}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2008692470}
+        m_TargetAssemblyTypeName: MainControlScript, Assembly-CSharp
+        m_MethodName: onClickMultyBtn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &458632111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -833,7 +845,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1
+  m_Text: 0
 --- !u!222 &813857452
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -924,7 +936,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 0.000044817556}
+  m_AnchoredPosition: {x: 0.00008254429, y: 0.000019363375}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &948324428
@@ -1039,7 +1051,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: lbwnb
+  m_Text: userName
 --- !u!222 &978870834
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1764,7 +1776,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1427124845
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2737,6 +2749,7 @@ MonoBehaviour:
   VillagerChatMsg: {fileID: 5070452170922682212}
   playerInfoDisplay: {fileID: 978870833}
   roomInfoDisplay: {fileID: 813857451}
+  countDown: {fileID: 646553577}
 --- !u!4 &2008692471
 Transform:
   m_ObjectHideFlags: 0
@@ -2990,7 +3003,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 808337850}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9996054
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8337,7 +8350,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u732B\u5C4B\u5C0F\u9C7C\u4E38"
+  m_Text: "\u865A\u5E2D\u4EE5\u5F85"
 --- !u!114 &3297172123041788545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8371,7 +8384,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u732B\u5C4B\u5C0F\u9C7C\u4E38"
+  m_Text: "\u865A\u5E2D\u4EE5\u5F85"
 --- !u!114 &3297172123046232813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8405,7 +8418,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u732B\u5C4B\u5C0F\u9C7C\u4E38"
+  m_Text: "\u865A\u5E2D\u4EE5\u5F85"
 --- !u!114 &3297172123112180457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8439,7 +8452,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u732B\u5C4B\u5C0F\u9C7C\u4E38"
+  m_Text: "\u865A\u5E2D\u4EE5\u5F85"
 --- !u!114 &3297172123450250179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8473,7 +8486,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u732B\u5C4B\u5C0F\u9C7C\u4E38"
+  m_Text: "\u865A\u5E2D\u4EE5\u5F85"
 --- !u!114 &3297172123546162771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8507,7 +8520,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u732B\u5C4B\u5C0F\u9C7C\u4E38"
+  m_Text: "\u865A\u5E2D\u4EE5\u5F85"
 --- !u!114 &3297172124107817589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8541,7 +8554,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u732B\u5C4B\u5C0F\u9C7C\u4E38"
+  m_Text: "\u865A\u5E2D\u4EE5\u5F85"
 --- !u!114 &3326752331359290364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12011,7 +12024,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00008254429, y: 0.000044817556}
+  m_AnchoredPosition: {x: 0.00008254429, y: 0.000019363375}
   m_SizeDelta: {x: -11.000083, y: 274.5016}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5070452170922682219
@@ -12829,7 +12842,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 5070452171591486105}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9996054
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
