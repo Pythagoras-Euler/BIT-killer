@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using LitJson;
+using System;
 
 public class HeartBeat : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class HeartBeat : MonoBehaviour
     void Start()
     {
         wl = GameObject.FindGameObjectWithTag("WebLink").GetComponent<WebLink>();
-        DelayDisplay.text = "9999ms";
+        DelayDisplay.text = "114514ms";
     }
 
     // Update is called once per frame
@@ -46,16 +47,26 @@ public class HeartBeat : MonoBehaviour
 
     void SpeedCheck()
     {
-        localTime = GetTimeSet();
+        //localTime = GetTimeSet();
+        localTime = GetUtcNowTimeStamp();
         delayTime = localTime - serverTime;
 
-        DelayDisplay.text = delayTime.ToString();
+        DelayDisplay.text = delayTime.ToString() + "ms";
     }
 
     long GetTimeSet()
     {
         long ts = new System.DateTimeOffset(System.DateTime.UtcNow).ToUnixTimeSeconds();
         return ts;
+    }
+
+
+
+    public static long GetUtcNowTimeStamp()
+    {
+        //DateTime.UtcNow获取的是世界标准时区的当前时间（比北京时间少8小时）
+        TimeSpan ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+        return (long)ts.TotalMilliseconds;//精确到毫秒
     }
 
 }
