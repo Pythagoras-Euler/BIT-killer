@@ -66,7 +66,6 @@ public class MainControlScript : MonoBehaviour
         switch (gameControl.gameState)//判断现在的阶段并执行相应函数
         {
             case GameControl.GameState.WAIT:
-                Debug.Log("wait");
                 Waiting();
                 break;
             case GameControl.GameState.START://分发身份牌
@@ -177,7 +176,7 @@ public class MainControlScript : MonoBehaviour
                     gameControl.playerCharacterMap.Add(retjson["content"]["players"][i].ToString(), retjson["content"]["playerCharacterMap"][retjson["content"]["players"][i].ToString()].ToString());
                     Debug.Log(retjson["content"]["players"][i].ToString() + ":" + retjson["content"]["playerCharacterMap"][retjson["content"]["players"][i].ToString()].ToString());
                     //gameControl.playerStateMap[retjson["content"]["players"][i].ToString()] = retjson["content"]["playerStateMap"][retjson["content"]["players"][i].ToString()].ToString() == "True" ? "true" : "false";
-                    gameControl.playerStateMap.Add(retjson["content"]["players"][i].ToString(), retjson["content"]["playerStateMap"][retjson["content"]["players"][i].ToString()].ToString() == "True" ? "true" : "false");
+                    gameControl.playerStateMap.Add(retjson["content"]["players"][i].ToString(), retjson["content"]["playerStateMap"][retjson["content"]["players"][i].ToString()].ToString() == "True" ? "True" : "False");
                     
                     playerAssignment.playerCharacter = GetChara();
                     if(playerAssignment.playerCharacter!=PlayerAssignment.Character.WOLF)
@@ -277,10 +276,6 @@ public class MainControlScript : MonoBehaviour
     int count = 0;
     void StartGame()
     {
-        // 
-        SetNight();
-
-
 
         if (!sendFlag)
         {
@@ -331,14 +326,7 @@ public class MainControlScript : MonoBehaviour
 
                 countDown.setCountDown(0, 0, 5);
         }
-        if (CountIsDown())
-        {
-            // 倒计时结束，开启下一阶段
-            gameControl.gameState = GameControl.GameState.KILL;
-            Debug.Log("Kill");
-            VillagerChatMsg.text += "<b><color=red>系统：现在是教务部操作时间</color></b>\n";
-            countDown.setCountDown(0, 0, 30);
-        }
+        SetNight();
     
     }
 
@@ -352,7 +340,17 @@ public class MainControlScript : MonoBehaviour
     {
 
         HasVictory(); // 检查游戏是否有赢家
+        // 开启狼人阶段
+        if (CountIsDown())
+        {
+            // 倒计时结束，开启下一阶段
+            gameControl.gameState = GameControl.GameState.KILL;
+            Debug.Log("Kill");
+            VillagerChatMsg.text += "<b><color=red>系统：现在是教务部操作时间</color></b>\n";
+            countDown.setCountDown(0, 0, 30);
+        }
         //背景由白天变成黑夜
+
     }
 
     void SetDay()
@@ -364,7 +362,6 @@ public class MainControlScript : MonoBehaviour
 
     void RetWolfAct()
     {
-        SetNight();
         //等待所有狼人确认完毕，这个发送给所有狼人
         if(retjson["type"].ToString()=="kill")
         {
@@ -391,7 +388,7 @@ public class MainControlScript : MonoBehaviour
             {
                 if (CountIsDown())
                 {
-                    VillagerChatMsg.text = "系统：教务部已操作完毕" + "\n";
+                    VillagerChatMsg.text += "系统：教务部已操作完毕" + "\n";
                     killFlag = false;
                     gameControl.gameState = GameControl.GameState.WITCH; // 进入女巫环节
                     countDown.setCountDown(0, 0, 30);
@@ -454,31 +451,56 @@ public class MainControlScript : MonoBehaviour
                 Debug.Log(retjson["message"].ToString());
             }
         }
-    }    
+    }
 
+    bool proact = false;
+    JsonData retjson2;
+    bool retjsonFlag = false;
     void RetProphetAct()
     {
-
-
-        if (playerAssignment.playerCharacter == PlayerAssignment.Character.PROPHET) // 如果是预言家
+        if (retjson["type"].ToString() == "prophet")
         {
-            if (retjson["type"].ToString() == "prophet")
+            if (retjson["success"].ToString() == "True")
             {
-                if (retjson["success"].ToString() == "True")
+                if (playerAssignment.playerCharacter == PlayerAssignment.Character.PROPHET) // 如果是预言家
                 {
                     string target = retjson["content"]["target"].ToString();
-                    string chara = retjson["content"]["character"].ToJson() == "WOLF" ? "令人挂科的人" : "让人好好过年的人";
-                    VillagerChatMsg.text += "系统：查验目标"+target+"为" + chara + "\n";
+                    
+                    string chara = retjson["content"]["character"].ToString() == "WOLF" ? "令人挂科的人" : "让人好好过年的人";
+                    Debug.Log(retjson["content"]["character"].ToString());
+                    if(proact == false )
+                    {
+                        VillagerChatMsg.text += "系统：查验目标" + target + "为" + chara + "\n";
+                        proact = true;
+                    }
                     gameControl.dayEvent.inspected = target;
                     gameControl.dayEvent.checkIden = retjson["content"]["character"].ToJson();
-                    clare = false;
-                    gameControl.gameState = GameControl.GameState.DISCUSS;
-                    gameControl.hasDown = false;
-                    
                 }
+
+
+
             }
 
         }
+        if (proact == true)
+        {
+            //收night end
+            if (retjson["type"].ToString() == "night end" && retjsonFlag == false)
+            {
+                retjson2 = retjson;
+                retjsonFlag = true;
+            }
+
+            if (CountIsDown())
+                {
+                    VillagerChatMsg.text += "系统：网信人员操作完毕\n";
+                    clare = false;
+                    gameControl.gameState = GameControl.GameState.DISCUSS;
+                    gameControl.hasDown = false;
+                }
+        
+        }
+
     }
 
     void ProphetExamine()
@@ -491,50 +513,119 @@ public class MainControlScript : MonoBehaviour
 
         //
     }
+   public bool daylock = false;
+    public bool electlock = false;
     void DiscussAct()
     {
         SetDay();
-        //这个发送给所有人
 
         
-        if(clare == false && retjson["type"].ToString() == "night end")
+        JsonData retjson0 = retjsonFlag ? retjson2 : retjson;
+        Debug.Log(retjson0["type"].ToString());
+        //这个发送给所有人
+        if(retjson0["type"].ToString() == "night end")
         {
-            if(retjson["success"].ToString()=="True")
+            if(retjson0["success"].ToString()=="True")
             {
-                int playerCnt = retjson["content"]["players"].Count;
+                retjsonFlag = false;
+
+                int playerCnt = retjson0["content"]["players"].Count;
                 gameControl.players = new string[playerCnt];
                 for(int i =0;i<playerCnt;i++)
                 {
-                    gameControl.players[i] = retjson["content"]["players"][i].ToString();
+                    gameControl.players[i] = retjson0["content"]["players"][i].ToString();
                 }
                 //gameControl.playerCharacterMap = new Hashtable();
-                for (int i = 0; i < retjson["content"]["playerCharacterMap"].Count; i++)
+                foreach(var player in gameControl.players)
                 {
-                    gameControl.playerCharacterMap[retjson["content"]["playerCharacterMap"][i].Keys.ToString()] = retjson["content"]["players"][i].ToString();
+                    gameControl.playerStateMap[player] = retjson0["content"]["playerStateMap"][player].ToString();
+                    Debug.Log(player+gameControl.playerStateMap[player]);
+
                 }
-                gameControl.captain = retjson["content"]["captain"].ToString();
-
-                VillagerChatMsg.text += "系统：昨晚挂科的人是" + gameControl.dayEvent.killed + "和" + gameControl.dayEvent.poisoned;
-
-                clare = true;
+                //for (int i = 0; i < retjson0["content"]["playerCharacterMap"].Count; i++)
+                //{
+                //    gameControl.playerCharacterMap[retjson0["content"]["playerCharacterMap"][i].Keys.ToString()] = retjson0["content"]["players"][i].ToString();
+                //}
+                gameControl.captain = retjson0["content"]["captain"].ToString();
+                if(clare == false)
+                {
+                    if(gameControl.dayEvent.killed == ""&& gameControl.dayEvent.poisoned != "")
+                        VillagerChatMsg.text += "系统：昨晚挂科的人是"+gameControl.dayEvent.poisoned + "\n";
+                    else if(gameControl.dayEvent.killed != "" && gameControl.dayEvent.poisoned == "")
+                        VillagerChatMsg.text += "系统：昨晚挂科的人是" + gameControl.dayEvent.killed + "\n";
+                    else if(gameControl.dayEvent.killed != "" && gameControl.dayEvent.poisoned != "")
+                        VillagerChatMsg.text += "系统：昨晚挂科的人是" + gameControl.dayEvent.killed+"和"+ gameControl.dayEvent.poisoned+"\n";
+                    else
+                    {
+                        VillagerChatMsg.text += "系统：昨晚是平安夜\n";
+                    }
+                    clare = true;
+                    //countDown.setCountDown(0, 1, 23);
+                }
 
                 killFlag = false;
+                witchinformed = false;
+                witchacted = false;
+                proact = false;
+                electclarelock = false;
 
-                if(retjson["content"]["electCaptain"].ToString()=="True")
+                if (retjson0["content"]["electCaptain"].ToString()=="True")
                 {
                     // 票选警长
-                    gameControl.gameState = GameControl.GameState.ELECT;
-                    gameControl.hasDown = false;
+                    if(electlock == false)
+                    {
+
+                        VillagerChatMsg.text += "系统：现在是警长选举时间，请各位畅所欲言" + "\n";
+
+                        countDown.setCountDown(0, 0, 45);
+                        Debug.Log("setCountDown");
+
+                        electlock = true;
+
+                    }
+                    else if (electlock == true && CountIsDown())
+                    {
+                        gameControl.gameState = GameControl.GameState.ELECT;
+                        countDown.setCountDown(0, 0, 10);
+                        gameControl.hasDown = false;
+                    }
                 }
                 else
                 {
                     // TODO:允许发言
-                    gameControl.gameState = GameControl.GameState.VOTE;
-                    gameControl.hasDown = false;
+                    if(daylock == false)
+                    {
+                        VillagerChatMsg.text += "系统：现在是自由讨论时间，请各位畅所欲言" + "\n";
+                        daylock = true;
+                        countDown.setCountDown(0, 1, 0);
+                    }
+                    else if(CountIsDown())
+                    {
+                        VillagerChatMsg.text += "系统：现在是投票环节" + "\n";
+                        gameControl.gameState = GameControl.GameState.VOTE;
+                        gameControl.hasDown = false;
+                        countDown.setCountDown(0, 0, 10);
+                    }
                 }
             }
         }
-
+        else if ( retjson0["type"].ToString() == "elect")
+        {
+            Debug.Log(daylock.ToString());
+            if (daylock == false)
+            {
+                VillagerChatMsg.text += "系统：现在是自由讨论时间，请各位畅所欲言" + "\n";
+                daylock = true;
+                countDown.setCountDown(0, 1, 0);
+            }
+            if (CountIsDown())
+            {
+                VillagerChatMsg.text += "系统：现在是投票环节" + "\n";
+                gameControl.gameState = GameControl.GameState.VOTE;
+                gameControl.hasDown = false;
+                countDown.setCountDown(0, 0, 10);
+            }
+        }
     }
     void DeadCheck()
     {
@@ -589,37 +680,65 @@ public class MainControlScript : MonoBehaviour
         bool isLive = false;
         return isLive;
     }
-
+    public  bool electclarelock = false;
     void ElectPolice()
     {
         if(retjson["type"].ToString() == "elect")
         {
             if(retjson["success"].ToString()=="True")
             {
-                string result = retjson["content"]["result"].ToString();
-                VillagerChatMsg.text += "系统：选举警长为" + result +"\n";
-                gameControl.dayEvent.nowPolice = result;
-                for(int i = 0; i < retjson["content"]["voterTargetMap"].Count;i++)
+                Debug.Log(electclarelock.ToString());
+                if(electclarelock==false)
                 {
-                    VillagerChatMsg.text += retjson["content"]["voterTargetMap"][i].Keys.ToString() + "投给了" + retjson["content"]["voterTargetMap"][i].ToString()+"\n";
-                }
-                gameControl.gameState = GameControl.GameState.DISCUSS;// 进入讨论环节
-                gameControl.hasDown = false;
+                    Debug.Log(retjson["content"]["result"].ToString());
+                    string result = retjson["content"]["result"].ToString();
+                    Debug.Log(result);
+                    //for(int i =0;i< 7; i++)
+                    //{
+                        //if(gameControl.playerStateMap[gameControl.players[i]] == "true")
+                        //{
+                            //Debug.Log(gameControl.players[i] + ":" + retjson["content"]["voterTargetMap"][gameControl.players[i]].ToString());
+                            //VillagerChatMsg.text += "系统：" + gameControl.players[i] + "投给了" + retjson["content"]["voterTargetMap"][gameControl.players[i]].ToString() + "\n";
 
+                        //}
+                    //}
+                    VillagerChatMsg.text += "系统：选举警长为" + result + "\n";
+                    gameControl.dayEvent.nowPolice = result;
+                    electclarelock = true;
+                    gameControl.gameState = GameControl.GameState.DISCUSS;// 进入讨论环节
+                    gameControl.hasDown = false;
+                    // countDown.setCountDown(0, 1, 0);
+                }
             }
         }
         
     }
 
-    void VotePolice()
-    {
-        //TODO 发送投票信息
-    }
-
-
+    public bool voteclare = false;
     void VoteKill()
     {
-        //send btn enable
+        // 处理投票返回值
+        if(retjson["type"].ToString()=="vote")
+        {
+            if(retjson["success"].ToString()=="True")
+            {
+                if(retjson["content"]["tie"].ToString()=="True")
+                {
+                    VillagerChatMsg.text += "系统：平票，无事发生" + "\n";
+                }
+                else
+                {
+                    string voteName = retjson["content"]["result"].ToString();
+                    if(voteclare == false)
+                    {
+                        VillagerChatMsg.text += "系统：投票结果为"+ voteName + "\n";
+                        gameControl.playerStateMap[voteName] = "false";
+                        voteclare = true;
+                    }
+                }
+                SetNight();
+            }
+        }
     }
 
     void Ending()
@@ -628,3 +747,27 @@ public class MainControlScript : MonoBehaviour
     }
 
 }
+
+
+/**
+ *  _ooOoo_
+ * o8888888o
+ * 88" . "88
+ * (| -_- |)
+ *  O\ = /O
+ * ___/`---'\____
+ * .   ' \\| |// `.
+ * / \\||| : |||// \
+ * / _||||| -:- |||||- \
+ * | | \\\ - /// | |
+ * | \_| ''\---/'' | |
+ * \ .-\__ `-` ___/-. /
+ * ___`. .' /--.--\ `. . __
+ * ."" '< `.___\_<|>_/___.' >'"".
+ * | | : `- \`.;`\ _ /`;.`/ - ` : | |
+ * \ \ `-. \_ __\ /__ _/ .-` / /
+ * ======`-.____`-.___\_____/___.-`____.-'======
+ * `=---='
+ *          .............................................
+ *           佛曰：bug泛滥，我已瘫痪！
+ */

@@ -547,7 +547,7 @@ public class PlayerBand : MonoBehaviour
     //目标（player）死没死
     void TargetDeadCheck()
     {
-        if(targetName!="" && gameControl.playerStateMap[targetName].ToString() == "true")
+        if(targetName!="" && gameControl.playerStateMap[targetName].ToString() == "True")
         {
             targetIsDead = false;
             statePan.SetActive(false);
@@ -575,7 +575,7 @@ public class PlayerBand : MonoBehaviour
 
     void ElectPolice()
     {
-        if (gameControl.hasDown == false && targetIsDead == false && IAmAlive == true)
+        if (CanAct() && targetIsDead == false && IAmAlive == true)
         {
             electPan.SetActive(true);
             electBtn.SetActive(true);
@@ -590,6 +590,7 @@ public class PlayerBand : MonoBehaviour
     public void VotePolice()
     {
         electPan.SetActive(false);
+        gameControl.hasDown = true;
         //TODO 发送投票信息
         JsonData data1 = new JsonData();
         data1["type"] = "elect";
@@ -629,7 +630,7 @@ public class PlayerBand : MonoBehaviour
     void VoteKill()
     {
         //send btn enable
-        if (gameControl.hasDown == false && targetIsDead == false && IAmAlive == true)
+        if (CanAct() && targetIsDead == false && IAmAlive == true)
         {
             votePan.SetActive(true);
         }

@@ -40,7 +40,7 @@ public class ChatPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameControl.gameState == GameControl.GameState.DISCUSS) // 只有在讨论阶段允许接收
+        if(gameControl.gameState == GameControl.GameState.DISCUSS || gameControl.gameState == GameControl.GameState.ELECT) // 只有在讨论或警长选举阶段允许接收
         {
             RecChat();
         }
