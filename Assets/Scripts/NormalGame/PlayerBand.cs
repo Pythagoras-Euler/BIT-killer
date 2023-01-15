@@ -44,7 +44,7 @@ public class PlayerBand : MonoBehaviour
     private bool targetIsDead = false;
     PlayerAssignment.Character targetCharacter;
     PlayerAssignment.Character myCharacter;
-    PlayerAssignment.Character NowMark;
+    int NowMark = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +62,7 @@ public class PlayerBand : MonoBehaviour
         gameControl = GameObject.FindGameObjectWithTag("GameControl").GetComponent<GameControl>();
         //gameControl.playerStateMap = new Hashtable();
        // gameControl.playerCharacterMap = new Hashtable();
-        NowMark = PlayerAssignment.Character.UNDEF;
+        NowMark = 0;
         targetCharacter = PlayerAssignment.Character.UNDEF;
 
         InfoRefresh();
@@ -184,13 +184,34 @@ public class PlayerBand : MonoBehaviour
     //分发身份牌,可以弹出一个窗口，也可以在聊天栏有一个系统消息
     void StartGame()
     {
-        NowMark = PlayerAssignment.Character.UNDEF;
+        NowMark = 0;
 
         InfoRefresh();
 
         targetCharacter = GetChara(targetName);
 
         myCharacter = GetChara(myName);
+    }
+
+    string CharacterInIcon()
+    {
+        string iconName = "谜语人";
+        switch (targetCharacter)
+        {
+            case PlayerAssignment.Character.VILLAGE:
+                iconName = "平民";
+                break;
+            case PlayerAssignment.Character.PROPHET:
+                iconName = "网管";
+                break;
+            case PlayerAssignment.Character.WITCH:
+                iconName = "任课老师";
+                break;
+            case PlayerAssignment.Character.WOLF:
+                iconName = "教务部";
+                break;
+        }
+        return iconName;
     }
 
     void MyInfo()//更新视野
@@ -217,7 +238,22 @@ public class PlayerBand : MonoBehaviour
     }
     void IdenIconDisplay(bool displayGod = false)//TODO 显示正确的IdenIcon,true显示神官身份
     {
+        if (displayGod)
+        {
+            idenIcon.GetComponent<Image>().sprite = Resources.Load<Sprite>(CharacterInIcon());
+        }
+        else
+        {
+            if (targetCharacter == PlayerAssignment.Character.WOLF)
+            {
+                idenIcon.GetComponent<Image>().sprite = Resources.Load<Sprite>("教务部");
+            }
+            else
+            {
 
+                idenIcon.GetComponent<Image>().sprite = Resources.Load<Sprite>("好人");
+            }
+        }
     }
     void ISeen()
     {
@@ -466,22 +502,39 @@ public class PlayerBand : MonoBehaviour
 
     public void MarkBtn()
     {
-        NowMark++;
-        //doubtIcon.sprite = ''  ;//TODO ICON显示
+        Debug.Log("clicked");
+        if (NowMark < 5)
+        {
+            NowMark++;
+        }
+        else
+        {
+            NowMark = 0;
+        }
+            //doubtIcon.sprite = ''  ;//TODO ICON显示
         //重新加载图片
 
         switch (NowMark)
         {
-            case PlayerAssignment.Character.PROPHET:
+            case 0:
+                doubtIcon.GetComponent<Image>().sprite = Resources.Load<Sprite>("未知");
                 break;
-            case PlayerAssignment.Character.VILLAGE:
+            case 1:
+                doubtIcon.GetComponent<Image>().sprite = Resources.Load<Sprite>("平民");
                 break;
-            case PlayerAssignment.Character.WITCH:
+            case 2:
+                doubtIcon.GetComponent<Image>().sprite = Resources.Load<Sprite>("任课老师");
                 break;
-            case PlayerAssignment.Character.WOLF:
+            case 3:
+                doubtIcon.GetComponent<Image>().sprite = Resources.Load<Sprite>("网管");
                 break;
-            case PlayerAssignment.Character.UNDEF:
+            case 4:
+                doubtIcon.GetComponent<Image>().sprite = Resources.Load<Sprite>("教务部");
                 break;
+            case 5:
+                doubtIcon.GetComponent<Image>().sprite = Resources.Load<Sprite>("好人");
+                break;
+            
         }
 
     }

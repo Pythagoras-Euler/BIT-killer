@@ -12,7 +12,7 @@ public class HeartBeat : MonoBehaviour
     public Text DelayDisplay;//延迟的英文名其实是lag，但是我懒得改了
     public Image NetStatusImage;
 
-    private long localTime;
+    public long localTime;
     private long serverTime;
     private long delayTime;
 
@@ -26,6 +26,7 @@ public class HeartBeat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        localTime = GetUtcNowTimeStamp();
         serverTime = GetHeartBeat();
         SpeedCheck();
     }
