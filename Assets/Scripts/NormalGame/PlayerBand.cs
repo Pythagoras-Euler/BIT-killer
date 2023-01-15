@@ -158,7 +158,7 @@ public class PlayerBand : MonoBehaviour
             isEmpty = false;
             targetName = gameControl.players[seatNum - 1];
             playerName.text = targetName;
-            myName = playerAssignment.name;
+            myName = playerAssignment.playerName;
             myCharacter = playerAssignment.playerCharacter;
         }
         else
@@ -236,7 +236,7 @@ public class PlayerBand : MonoBehaviour
             AllSeen();
         }
     }
-    void IdenIconDisplay(bool displayGod = false)//TODO 显示正确的IdenIcon,true显示神官身份
+    void IdenIconDisplay(bool displayGod = true)//TODO 显示正确的IdenIcon,true显示神官身份
     {
         if (displayGod)
         {
@@ -417,6 +417,7 @@ public class PlayerBand : MonoBehaviour
     
     bool IsMe()
     {
+        //Debug.Log($"No.{seatNum} : {targetName} == {myName}?{targetName == myName}");
         if (targetName == myName)
         {
             return true;
